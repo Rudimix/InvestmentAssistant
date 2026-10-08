@@ -10,6 +10,12 @@ Python 3.12 или новее.
 python -m pip install -e ".[docs]"
 ~~~
 
+## Тесты
+
+~~~sh
+python -m unittest discover -s tests -v
+~~~
+
 ## Документация
 
 ~~~sh
