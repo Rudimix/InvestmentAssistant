@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 
 import _support  # noqa: F401
 from investment_journal.analytics import review_decision
-from investment_journal.formatting import format_journal, format_portfolio, format_reviews, money
+from investment_journal.formatting import format_journal, format_portfolio, format_position, format_reviews, money
 from investment_journal.models import Decision, Portfolio, Position
 
 NOW = datetime(2026, 11, 1, tzinfo=timezone.utc)
@@ -35,6 +35,10 @@ class FormattingTests(unittest.TestCase):
         self.assertIn("Стоимость портфеля: 1 000.00 ₽", text)
         self.assertIn("• SIZ6 (futures): 1 шт., средняя 90, текущая 89, результат -1.00 ₽", text)
         self.assertNotIn("•", format_portfolio(Portfolio(0, 0, 0)))
+
+    def test_position_without_type_and_price(self):
+        self.assertEqual(format_position(Position("USD000UTSTOM", "", 10, 90, 0, 0)),
+                         "• USD000UTSTOM: 10 шт., средняя 90")
 
 
 if __name__ == "__main__":

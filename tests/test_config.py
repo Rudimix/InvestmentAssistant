@@ -5,7 +5,14 @@ import unittest
 from pathlib import Path
 
 import _support  # noqa: F401
-from investment_journal.config import DEFAULT_READ_ONLY_TOOLS, load_settings, read_dotenv
+from investment_journal.config import (
+    DEFAULT_READ_ONLY_TOOLS,
+    OFFICIAL_MCP_URL,
+    SANDBOX_MCP_URL,
+    load_env,
+    load_settings,
+    read_dotenv,
+)
 
 
 class ConfigTests(unittest.TestCase):
@@ -15,28 +22,50 @@ class ConfigTests(unittest.TestCase):
 
     def test_defaults(self):
         s = load_settings({"TELEGRAM_BOT_TOKEN": "t", "TINKOFF_TOKEN": "x", "SECRET": "s"}, dotenv=None)
-        self.assertEqual(s.mcp.command, "tinvest-mcp")
         self.assertEqual(s.mcp.read_only_tools, DEFAULT_READ_ONLY_TOOLS)
-        self.assertEqual(s.mcp.env, {"TINKOFF_TOKEN": "x", "TINVEST_ALLOW_TRADING": "0"})
+        self.assertEqual((s.mcp.account_id, s.mcp.ca_files), ("", ()))
         self.assertIsNone(s.llm)
         self.assertEqual(s.db_path, Path("journal.sqlite3"))
 
-    def test_trading_is_always_disabled(self):
-        s = load_settings({"TELEGRAM_BOT_TOKEN": "t", "TINVEST_ALLOW_TRADING": "1"}, dotenv=None)
-        self.assertEqual(s.mcp.env["TINVEST_ALLOW_TRADING"], "0")
+    def test_read_only_tools_exclude_trading(self):
+        for name in ("invest_create_order", "invest_replace_order", "invest_cancel_order",
+                     "invest_create_stoporder", "invest_cancel_stoporder", "invest_deposit_sandbox_account",
+                     "invest_open_sandbox_account", "invest_close_sandbox_account",
+                     "invest_edit_favorite_instruments", "invest_create_favorite_group",
+                     "invest_delete_favorite_group"):
+            self.assertNotIn(name, DEFAULT_READ_ONLY_TOOLS)
+        self.assertEqual(len(DEFAULT_READ_ONLY_TOOLS), len(set(DEFAULT_READ_ONLY_TOOLS)))
 
-    def test_custom_server_and_llm(self):
+    def test_official_server_by_default(self):
+        s = load_settings({"TELEGRAM_BOT_TOKEN": "t", "TINKOFF_TOKEN": "x",
+                           "TINVEST_CA_FILES": "certs/root.cer, certs/sub.cer"}, dotenv=None)
+        self.assertEqual(s.mcp.url, OFFICIAL_MCP_URL)
+        self.assertEqual(s.mcp.headers, {"Authorization": "Bearer x"})
+        self.assertEqual(s.mcp.ca_files, ("certs/root.cer", "certs/sub.cer"))
+
+    def test_sandbox_and_explicit_url(self):
+        env = {"TELEGRAM_BOT_TOKEN": "t", "TINVEST_SANDBOX": "1", "TINVEST_TOKEN": "y"}
+        s = load_settings(env, dotenv=None)
+        self.assertEqual((s.mcp.url, s.mcp.headers["Authorization"]), (SANDBOX_MCP_URL, "Bearer y"))
+        s = load_settings({**env, "TINVEST_MCP_URL": "https://example.test/mcp"}, dotenv=None)
+        self.assertEqual(s.mcp.url, "https://example.test/mcp")
+
+    def test_no_token_no_header(self):
+        self.assertEqual(load_settings({"TELEGRAM_BOT_TOKEN": "t"}, dotenv=None).mcp.headers, {})
+
+    def test_load_env_without_bot_token(self):
+        self.assertEqual(load_env({"TINKOFF_TOKEN": "x"}, dotenv=None), {"TINKOFF_TOKEN": "x"})
+
+    def test_custom_tools_account_and_llm(self):
         s = load_settings({
             "TELEGRAM_BOT_TOKEN": "t",
-            "TINVEST_MCP_COMMAND": "docker",
-            "TINVEST_MCP_ARGS": 'run -i --rm "my image"',
-            "TINVEST_MCP_PRICE_TOOL": "price",
-            "TINVEST_MCP_READ_TOOLS": "price, candles ,",
+            "TINKOFF_ACCOUNT_ID": "2000000001",
+            "TINVEST_MCP_READ_TOOLS": "invest_get_candles, invest_get_portfolio ,",
             "LLM_BASE_URL": "http://localhost:11434/v1",
             "LLM_MODEL": "qwen3",
         }, dotenv=None)
-        self.assertEqual(s.mcp.args, ("run", "-i", "--rm", "my image"))
-        self.assertEqual((s.mcp.price_tool, s.mcp.read_only_tools), ("price", ("price", "candles")))
+        self.assertEqual(s.mcp.account_id, "2000000001")
+        self.assertEqual(s.mcp.read_only_tools, ("invest_get_candles", "invest_get_portfolio"))
         self.assertEqual((s.llm.base_url, s.llm.model, s.llm.api_key), ("http://localhost:11434/v1", "qwen3", ""))
 
     def test_dotenv(self):

@@ -1,6 +1,8 @@
-"""Тестовый MCP-сервер с теми же инструментами, что у t-invest-tinkoff-mcp (без сети)."""
+"""Тестовый MCP-сервер без сети: ``python fake_tinvest_server.py --http PORT``."""
 
-from mcp.server.fastmcp import FastMCP
+import sys
+
+from mcp.server.fastmcp import Context, FastMCP
 
 mcp = FastMCP("fake-tinvest")
 
@@ -26,5 +28,14 @@ def get_portfolio() -> dict:
     raise RuntimeError("TINKOFF_TOKEN not set")
 
 
+@mcp.tool()
+def whoami(ctx: Context) -> dict:
+    """Заголовок Authorization запроса (только для HTTP)."""
+    request = ctx.request_context.request
+    return {"authorization": request.headers.get("authorization", "") if request else ""}
+
+
 if __name__ == "__main__":
-    mcp.run(transport="stdio")
+    mcp.settings.port = int(sys.argv[sys.argv.index("--http") + 1])
+    mcp.settings.log_level = "WARNING"
+    mcp.run(transport="streamable-http")

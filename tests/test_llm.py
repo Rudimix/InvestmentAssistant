@@ -39,7 +39,7 @@ class AgentTests(unittest.IsolatedAsyncioTestCase):
         self.llm = ScriptedLlm(replies)
         http = httpx.AsyncClient(transport=httpx.MockTransport(self.llm))
         self.tools = FakeToolClient()
-        self.journal = JournalService(JournalRepository(), MarketDataService(self.tools, mcp_settings()))
+        self.journal = JournalService(JournalRepository(), MarketDataService(self.tools))
         client = ChatCompletionsClient(SETTINGS, http)
         return InvestmentAgent(client, self.journal, mcp_settings().read_only_tools, max_steps)
 
@@ -54,21 +54,21 @@ class AgentTests(unittest.IsolatedAsyncioTestCase):
         agent = self.make_agent([{"role": "assistant", "content": "ok"}])
         await agent.ask(1, "что есть?")
         names = {t["function"]["name"] for t in self.llm.requests[0]["tools"]}
-        self.assertEqual(names, {"get_last_price", "get_portfolio", "journal_list", "journal_review"})
+        self.assertEqual(names, {"invest_get_market_values", "invest_get_portfolio", "journal_list", "journal_review"})
 
     async def test_mcp_tool_call_roundtrip(self):
         agent = self.make_agent([
-            tool_call("get_last_price", {"ticker": "SiZ6"}),
+            tool_call("invest_get_market_values", {"instrumentId": ["SiZ6_SPBFUT"]}),
             {"role": "assistant", "content": "SiZ6 стоит 90000"},
         ])
         self.assertEqual(await agent.ask(1, "цена SiZ6?"), "SiZ6 стоит 90000")
         tool_msg = self.llm.requests[1]["messages"][-1]
         self.assertEqual(tool_msg["role"], "tool")
-        self.assertEqual(json.loads(tool_msg["content"]), {"ticker": "SIZ6", "price": 90000.0})
+        self.assertEqual(json.loads(tool_msg["content"])["instruments"][0]["values"][0]["value"], {"value": "90000.0"})
 
     async def test_trading_tool_is_refused(self):
         agent = self.make_agent([
-            tool_call("place_market_order", {"ticker": "SiZ6", "direction": "buy", "qty": 1}),
+            tool_call("invest_create_order", {"instrumentId": "SiZ6_SPBFUT", "direction": "ORDER_DIRECTION_BUY"}),
             {"role": "assistant", "content": "Не могу"},
         ])
         await agent.ask(1, "купи")
@@ -89,7 +89,7 @@ class AgentTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_tool_error_is_passed_to_llm(self):
         agent = self.make_agent([
-            tool_call("get_last_price", {"ticker": "SBER"}),
+            tool_call("invest_get_portfolio", {"accountId": "nope"}),
             {"role": "assistant", "content": "нет данных"},
         ])
         await agent.ask(1, "цена SBER?")

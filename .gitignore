@@ -8,3 +8,4 @@ docs/_build/
 .env
 *.sqlite3
 .coverage
+certs/

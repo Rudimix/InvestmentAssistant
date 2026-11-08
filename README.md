@@ -4,13 +4,15 @@ Telegram-бот — инвестиционный ассистент поверх
 
 * **журнал гипотез**: `/idea` записывает решение buy/sell/hold с текущей ценой, `/review` проверяет,
   подтверждается ли гипотеза, `/close` фиксирует результат;
-* **рыночные данные и портфель** через MCP-сервер T-Invest: `/price`, `/stats` (SMA, волатильность,
-  просадка, тренд), `/portfolio`;
+* **рыночные данные и портфель** через [официальный MCP-сервер Т-Инвестиций](https://developer.tbank.ru/invest/mcp):
+  `/price`, `/stats` (SMA, волатильность, просадка, тренд), `/portfolio`. Работают акции, облигации,
+  фонды и фьючерсы: тикер `SBER` сам переводится в `SBER_TQBR`, `SiZ6` — в `SiZ6_SPBFUT`;
 * **свободный диалог** с любой LLM, у которой есть OpenAI-совместимый API (OpenAI, DeepSeek,
   OpenRouter, Ollama, LM Studio...). Модель сама вызывает MCP-инструменты, но только для чтения.
 
-Ассистент **не торгует**: MCP-сервер запускается с `TINVEST_ALLOW_TRADING=0`, а LLM получает только
-список разрешённых инструментов чтения.
+Ассистент **не торгует**: LLM получает только список инструментов чтения (без заявок, стоп-заявок
+и операций со счетами), а для бота стоит выпускать токен «Только чтение» — тогда торговать
+запретит сам сервер Т-Инвестиций.
 
 Python 3.12 или новее.
 
@@ -19,25 +21,31 @@ Python 3.12 или новее.
 ```
 Telegram ──► bot.py (aiogram 3) ──► journal.py ──► storage.py (SQLite)
                  │                      │
-                 └──► llm.py (агент) ───┴──► market.py ──► mcp_client.py ══stdio══► tinvest-mcp ──► T-Invest API
+                 └──► llm.py (агент) ───┴──► market.py ──► mcp_client.py ══HTTPS══► invest-public-api.tbank.ru/mcp
 ```
 
-MCP-сервер по умолчанию — [t-invest-tinkoff-mcp](https://github.com/viptdv333-boop/t-invest-tinkoff-mcp).
-Его инструменты `get_last_price`/`get_candles` работают с **фьючерсами MOEX** (например `SiZ6`, `BRZ6`),
-портфель возвращается целиком. Чтобы подключить другой MCP-сервер, задайте его команду и имена
-инструментов в `.env` (`TINVEST_MCP_COMMAND`, `TINVEST_MCP_PRICE_TOOL` и т. д.).
+Сервер Т-Инвестиций использует сертификат Минцифры, которого нет в стандартном наборе Python.
+Скачайте с https://www.gosuslugi.ru/crt корневой и выпускающий сертификаты и положите их в `certs/`
+(пути задаются в `TINVEST_CA_FILES`). Они используются только для соединения бота с сервером
+и в систему не устанавливаются.
 
 ## Установка
 
 ~~~sh
 python -m venv .venv
 .venv\Scripts\activate            # Linux/macOS: source .venv/bin/activate
-python -m pip install -e ".[tinvest]"
+python -m pip install -e .
 copy .env.example .env            # заполните TELEGRAM_BOT_TOKEN, TINKOFF_TOKEN, при желании LLM_*
 ~~~
 
-Токен T-Invest лучше выпустить «только для чтения»: https://www.tbank.ru/invest/settings/api/.
+Токен T-Invest: Т-Инвестиции → Настройки → Токены API, лучше «Только чтение».
 Для проверки без риска используйте песочницу (`TINVEST_SANDBOX=1` и токен песочницы).
+
+Проверить подключение и посмотреть инструменты сервера:
+
+~~~sh
+python -m investment_journal --list-tools
+~~~
 
 ## Запуск
 
@@ -51,8 +59,9 @@ investment-assistant              # или: python -m investment_journal
 python -m unittest discover -s tests -v
 ~~~
 
-Сетевые сервисы в тестах не нужны: MCP подменяется заглушкой или тестовым stdio-сервером
-`tests/fake_tinvest_server.py`, HTTP к LLM — `httpx.MockTransport`, Telegram — подменённым `Bot`.
+Сетевые сервисы в тестах не нужны: MCP подменяется заглушкой с форматом ответов официального
+сервера или локальным тестовым HTTP-сервером `tests/fake_tinvest_server.py`, HTTP к LLM —
+`httpx.MockTransport`, Telegram — подменённым `Bot`.
 
 ## Метрики кода (лабораторная работа №3)
 

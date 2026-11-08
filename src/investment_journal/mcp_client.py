@@ -1,11 +1,14 @@
-"""Клиент MCP-сервера T-Invest (транспорт stdio)."""
+"""Клиент официального MCP-сервера Т-Инвестиций (Streamable HTTP)."""
 
 import json
+import ssl
 from contextlib import AsyncExitStack
 from typing import Any, Protocol
 
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
+import certifi
+import httpx
+from mcp import ClientSession
+from mcp.client.streamable_http import streamable_http_client
 from mcp.shared.exceptions import McpError
 
 from .config import McpSettings
@@ -50,8 +53,20 @@ def _unwrap(data: Any) -> Any:
     return data
 
 
+#: Как у клиента mcp по умолчанию: 30 с на соединение, 300 с на чтение потока ответа.
+HTTP_TIMEOUT = httpx.Timeout(30, read=300)
+
+
+def ssl_context(ca_files: tuple[str, ...] = ()) -> ssl.SSLContext:
+    """Сертификаты certifi плюс дополнительные (для T-Bank — корневой и промежуточный сертификаты Минцифры)."""
+    context = ssl.create_default_context(cafile=certifi.where())
+    for path in ca_files:
+        context.load_verify_locations(cafile=path)
+    return context
+
+
 class McpToolClient:
-    """Долгоживущая сессия с MCP-сервером, запущенным как дочерний процесс."""
+    """Долгоживущая сессия с MCP-сервером по Streamable HTTP."""
 
     def __init__(self, settings: McpSettings):
         self._settings = settings
@@ -59,16 +74,24 @@ class McpToolClient:
         self._session: ClientSession | None = None
 
     async def __aenter__(self) -> "McpToolClient":
-        params = StdioServerParameters(
-            command=self._settings.command,
-            args=list(self._settings.args),
-            env=dict(self._settings.env),
-        )
         self._stack = AsyncExitStack()
-        read, write = await self._stack.enter_async_context(stdio_client(params))
-        self._session = await self._stack.enter_async_context(ClientSession(read, write))
-        await self._session.initialize()
+        try:
+            read, write = await self._open_transport(self._stack)
+            self._session = await self._stack.enter_async_context(ClientSession(read, write))
+            await self._session.initialize()
+        except BaseException:
+            await self.__aexit__(None, None, None)
+            raise
         return self
+
+    async def _open_transport(self, stack: AsyncExitStack):
+        http = await stack.enter_async_context(httpx.AsyncClient(
+            headers=dict(self._settings.headers),
+            timeout=HTTP_TIMEOUT,
+            verify=ssl_context(self._settings.ca_files),
+        ))
+        read, write, _ = await stack.enter_async_context(streamable_http_client(self._settings.url, http_client=http))
+        return read, write
 
     async def __aexit__(self, *exc: object) -> None:
         if self._stack is not None:

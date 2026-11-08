@@ -26,7 +26,7 @@ MCP-клиент и рыночные данные
    :member-order: bysource
 
 .. automodule:: investment_journal.market
-   :members: MarketDataService, quotation, parse_position, parse_candle
+   :members: MarketDataService, quotation, pick_instrument, parse_candle, parse_position, parse_portfolio
    :member-order: bysource
 
 Журнал и аналитика

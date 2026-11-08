@@ -1,12 +1,15 @@
 """Запуск: ``python -m investment_journal``."""
 
+import argparse
 import asyncio
+import json
 import logging
+import sys
 
 from aiogram import Bot, Dispatcher
 
 from .bot import create_router
-from .config import Settings, load_settings
+from .config import McpSettings, Settings, load_env, load_settings, mcp_settings
 from .journal import JournalService
 from .llm import ChatCompletionsClient, InvestmentAgent
 from .market import MarketDataService
@@ -17,7 +20,7 @@ from .storage import JournalRepository
 def build_dispatcher(settings: Settings, tools: ToolClient, repo: JournalRepository,
                      llm: ChatCompletionsClient | None = None) -> Dispatcher:
     """Собрать сервисы и Dispatcher; зависимости попадают в обработчики по имени."""
-    journal = JournalService(repo, MarketDataService(tools, settings.mcp))
+    journal = JournalService(repo, MarketDataService(tools, settings.mcp.account_id))
     agent = None
     if llm is not None and settings.llm is not None:
         agent = InvestmentAgent(llm, journal, settings.mcp.read_only_tools, settings.llm.max_steps)
@@ -40,8 +43,23 @@ async def run(settings: Settings) -> None:
         repo.close()
 
 
-def main() -> None:
+async def list_tools(settings: McpSettings) -> list[dict]:
+    """Инструменты MCP-сервера с их схемами — для проверки подключения и настройки имён."""
+    async with McpToolClient(settings) as tools:
+        return await tools.list_tools()
+
+
+def main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(prog="investment-assistant", description="Telegram-бот инвестиционного ассистента")
+    parser.add_argument("--list-tools", action="store_true",
+                        help="подключиться к MCP-серверу, вывести его инструменты в JSON и выйти")
+    args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    if args.list_tools:
+        tools = asyncio.run(list_tools(mcp_settings(load_env())))
+        sys.stdout.reconfigure(encoding="utf-8")
+        print(json.dumps(tools, ensure_ascii=False, indent=2))
+        return
     asyncio.run(run(load_settings()))
 
 

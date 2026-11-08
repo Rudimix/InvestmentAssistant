@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from _support import FakeToolClient, mcp_settings
+from _support import FakeToolClient
 from investment_journal.journal import JournalError, JournalService
 from investment_journal.market import MarketDataService
 from investment_journal.mcp_client import ToolError
@@ -56,7 +56,7 @@ class RepositoryTests(unittest.TestCase):
 class JournalServiceTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         self.tools = FakeToolClient()
-        self.journal = JournalService(JournalRepository(), MarketDataService(self.tools, mcp_settings()))
+        self.journal = JournalService(JournalRepository(), MarketDataService(self.tools))
         self.user = self.journal.user(42)
 
     async def test_record_uses_current_price(self):

@@ -17,7 +17,7 @@ from .models import DECISION_KINDS, DecisionDraft
 HELP = (
     "Я веду журнал инвестиционных гипотез и беру данные из Т-Инвестиций через MCP.\n\n"
     "/price ТИКЕР — последняя цена\n"
-    "/stats ТИКЕР [интервал] [свечей] — статистика по свечам (интервалы: 1m 5m 15m 1h 4h 1d)\n"
+    "/stats ТИКЕР [интервал] [свечей] — статистика по свечам (интервалы: 1m 5m 15m 1h 4h 1d 1w)\n"
     "/portfolio — портфель счёта\n"
     "/idea — записать гипотезу (buy/sell/hold) с текущей ценой\n"
     "/journal — все записи журнала\n"
@@ -52,7 +52,7 @@ async def cmd_start(message: Message, journal: JournalService) -> None:
 
 async def cmd_price(message: Message, command: CommandObject, journal: JournalService) -> None:
     if not command.args:
-        await message.answer("Укажите тикер: /price SiZ6")
+        await message.answer("Укажите тикер: /price SBER")
         return
     ticker = command.args.split()[0].upper()
     try:
@@ -68,7 +68,7 @@ def parse_stats_args(args: str | None) -> tuple[str, str, int]:
     parts = (args or "").split()
     ticker, interval, bars = (parts + STATS_DEFAULTS[len(parts):])[:3]
     if not ticker:
-        raise ValueError("Укажите тикер: /stats SiZ6 1d 30")
+        raise ValueError("Укажите тикер: /stats SBER 1d 30")
     if interval not in INTERVALS:
         raise ValueError(f"Интервал должен быть одним из: {', '.join(INTERVALS)}")
     if not bars.isdigit() or not 2 <= int(bars) <= 500:

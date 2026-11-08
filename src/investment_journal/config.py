@@ -1,53 +1,47 @@
 """Настройки приложения из переменных окружения и файла ``.env``."""
 
 import os
-import shlex
 from dataclasses import dataclass, field
 from pathlib import Path
 
-#: Инструменты MCP-сервера, которые разрешено вызывать LLM (только чтение).
-DEFAULT_READ_ONLY_TOOLS = (
-    "get_last_price",
-    "get_candles",
-    "get_orderbook",
-    "get_instrument_specs",
-    "get_portfolio",
-    "get_active_orders",
-    "get_free_deposit",
-    "get_operations",
-)
+#: Официальный MCP-сервер Т-Инвестиций (Streamable HTTP) и его песочница.
+OFFICIAL_MCP_URL = "https://invest-public-api.tbank.ru/mcp"
+SANDBOX_MCP_URL = "https://sandbox-invest-public-api.tbank.ru/mcp"
 
-#: Переменные, которые передаются процессу MCP-сервера.
-FORWARDED_ENV = (
-    "TINKOFF_TOKEN",
-    "TINVEST_TOKEN",
-    "TINKOFF_ACCOUNT_ID",
-    "TINVEST_ACCOUNT_ID",
-    "TINVEST_SANDBOX",
-    "TINVEST_DROP_WEEKENDS",
-    "TINVEST_STATE_DIR",
-    # Без них Python-процесс на Windows/Linux может не запуститься.
-    "SYSTEMROOT",
-    "PATH",
-    "HOME",
-    "USERPROFILE",
-    "APPDATA",
-    "LOCALAPPDATA",
-    "TEMP",
-    "TMP",
+#: Инструменты официального сервера, которые разрешено вызывать LLM: только чтение.
+#: Заявки, стоп-заявки, избранное и операции со счетами песочницы сюда не входят;
+#: инструменты, появившиеся на сервере позже, тоже не попадут к LLM, пока их не добавить.
+DEFAULT_READ_ONLY_TOOLS = (
+    # инструменты и справочники
+    "invest_find_instrument", "invest_get_share", "invest_get_bond", "invest_get_etf", "invest_get_future",
+    "invest_get_option", "invest_get_currency", "invest_get_dfa", "invest_get_structured_note",
+    "invest_get_asset", "invest_get_asset_fundamentals", "invest_get_brand", "invest_list_assets",
+    "invest_list_brands", "invest_list_countries", "invest_list_shares", "invest_list_bonds",
+    "invest_list_etfs", "invest_list_futures", "invest_list_options", "invest_list_currencies",
+    "invest_list_dfas", "invest_list_indicatives", "invest_list_structured_notes",
+    "invest_get_bond_accrued", "invest_get_bond_events", "invest_get_share_dividends",
+    "invest_get_instrument_reports", "invest_get_insider_deals", "invest_get_risk_rates",
+    "invest_get_trading_schedule", "invest_get_favorite_groups", "invest_get_favorite_instruments",
+    # рыночные данные и аналитика
+    "invest_get_market_values", "invest_get_candles", "invest_get_last_trades", "invest_get_orderbook",
+    "invest_get_tech_analysis", "invest_get_trading_statuses", "invest_get_forecast",
+    "invest_list_consensus_forecasts", "invest_list_signals", "invest_list_strategies", "invest_get_news",
+    # счета, портфель, операции (без изменений)
+    "invest_list_accounts", "invest_list_broker_accounts", "invest_get_user_info", "invest_get_portfolio",
+    "invest_get_positions", "invest_get_operations", "invest_get_blocked_guarantee",
+    "invest_get_broker_account_margin", "invest_get_orders", "invest_get_order_state", "invest_get_stoporders",
+    "invest_get_max_lots", "invest_get_order_price",
 )
 
 
 @dataclass(frozen=True)
 class McpSettings:
-    """Как запускать MCP-сервер T-Invest и как называются его инструменты."""
+    """Подключение к MCP-серверу Т-Инвестиций по Streamable HTTP."""
 
-    command: str = "tinvest-mcp"
-    args: tuple[str, ...] = ()
-    env: dict[str, str] = field(default_factory=dict)
-    price_tool: str = "get_last_price"
-    candles_tool: str = "get_candles"
-    portfolio_tool: str = "get_portfolio"
+    url: str = OFFICIAL_MCP_URL
+    headers: dict[str, str] = field(default_factory=dict)
+    ca_files: tuple[str, ...] = ()
+    account_id: str = ""
     read_only_tools: tuple[str, ...] = DEFAULT_READ_ONLY_TOOLS
 
 
@@ -93,11 +87,16 @@ def _unquote(value: str) -> str:
     return value
 
 
-def load_settings(environ: dict[str, str] | None = None, dotenv: Path | None = Path(".env")) -> Settings:
-    """Собрать настройки. Переменные окружения важнее значений из ``.env``."""
+def load_env(environ: dict[str, str] | None = None, dotenv: Path | None = Path(".env")) -> dict[str, str]:
+    """Значения из ``.env``, поверх которых — переменные окружения."""
     env = dict(read_dotenv(dotenv)) if dotenv else {}
     env.update(os.environ if environ is None else environ)
+    return env
 
+
+def load_settings(environ: dict[str, str] | None = None, dotenv: Path | None = Path(".env")) -> Settings:
+    """Собрать настройки. Переменные окружения важнее значений из ``.env``."""
+    env = load_env(environ, dotenv)
     bot_token = env.get("TELEGRAM_BOT_TOKEN", "")
     if not bot_token:
         raise ValueError("Не задан TELEGRAM_BOT_TOKEN")
@@ -114,19 +113,26 @@ def split_list(value: str) -> tuple[str, ...]:
     return tuple(item.strip() for item in value.split(",") if item.strip())
 
 
+def mcp_url(env: dict[str, str]) -> str:
+    """Адрес MCP-сервера: явный ``TINVEST_MCP_URL``, иначе песочница или боевой сервер."""
+    if env.get("TINVEST_MCP_URL"):
+        return env["TINVEST_MCP_URL"]
+    sandbox = env.get("TINVEST_SANDBOX", "0").strip().lower() in ("1", "true", "yes")
+    return SANDBOX_MCP_URL if sandbox else OFFICIAL_MCP_URL
+
+
+def auth_headers(env: dict[str, str]) -> dict[str, str]:
+    token = env.get("TINKOFF_TOKEN") or env.get("TINVEST_TOKEN")
+    return {"Authorization": f"Bearer {token}"} if token else {}
+
+
 def mcp_settings(env: dict[str, str]) -> McpSettings:
-    server_env = {k: env[k] for k in FORWARDED_ENV if k in env}
-    # Ассистент никогда не торгует: торговые инструменты сервера выключены.
-    server_env["TINVEST_ALLOW_TRADING"] = "0"
-    defaults = McpSettings()
     return McpSettings(
-        command=env.get("TINVEST_MCP_COMMAND", defaults.command),
-        args=tuple(shlex.split(env.get("TINVEST_MCP_ARGS", ""))),
-        env=server_env,
-        price_tool=env.get("TINVEST_MCP_PRICE_TOOL", defaults.price_tool),
-        candles_tool=env.get("TINVEST_MCP_CANDLES_TOOL", defaults.candles_tool),
-        portfolio_tool=env.get("TINVEST_MCP_PORTFOLIO_TOOL", defaults.portfolio_tool),
-        read_only_tools=split_list(env.get("TINVEST_MCP_READ_TOOLS", "")) or defaults.read_only_tools,
+        url=mcp_url(env),
+        headers=auth_headers(env),
+        ca_files=split_list(env.get("TINVEST_CA_FILES", "")),
+        account_id=env.get("TINKOFF_ACCOUNT_ID") or env.get("TINVEST_ACCOUNT_ID", ""),
+        read_only_tools=split_list(env.get("TINVEST_MCP_READ_TOOLS", "")) or DEFAULT_READ_ONLY_TOOLS,
     )
 
 

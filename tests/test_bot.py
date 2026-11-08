@@ -9,7 +9,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StorageKey
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from _support import FakeToolClient, mcp_settings
+from _support import FakeToolClient
 from investment_journal import bot
 from investment_journal.journal import JournalService
 from investment_journal.llm import LlmError
@@ -36,7 +36,7 @@ class ParseStatsArgsTests(unittest.TestCase):
         self.assertEqual(bot.parse_stats_args("siz6 4h 100 extra"), ("SIZ6", "4h", 100))
 
     def test_errors(self):
-        for args in (None, "", "SIZ6 1w", "SIZ6 1d 1", "SIZ6 1d -5"):
+        for args in (None, "", "SIZ6 2d", "SIZ6 1d 1", "SIZ6 1d -5"):
             with self.subTest(args=args), self.assertRaises(ValueError):
                 bot.parse_stats_args(args)
 
@@ -44,7 +44,7 @@ class ParseStatsArgsTests(unittest.TestCase):
 class BotTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         self.tools = FakeToolClient()
-        self.journal = JournalService(JournalRepository(), MarketDataService(self.tools, mcp_settings()))
+        self.journal = JournalService(JournalRepository(), MarketDataService(self.tools))
         self.state = FSMContext(storage=MemoryStorage(), key=StorageKey(bot_id=1, chat_id=7, user_id=7))
 
     async def test_start_registers_user(self):
@@ -86,7 +86,9 @@ class BotTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_stats_not_enough_candles(self):
         async def one_candle(name, arguments=None):
-            return {"candles": [{"t": "t", "o": 1, "h": 1, "l": 1, "c": 1, "v": 1}]}
+            if name == "invest_find_instrument":
+                return {"instruments": [{"ticker": "SiZ6", "classCode": "SPBFUT"}]}
+            return {"candles": [{"time": "2026-11-01", "close": {"value": "1"}, "volume": "1"}]}
         self.tools.call = one_candle
         msg = message()
         await bot.cmd_stats(msg, command("SiZ6"), self.journal)

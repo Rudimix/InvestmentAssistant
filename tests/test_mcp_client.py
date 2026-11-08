@@ -1,13 +1,19 @@
-"""MCP-клиент: разбор ответов и настоящая stdio-сессия с тестовым сервером."""
+"""MCP-клиент: разбор ответов и настоящая HTTP-сессия с тестовым сервером."""
 
+import socket
+import subprocess
 import sys
+import tempfile
+import time
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
 
+import certifi
+
 import _support  # noqa: F401
 from investment_journal.config import McpSettings
-from investment_journal.mcp_client import McpToolClient, ToolError, parse_tool_result
+from investment_journal.mcp_client import McpToolClient, ToolError, parse_tool_result, ssl_context
 
 SERVER = Path(__file__).resolve().parent / "fake_tinvest_server.py"
 
@@ -44,18 +50,32 @@ class ParseToolResultTests(unittest.TestCase):
             parse_tool_result(result)
 
 
-class StdioSessionTests(unittest.IsolatedAsyncioTestCase):
-    """Сессия открывается и закрывается в одной задаче — так требует anyio."""
+class HttpSessionTests(unittest.IsolatedAsyncioTestCase):
+    """Streamable HTTP, как у официального сервера: тестовый сервер на локальном порту.
 
-    async def test_session_with_fake_server(self):
-        settings = McpSettings(command=sys.executable, args=(str(SERVER),), env=_env())
+    Сессия открывается и закрывается в одной задаче — так требует anyio.
+    """
+
+    def setUp(self):
+        self.port = _free_port()
+        self.server = subprocess.Popen([sys.executable, str(SERVER), "--http", str(self.port)],
+                                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        _wait_for_port(self.port)
+
+    def tearDown(self):
+        self.server.terminate()
+        self.server.wait(timeout=10)
+
+    async def test_http_session_sends_token(self):
+        settings = McpSettings(url=f"http://127.0.0.1:{self.port}/mcp",
+                               headers={"Authorization": "Bearer test-token"})
         async with McpToolClient(settings) as client:
             names = {t["name"] for t in await client.list_tools()}
-            self.assertEqual(names, {"get_last_price", "get_candles", "get_portfolio"})
+            self.assertEqual(names, {"get_last_price", "get_candles", "get_portfolio", "whoami"})
+            self.assertEqual(await client.call("whoami"), {"authorization": "Bearer test-token"})
 
             data = await client.call("get_last_price", {"ticker": "SiZ6"})
             self.assertEqual(data, {"ticker": "SiZ6", "price": 91234.5})
-
             candles = await client.call("get_candles", {"ticker": "SiZ6", "interval": "1d", "bars": 3})
             self.assertEqual([c["c"] for c in candles["candles"]], [1, 2, 3])
 
@@ -64,6 +84,28 @@ class StdioSessionTests(unittest.IsolatedAsyncioTestCase):
             with self.assertRaisesRegex(ToolError, "TINKOFF_TOKEN"):
                 await client.call("get_portfolio")
 
+    async def test_unreachable_server_fails_on_enter(self):
+        settings = McpSettings(url=f"http://127.0.0.1:{_free_port()}/mcp")
+        with self.assertRaises(BaseException):
+            async with McpToolClient(settings):
+                pass
+
+
+class SslContextTests(unittest.TestCase):
+    def test_extra_ca_file_is_loaded(self):
+        base = ssl_context()
+        with tempfile.TemporaryDirectory() as tmp:
+            pem = Path(tmp) / "ca.pem"
+            # любой корректный сертификат из certifi подходит для проверки загрузки
+            pem.write_text(Path(certifi.where()).read_text(encoding="utf-8").split("\n\n")[0] + "\n",
+                           encoding="utf-8")
+            extended = ssl_context((str(pem),))
+        self.assertGreaterEqual(len(extended.get_ca_certs()), len(base.get_ca_certs()))
+
+    def test_missing_ca_file_is_an_error(self):
+        with self.assertRaises(FileNotFoundError):
+            ssl_context(("definitely-missing.cer",))
+
 
 class SessionGuardTests(unittest.IsolatedAsyncioTestCase):
     async def test_call_without_session_fails(self):
@@ -71,11 +113,20 @@ class SessionGuardTests(unittest.IsolatedAsyncioTestCase):
             await McpToolClient(McpSettings()).call("get_last_price", {"ticker": "SiZ6"})
 
 
-def _env() -> dict[str, str]:
-    import os
+def _free_port() -> int:
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        return s.getsockname()[1]
 
-    keep = ("SYSTEMROOT", "PATH", "TEMP", "TMP", "USERPROFILE", "HOME", "APPDATA", "LOCALAPPDATA")
-    return {k: os.environ[k] for k in keep if k in os.environ}
+
+def _wait_for_port(port: int, timeout: float = 15) -> None:
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        with socket.socket() as s:
+            if s.connect_ex(("127.0.0.1", port)) == 0:
+                return
+        time.sleep(0.1)
+    raise RuntimeError(f"Тестовый MCP-сервер не запустился на порту {port}")
 
 
 if __name__ == "__main__":

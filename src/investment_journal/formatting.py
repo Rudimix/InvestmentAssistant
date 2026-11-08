@@ -1,7 +1,7 @@
 """Тексты сообщений бота."""
 
 from .analytics import CandleStats, DecisionReview
-from .models import Decision, Portfolio
+from .models import Decision, Portfolio, Position
 
 KIND_LABELS = {"buy": "Покупка", "sell": "Продажа", "hold": "Удержание"}
 VERDICT_LABELS = {
@@ -60,13 +60,17 @@ def format_portfolio(p: Portfolio) -> str:
     ]
     if p.positions:
         lines.append("")
-        for pos in p.positions:
-            lines.append(
-                f"• {pos.ticker} ({pos.instrument_type}): {pos.quantity:g} шт., "
-                f"средняя {pos.average_price:g}, текущая {pos.current_price:g}, "
-                f"результат {money(pos.expected_yield, pos.currency)}"
-            )
+        lines.extend(format_position(pos) for pos in p.positions)
     return "\n".join(lines)
+
+
+def format_position(pos: Position) -> str:
+    """Строка позиции; поля, которых нет в ответе сервера, не выводятся."""
+    kind = f" ({pos.instrument_type})" if pos.instrument_type else ""
+    parts = [f"{pos.quantity:g} шт.", f"средняя {pos.average_price:g}"]
+    if pos.current_price:
+        parts += [f"текущая {pos.current_price:g}", f"результат {money(pos.expected_yield, pos.currency)}"]
+    return f"• {pos.ticker}{kind}: " + ", ".join(parts)
 
 
 def format_stats(ticker: str, interval: str, s: CandleStats, bars: int) -> str:
