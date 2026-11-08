@@ -4,12 +4,22 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "investment-decision-journal"
-version = "0.1.0"
-description = "Investment journal models"
+version = "0.2.0"
+description = "Investment assistant: Telegram bot + T-Invest MCP + journal of investment hypotheses"
 requires-python = ">=3.12"
+dependencies = [
+    # t-invest-tinkoff-mcp использует FastMCP из mcp 1.x
+    "mcp>=1.27,<2",
+    "aiogram>=3.13,<4",
+    "httpx>=0.27",
+]
 
 [project.optional-dependencies]
+tinvest = ["t-invest-tinkoff-mcp @ git+https://github.com/viptdv333-boop/t-invest-tinkoff-mcp.git"]
 docs = ["Sphinx>=8,<10"]
+
+[project.scripts]
+investment-assistant = "investment_journal.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

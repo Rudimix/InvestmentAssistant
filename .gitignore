@@ -5,3 +5,6 @@ __pycache__/
 build/
 dist/
 docs/_build/
+.env
+*.sqlite3
+.coverage
