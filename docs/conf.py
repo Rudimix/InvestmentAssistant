@@ -13,3 +13,5 @@ html_theme = "alabaster"
 html_show_sourcelink = False
 html_copy_source = False
 html_show_copyright = False
+# Аннотации типов не выводим: иначе строгий режим (-n -W) требует ссылок на внешние библиотеки.
+autodoc_typehints = "none"

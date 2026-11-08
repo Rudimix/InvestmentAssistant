@@ -4,12 +4,42 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "investment-decision-journal"
-version = "0.1.0"
-description = "Investment journal models"
+version = "0.2.0"
+description = "Investment assistant: Telegram bot + official T-Invest MCP + journal of investment hypotheses"
 requires-python = ">=3.12"
+dependencies = [
+    # клиент Streamable HTTP из mcp 1.x (в 2.x API клиента и сервера изменились)
+    "mcp>=1.27,<2",
+    "aiogram>=3.13,<4",
+    "httpx>=0.27",
+]
 
 [project.optional-dependencies]
 docs = ["Sphinx>=8,<10"]
+metrics = [
+    "radon>=6",
+    "lizard>=1.17",
+    "pylint>=3",
+    "flake8>=7",
+    "pyscn>=1.30",
+    "coverage>=7",
+]
+
+[project.scripts]
+investment-assistant = "investment_journal.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+# Пороги проверок дизайна pylint — аналог правил CA1501/CA150x анализаторов .NET.
+[tool.pylint.design]
+max-parents = 5        # R0901 too-many-ancestors   ≈ CA1501 (глубина наследования)
+max-branches = 12      # R0912 too-many-branches
+max-statements = 50    # R0915 too-many-statements
+max-args = 5           # R0913 too-many-arguments
+max-locals = 15        # R0914 too-many-locals
+max-returns = 6        # R0911 too-many-return-statements
+
+[tool.coverage.run]
+branch = true
+source = ["src/investment_journal"]

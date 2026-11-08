@@ -1,0 +1,8 @@
+************* Module investment_journal.analytics
+src\investment_journal\analytics.py:24:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
+src\investment_journal\analytics.py:44:0: R0912: Too many branches (16/12) (too-many-branches)
+src\investment_journal\analytics.py:88:0: R0914: Too many local variables (16/15) (too-many-locals)
+************* Module investment_journal.bot
+src\investment_journal\bot.py:33:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+************* Module investment_journal.models
+src\investment_journal\models.py:39:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)

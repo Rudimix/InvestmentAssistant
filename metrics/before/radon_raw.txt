@@ -1,0 +1,156 @@
+src\investment_journal\analytics.py
+    LOC: 131
+    LLOC: 114
+    SLOC: 105
+    Comments: 3
+    Single comments: 5
+    Multi: 5
+    Blank: 16
+    - Comment Stats
+        (C % L): 2%
+        (C % S): 3%
+        (C + M % L): 6%
+src\investment_journal\bot.py
+    LOC: 207
+    LLOC: 159
+    SLOC: 170
+    Comments: 0
+    Single comments: 1
+    Multi: 0
+    Blank: 36
+    - Comment Stats
+        (C % L): 0%
+        (C % S): 0%
+        (C + M % L): 0%
+src\investment_journal\config.py
+    LOC: 132
+    LLOC: 81
+    SLOC: 101
+    Comments: 4
+    Single comments: 9
+    Multi: 0
+    Blank: 22
+    - Comment Stats
+        (C % L): 3%
+        (C % S): 4%
+        (C + M % L): 3%
+src\investment_journal\formatting.py
+    LOC: 81
+    LLOC: 48
+    SLOC: 62
+    Comments: 0
+    Single comments: 1
+    Multi: 0
+    Blank: 18
+    - Comment Stats
+        (C % L): 0%
+        (C % S): 0%
+        (C + M % L): 0%
+src\investment_journal\journal.py
+    LOC: 59
+    LLOC: 49
+    SLOC: 43
+    Comments: 0
+    Single comments: 5
+    Multi: 0
+    Blank: 11
+    - Comment Stats
+        (C % L): 0%
+        (C % S): 0%
+        (C + M % L): 0%
+src\investment_journal\llm.py
+    LOC: 144
+    LLOC: 102
+    SLOC: 120
+    Comments: 0
+    Single comments: 5
+    Multi: 0
+    Blank: 19
+    - Comment Stats
+        (C % L): 0%
+        (C % S): 0%
+        (C + M % L): 0%
+src\investment_journal\market.py
+    LOC: 96
+    LLOC: 61
+    SLOC: 83
+    Comments: 0
+    Single comments: 3
+    Multi: 0
+    Blank: 10
+    - Comment Stats
+        (C % L): 0%
+        (C % S): 0%
+        (C + M % L): 0%
+src\investment_journal\mcp_client.py
+    LOC: 89
+    LLOC: 67
+    SLOC: 64
+    Comments: 1
+    Single comments: 6
+    Multi: 0
+    Blank: 19
+    - Comment Stats
+        (C % L): 1%
+        (C % S): 2%
+        (C + M % L): 1%
+src\investment_journal\models.py
+    LOC: 101
+    LLOC: 90
+    SLOC: 50
+    Comments: 1
+    Single comments: 6
+    Multi: 21
+    Blank: 24
+    - Comment Stats
+        (C % L): 1%
+        (C % S): 2%
+        (C + M % L): 22%
+src\investment_journal\storage.py
+    LOC: 105
+    LLOC: 47
+    SLOC: 88
+    Comments: 0
+    Single comments: 2
+    Multi: 0
+    Blank: 15
+    - Comment Stats
+        (C % L): 0%
+        (C % S): 0%
+        (C + M % L): 0%
+src\investment_journal\__init__.py
+    LOC: 1
+    LLOC: 1
+    SLOC: 0
+    Comments: 0
+    Single comments: 1
+    Multi: 0
+    Blank: 0
+    - Comment Stats
+        (C % L): 0%
+        (C % S): 0%
+        (C + M % L): 0%
+src\investment_journal\__main__.py
+    LOC: 46
+    LLOC: 34
+    SLOC: 36
+    Comments: 0
+    Single comments: 1
+    Multi: 0
+    Blank: 9
+    - Comment Stats
+        (C % L): 0%
+        (C % S): 0%
+        (C + M % L): 0%
+** Total **
+    LOC: 1192
+    LLOC: 853
+    SLOC: 922
+    Comments: 9
+    Single comments: 45
+    Multi: 26
+    Blank: 199
+    - Comment Stats
+        (C % L): 1%
+        (C % S): 1%
+        (C + M % L): 3%
