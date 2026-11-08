@@ -19,6 +19,22 @@ class User:
     chat_id: int
 
 
+@dataclass(frozen=True)
+class Account:
+    """Счёт в Т-Инвестициях.
+
+    :param id: Идентификатор счёта.
+    :param name: Название, которое пользователь дал счёту.
+    :param type: Тип счёта (``ACCOUNT_TYPE_TINKOFF``, ``ACCOUNT_TYPE_TINKOFF_IIS``...).
+    :param read_only: Токен даёт к счёту доступ только на чтение.
+    """
+
+    id: str
+    name: str = ""
+    type: str = ""
+    read_only: bool = False
+
+
 @dataclass
 class DecisionDraft:
     """Черновик инвестиционной гипотезы.

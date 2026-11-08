@@ -1,5 +1,6 @@
 """Общие заглушки для тестов."""
 
+from contextlib import asynccontextmanager
 from pathlib import Path
 import sys
 
@@ -106,3 +107,43 @@ class FakeToolClient:
 
 def mcp_settings() -> McpSettings:
     return McpSettings()
+
+
+#: Токен в формате T-Invest API, который заглушка сервера считает действительным.
+TEST_TOKEN = "t." + "TestToken_" * 6
+TEST_KEY = "ZmFrZS1rZXktZm9yLXRlc3RzLW9ubHktMzItYnl0ZXM="  # 32 байта в base64: ключ Fernet для тестов
+
+
+class FakeOpener:
+    """Вместо настоящей сессии MCP: отдаёт FakeToolClient, если токен действителен."""
+
+    def __init__(self, tools: FakeToolClient, valid_tokens=(TEST_TOKEN,)):
+        self.tools = tools
+        self.valid_tokens = set(valid_tokens)
+        self.tokens: list[str] = []
+
+    def __call__(self, settings: McpSettings):
+        token = settings.headers.get("Authorization", "").removeprefix("Bearer ")
+        self.tokens.append(token)
+        return self._session(token)
+
+    @asynccontextmanager
+    async def _session(self, token: str):
+        if token not in self.valid_tokens:
+            raise ToolError("сервер Т-Инвестиций не принял токен — проверьте его или выпустите новый")
+        yield self.tools
+
+
+def make_connections(tools: FakeToolClient | None = None, connected=(7,)):
+    """Connections на памяти; чаты из ``connected`` уже подключили TEST_TOKEN."""
+    from investment_journal.connections import Connections, TokenCipher
+    from investment_journal.storage import JournalRepository
+
+    repo = JournalRepository()
+    cipher = TokenCipher(TEST_KEY)
+    opener = FakeOpener(tools or FakeToolClient())
+    connections = Connections(repo, cipher, McpSettings(), opener)
+    for chat_id in connected:
+        user = repo.get_or_create_user(chat_id)
+        repo.save_credentials(user.id, cipher.encrypt(TEST_TOKEN), "2000000001")
+    return connections

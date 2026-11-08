@@ -22,6 +22,12 @@ CREATE TABLE IF NOT EXISTS decisions (
     exit_price REAL,
     closed_at TEXT
 );
+CREATE TABLE IF NOT EXISTS credentials (
+    user_id INTEGER PRIMARY KEY REFERENCES users(id),
+    token BLOB NOT NULL,
+    account_id TEXT NOT NULL DEFAULT '',
+    connected_at TEXT NOT NULL
+);
 """
 
 
@@ -47,6 +53,28 @@ class JournalRepository:
             self._db.commit()
             return User(id=cur.lastrowid, chat_id=chat_id)
         return User(id=row["id"], chat_id=row["chat_id"])
+
+    def save_credentials(self, user_id: int, token: bytes, account_id: str) -> None:
+        """Сохранить (заменить) токен пользователя. ``token`` — уже зашифрованный."""
+        self._db.execute(
+            "INSERT OR REPLACE INTO credentials (user_id, token, account_id, connected_at) VALUES (?, ?, ?, ?)",
+            (user_id, token, account_id, _now().isoformat()),
+        )
+        self._db.commit()
+
+    def get_credentials(self, user_id: int) -> tuple[bytes, str] | None:
+        """Зашифрованный токен и выбранный счёт или ``None``, если пользователь не подключён."""
+        row = self._db.execute("SELECT token, account_id FROM credentials WHERE user_id = ?", (user_id,)).fetchone()
+        return (row["token"], row["account_id"]) if row else None
+
+    def set_account(self, user_id: int, account_id: str) -> None:
+        self._db.execute("UPDATE credentials SET account_id = ? WHERE user_id = ?", (account_id, user_id))
+        self._db.commit()
+
+    def delete_credentials(self, user_id: int) -> bool:
+        cur = self._db.execute("DELETE FROM credentials WHERE user_id = ?", (user_id,))
+        self._db.commit()
+        return cur.rowcount > 0
 
     def add_decision(self, draft: DecisionDraft, entry_price: float, created_at: datetime | None = None) -> Decision:
         created_at = created_at or _now()

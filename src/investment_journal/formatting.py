@@ -1,7 +1,7 @@
 """Тексты сообщений бота."""
 
 from .analytics import CandleStats, DecisionReview
-from .models import Decision, Portfolio, Position
+from .models import Account, Decision, Portfolio, Position
 
 KIND_LABELS = {"buy": "Покупка", "sell": "Продажа", "hold": "Удержание"}
 VERDICT_LABELS = {
@@ -10,6 +10,12 @@ VERDICT_LABELS = {
     "pending": "⏳ пока рано судить",
 }
 TREND_LABELS = {"up": "восходящий", "down": "нисходящий", "flat": "боковой"}
+ACCOUNT_TYPES = {
+    "ACCOUNT_TYPE_TINKOFF": "брокерский",
+    "ACCOUNT_TYPE_TINKOFF_IIS": "ИИС",
+    "ACCOUNT_TYPE_INVEST_BOX": "инвесткопилка",
+    "ACCOUNT_TYPE_INVEST_FUND": "фонд",
+}
 
 
 def money(value: float, currency: str = "rub") -> str:
@@ -71,6 +77,26 @@ def format_position(pos: Position) -> str:
     if pos.current_price:
         parts += [f"текущая {pos.current_price:g}", f"результат {money(pos.expected_yield, pos.currency)}"]
     return f"• {pos.ticker}{kind}: " + ", ".join(parts)
+
+
+def format_accounts(accounts: list[Account], selected_id: str = "") -> str:
+    """Нумерованный список счетов; выбранный для /portfolio помечен."""
+    if not accounts:
+        return "Открытых брокерских счетов нет."
+    lines = ["Счета:"]
+    lines += [f"{n}. {format_account(a)}" + (" ← выбран" if a.id == selected_id else "")
+              for n, a in enumerate(accounts, 1)]
+    if len(accounts) > 1:
+        lines += ["", "Выбрать другой счёт: /account НОМЕР"]
+    return "\n".join(lines)
+
+
+def format_account(account: Account) -> str:
+    """«ИИС (только чтение)», «Брокерский счёт (брокерский)»; без названия — тип или номер."""
+    kind = ACCOUNT_TYPES.get(account.type, "")
+    title = account.name or kind or account.id
+    details = [x for x in (kind if kind != title else "", "только чтение" if account.read_only else "") if x]
+    return f"{title} ({', '.join(details)})" if details else title
 
 
 def format_stats(ticker: str, interval: str, s: CandleStats, bars: int) -> str:

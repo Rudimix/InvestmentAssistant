@@ -1,13 +1,14 @@
 """Свободный диалог: LLM с OpenAI-совместимым API вызывает инструменты T-Invest MCP и журнала."""
 
 import json
-from typing import Any
+from typing import Any, NamedTuple
 
 import httpx
 
 from .config import LlmSettings
 from .formatting import format_journal, format_reviews
 from .journal import JournalService
+from .market import MarketDataService
 from .mcp_client import ToolError
 from .models import User
 
@@ -41,6 +42,13 @@ JOURNAL_TOOLS = [
 HISTORY_LIMIT = 20
 TOOL_OUTPUT_LIMIT = 8000
 TOO_MANY_STEPS = "Слишком много шагов, уточните вопрос."
+
+
+class ToolContext(NamedTuple):
+    """Чей журнал и чьи данные видит LLM при вызове инструментов."""
+
+    journal: JournalService
+    user: User
 
 
 class LlmError(RuntimeError):
@@ -77,34 +85,36 @@ class ChatCompletionsClient:
 
 
 class InvestmentAgent:
-    """Цикл «LLM → вызов инструментов → LLM», история диалога по каждому чату."""
+    """Цикл «LLM → вызов инструментов → LLM», история диалога по каждому чату.
 
-    def __init__(self, llm: ChatCompletionsClient, journal: JournalService,
-                 read_only_tools: tuple[str, ...], max_steps: int = 6):
+    Журнал и рыночные данные передаются в :meth:`ask` для каждого вопроса —
+    с токеном того пользователя, который спрашивает.
+    """
+
+    def __init__(self, llm: ChatCompletionsClient, read_only_tools: tuple[str, ...], max_steps: int = 6):
         self._llm = llm
-        self._journal = journal
         self._allowed = set(read_only_tools)
         self._max_steps = max_steps
         self._tools: list[dict[str, Any]] | None = None
         self._history: dict[int, list[dict[str, Any]]] = {}
 
-    async def tools(self) -> list[dict[str, Any]]:
-        """Схемы инструментов для LLM: разрешённые инструменты MCP + журнал."""
+    async def tools(self, market: MarketDataService) -> list[dict[str, Any]]:
+        """Схемы инструментов для LLM: разрешённые инструменты MCP + журнал (одни для всех)."""
         if self._tools is None:
-            mcp_tools = await self._journal.market.list_tools()
+            mcp_tools = await market.list_tools()
             self._tools = [as_function(t) for t in mcp_tools if t["name"] in self._allowed] + JOURNAL_TOOLS
         return self._tools
 
     def reset(self, chat_id: int) -> None:
         self._history.pop(chat_id, None)
 
-    async def ask(self, chat_id: int, text: str) -> str:
+    async def ask(self, chat_id: int, text: str, journal: JournalService) -> str:
         """Ответить на вопрос, давая LLM вызывать инструменты не больше ``max_steps`` раз."""
-        user = self._journal.user(chat_id)
         history = self._history.setdefault(chat_id, [])
         history.append({"role": "user", "content": text})
         messages = [{"role": "system", "content": SYSTEM_PROMPT}] + history
-        tools = await self.tools()
+        tools = await self.tools(journal.market)
+        context = ToolContext(journal, journal.user(chat_id))
         for _ in range(self._max_steps):
             reply = await self._llm.complete(messages, tools)
             calls = reply.get("tool_calls") or []
@@ -112,7 +122,7 @@ class InvestmentAgent:
                 return self._remember(history, reply.get("content") or "Не удалось получить ответ.")
             messages.append({"role": "assistant", "content": reply.get("content"), "tool_calls": calls})
             for call in calls:
-                messages.append(await self._run_tool(call, user))
+                messages.append(await self._run_tool(call, context))
         return self._remember(history, TOO_MANY_STEPS)
 
     @staticmethod
@@ -121,23 +131,24 @@ class InvestmentAgent:
         del history[:-HISTORY_LIMIT]
         return answer
 
-    async def _run_tool(self, call: dict[str, Any], user: User) -> dict[str, Any]:
+    async def _run_tool(self, call: dict[str, Any], context: "ToolContext") -> dict[str, Any]:
         """Выполнить один вызов инструмента и вернуть сообщение ``role=tool``."""
         name = call["function"]["name"]
         try:
-            output = await self._dispatch(name, parse_arguments(call), user)
+            output = await self._dispatch(name, parse_arguments(call), context)
         except ToolError as exc:
             output = f"Ошибка: {exc}"
         return {"role": "tool", "tool_call_id": call.get("id", name), "content": output}
 
-    async def _dispatch(self, name: str, args: dict[str, Any], user: User) -> str:
+    async def _dispatch(self, name: str, args: dict[str, Any], context: "ToolContext") -> str:
+        journal, user = context
         if name == "journal_list":
-            return format_journal(self._journal.repo.list_decisions(user.id))
+            return format_journal(journal.repo.list_decisions(user.id))
         if name == "journal_review":
-            return format_reviews(await self._journal.review(user))
+            return format_reviews(await journal.review(user))
         if name not in self._allowed:
             return f"Инструмент {name} недоступен"
-        data = await self._journal.market.call_raw(name, args)
+        data = await journal.market.call_raw(name, args)
         return json.dumps(data, ensure_ascii=False, default=str)[:TOOL_OUTPUT_LIMIT]
 
 
