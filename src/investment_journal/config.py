@@ -36,12 +36,15 @@ DEFAULT_READ_ONLY_TOOLS = (
 
 @dataclass(frozen=True)
 class McpSettings:
-    """Подключение к MCP-серверу Т-Инвестиций по Streamable HTTP."""
+    """Подключение к MCP-серверу Т-Инвестиций по Streamable HTTP.
+
+    В боте ``headers`` заменяются токеном конкретного пользователя (см. ``connections``);
+    из ``.env`` токен берётся только для ``--list-tools``.
+    """
 
     url: str = OFFICIAL_MCP_URL
     headers: dict[str, str] = field(default_factory=dict)
     ca_files: tuple[str, ...] = ()
-    account_id: str = ""
     read_only_tools: tuple[str, ...] = DEFAULT_READ_ONLY_TOOLS
 
 
@@ -63,6 +66,8 @@ class Settings:
     db_path: Path
     mcp: McpSettings
     llm: LlmSettings | None = None
+    #: Ключ Fernet, которым шифруются токены пользователей в базе.
+    token_key: str = ""
 
 
 def read_dotenv(path: Path) -> dict[str, str]:
@@ -105,6 +110,7 @@ def load_settings(environ: dict[str, str] | None = None, dotenv: Path | None = P
         db_path=Path(env.get("JOURNAL_DB", "journal.sqlite3")),
         mcp=mcp_settings(env),
         llm=llm_settings(env),
+        token_key=env.get("TOKEN_ENCRYPTION_KEY", ""),
     )
 
 
@@ -131,7 +137,6 @@ def mcp_settings(env: dict[str, str]) -> McpSettings:
         url=mcp_url(env),
         headers=auth_headers(env),
         ca_files=split_list(env.get("TINVEST_CA_FILES", "")),
-        account_id=env.get("TINKOFF_ACCOUNT_ID") or env.get("TINVEST_ACCOUNT_ID", ""),
         read_only_tools=split_list(env.get("TINVEST_MCP_READ_TOOLS", "")) or DEFAULT_READ_ONLY_TOOLS,
     )
 

@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from .mcp_client import ToolClient, ToolError
-from .models import Candle, Portfolio, Position
+from .models import Account, Candle, Portfolio, Position
 
 #: Интервал команды бота → интервал ``invest_get_candles``.
 INTERVALS = {
@@ -24,10 +24,11 @@ PREFERRED_CLASS_CODES = ("TQBR", "SPBFUT", "TQTF", "TQCB", "TQOB", "CETS", "SPBX
 class MarketDataService:
     """Цена, свечи и портфель по тикеру; тикер переводится в ``instrumentId`` вида ``SBER_TQBR``."""
 
-    def __init__(self, tools: ToolClient, account_id: str = ""):
+    def __init__(self, tools: ToolClient, account_id: str = "", instrument_ids: dict[str, str] | None = None):
         self._tools = tools
         self._account_id = account_id
-        self._instrument_ids: dict[str, str] = {}
+        #: Тикер → instrumentId; словарь можно разделять между сессиями разных пользователей.
+        self._instrument_ids = instrument_ids if instrument_ids is not None else {}
 
     async def instrument_id(self, ticker: str) -> str:
         """``SBER`` → ``SBER_TQBR``; ``SBER_TQBR`` и UID возвращаются как есть."""
@@ -61,11 +62,18 @@ class MarketDataService:
         })
         return [parse_candle(c) for c in data.get("candles", [])]
 
+    async def accounts(self) -> list[Account]:
+        """Открытые брокерские счета пользователя (без банковских)."""
+        data = await self._tools.call("invest_list_accounts", {"status": "ACCOUNT_STATUS_OPEN"})
+        return parse_accounts(data)
+
     async def account_id(self) -> str:
-        """Счёт из настроек или первый открытый брокерский счёт пользователя."""
+        """Выбранный счёт или первый открытый брокерский счёт пользователя."""
         if not self._account_id:
-            data = await self._tools.call("invest_list_accounts", {"status": "ACCOUNT_STATUS_OPEN"})
-            self._account_id = first_account_id(data)
+            accounts = await self.accounts()
+            if not accounts:
+                raise ToolError(NO_ACCOUNTS)
+            self._account_id = accounts[0].id
         return self._account_id
 
     async def portfolio(self) -> Portfolio:
@@ -114,12 +122,27 @@ def last_price_from(data: dict[str, Any]) -> float:
     return 0.0
 
 
+NO_ACCOUNTS = "Нет открытых брокерских счетов"
+
+
+def parse_accounts(data: dict[str, Any]) -> list[Account]:
+    """Ответ ``invest_list_accounts`` → счета; банковские счета пропускаются."""
+    accounts = []
+    for raw in data.get("accounts") or []:
+        account_id = raw.get("id") or raw.get("accountId")
+        if account_id and raw.get("type", "") != "ACCOUNT_TYPE_BANK":
+            accounts.append(Account(
+                id=account_id, name=raw.get("name", ""), type=raw.get("type", ""),
+                read_only=raw.get("accessLevel") == "ACCOUNT_ACCESS_LEVEL_READ_ONLY",
+            ))
+    return accounts
+
+
 def first_account_id(data: dict[str, Any]) -> str:
-    for account in data.get("accounts", []):
-        account_id = account.get("id") or account.get("accountId")
-        if account_id and account.get("type", "") != "ACCOUNT_TYPE_BANK":
-            return account_id
-    raise ToolError("Нет открытых брокерских счетов")
+    accounts = parse_accounts(data)
+    if not accounts:
+        raise ToolError(NO_ACCOUNTS)
+    return accounts[0].id
 
 
 def parse_candle(raw: dict[str, Any]) -> Candle:

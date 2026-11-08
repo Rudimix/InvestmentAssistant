@@ -65,6 +65,23 @@ def ssl_context(ca_files: tuple[str, ...] = ()) -> ssl.SSLContext:
     return context
 
 
+def _leaf_errors(exc: BaseException) -> list[BaseException]:
+    """Исключения внутри (возможно вложенных) ``ExceptionGroup`` из anyio."""
+    if isinstance(exc, BaseExceptionGroup):
+        return [leaf for sub in exc.exceptions for leaf in _leaf_errors(sub)]
+    return [exc]
+
+
+def connection_error(exc: Exception) -> ToolError:
+    """Понятная ошибка вместо ``ExceptionGroup`` при открытии сессии."""
+    leaves = _leaf_errors(exc)
+    for leaf in leaves:
+        if isinstance(leaf, httpx.HTTPStatusError) and leaf.response.status_code in (401, 403):
+            return ToolError("сервер Т-Инвестиций не принял токен — проверьте его или выпустите новый")
+    cause = next((leaf for leaf in leaves if isinstance(leaf, (httpx.HTTPError, OSError))), leaves[-1])
+    return ToolError(f"MCP-сервер недоступен: {cause}")
+
+
 class McpToolClient:
     """Долгоживущая сессия с MCP-сервером по Streamable HTTP."""
 
@@ -79,8 +96,15 @@ class McpToolClient:
             read, write = await self._open_transport(self._stack)
             self._session = await self._stack.enter_async_context(ClientSession(read, write))
             await self._session.initialize()
-        except BaseException:
-            await self.__aexit__(None, None, None)
+        except BaseException as exc:
+            # при сбое транспорта anyio отменяет initialize(), а настоящую причину
+            # (401, нет соединения) отдаёт только при закрытии стека
+            try:
+                await self.__aexit__(None, None, None)
+            except Exception as cleanup:  # pylint: disable=broad-exception-caught
+                raise connection_error(cleanup) from cleanup
+            if isinstance(exc, Exception):
+                raise connection_error(exc) from exc
             raise
         return self
 

@@ -10,32 +10,31 @@ from aiogram import Bot, Dispatcher
 
 from .bot import create_router
 from .config import McpSettings, Settings, load_env, load_settings, mcp_settings
-from .journal import JournalService
+from .connections import Connections, TokenCipher, generate_key
 from .llm import ChatCompletionsClient, InvestmentAgent
-from .market import MarketDataService
-from .mcp_client import ToolClient, McpToolClient
+from .mcp_client import McpToolClient
 from .storage import JournalRepository
 
 
-def build_dispatcher(settings: Settings, tools: ToolClient, repo: JournalRepository,
+def build_dispatcher(settings: Settings, connections: Connections,
                      llm: ChatCompletionsClient | None = None) -> Dispatcher:
     """Собрать сервисы и Dispatcher; зависимости попадают в обработчики по имени."""
-    journal = JournalService(repo, MarketDataService(tools, settings.mcp.account_id))
     agent = None
     if llm is not None and settings.llm is not None:
-        agent = InvestmentAgent(llm, journal, settings.mcp.read_only_tools, settings.llm.max_steps)
-    dp = Dispatcher(journal=journal, agent=agent)
+        agent = InvestmentAgent(llm, settings.mcp.read_only_tools, settings.llm.max_steps)
+    dp = Dispatcher(connections=connections, agent=agent)
     dp.include_router(create_router())
     return dp
 
 
 async def run(settings: Settings) -> None:
+    cipher = TokenCipher(settings.token_key)
     repo = JournalRepository(settings.db_path)
     llm = ChatCompletionsClient(settings.llm) if settings.llm else None
     bot = Bot(settings.bot_token)
     try:
-        async with McpToolClient(settings.mcp) as tools:
-            await build_dispatcher(settings, tools, repo, llm).start_polling(bot)
+        connections = Connections(repo, cipher, settings.mcp)
+        await build_dispatcher(settings, connections, llm).start_polling(bot)
     finally:
         await bot.session.close()
         if llm:
@@ -52,8 +51,13 @@ async def list_tools(settings: McpSettings) -> list[dict]:
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="investment-assistant", description="Telegram-бот инвестиционного ассистента")
     parser.add_argument("--list-tools", action="store_true",
-                        help="подключиться к MCP-серверу, вывести его инструменты в JSON и выйти")
+                        help="подключиться к MCP-серверу с TINKOFF_TOKEN из .env, вывести инструменты в JSON и выйти")
+    parser.add_argument("--generate-key", action="store_true",
+                        help="вывести новый ключ для TOKEN_ENCRYPTION_KEY и выйти")
     args = parser.parse_args(argv)
+    if args.generate_key:
+        print(generate_key())
+        return
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     if args.list_tools:
         tools = asyncio.run(list_tools(mcp_settings(load_env())))

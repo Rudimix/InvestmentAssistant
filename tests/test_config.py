@@ -23,7 +23,7 @@ class ConfigTests(unittest.TestCase):
     def test_defaults(self):
         s = load_settings({"TELEGRAM_BOT_TOKEN": "t", "TINKOFF_TOKEN": "x", "SECRET": "s"}, dotenv=None)
         self.assertEqual(s.mcp.read_only_tools, DEFAULT_READ_ONLY_TOOLS)
-        self.assertEqual((s.mcp.account_id, s.mcp.ca_files), ("", ()))
+        self.assertEqual((s.mcp.ca_files, s.token_key), ((), ""))
         self.assertIsNone(s.llm)
         self.assertEqual(s.db_path, Path("journal.sqlite3"))
 
@@ -56,15 +56,15 @@ class ConfigTests(unittest.TestCase):
     def test_load_env_without_bot_token(self):
         self.assertEqual(load_env({"TINKOFF_TOKEN": "x"}, dotenv=None), {"TINKOFF_TOKEN": "x"})
 
-    def test_custom_tools_account_and_llm(self):
+    def test_custom_tools_key_and_llm(self):
         s = load_settings({
             "TELEGRAM_BOT_TOKEN": "t",
-            "TINKOFF_ACCOUNT_ID": "2000000001",
+            "TOKEN_ENCRYPTION_KEY": "key",
             "TINVEST_MCP_READ_TOOLS": "invest_get_candles, invest_get_portfolio ,",
             "LLM_BASE_URL": "http://localhost:11434/v1",
             "LLM_MODEL": "qwen3",
         }, dotenv=None)
-        self.assertEqual(s.mcp.account_id, "2000000001")
+        self.assertEqual(s.token_key, "key")
         self.assertEqual(s.mcp.read_only_tools, ("invest_get_candles", "invest_get_portfolio"))
         self.assertEqual((s.llm.base_url, s.llm.model, s.llm.api_key), ("http://localhost:11434/v1", "qwen3", ""))
 
