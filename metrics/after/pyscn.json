@@ -1,0 +1,5548 @@
+{
+  "complexity": {
+    "functions": [
+      {
+        "name": "format_reviews",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\formatting.py",
+        "start_line": 46,
+        "start_column": 0,
+        "end_line": 52,
+        "metrics": {
+          "complexity": 7,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 47,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 7
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "candle_stats",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 114,
+        "start_column": 0,
+        "end_line": 131,
+        "metrics": {
+          "complexity": 6,
+          "cognitive_complexity": 2,
+          "nodes": 8,
+          "edges": 11,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 116,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 17
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "ChatCompletionsClient.complete",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 57,
+        "start_column": 4,
+        "end_line": 73,
+        "metrics": {
+          "complexity": 6,
+          "cognitive_complexity": 5,
+          "nodes": 10,
+          "edges": 15,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 66,
+          "if_statements": 2,
+          "loop_statements": 0,
+          "exception_handlers": 2,
+          "switch_cases": 0,
+          "sloc": 17
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "read_dotenv",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 74,
+        "start_column": 0,
+        "end_line": 79,
+        "metrics": {
+          "complexity": 5,
+          "cognitive_complexity": 1,
+          "nodes": 8,
+          "edges": 11,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 76,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 5
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "parse_tool_result",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 26,
+        "start_column": 0,
+        "end_line": 32,
+        "metrics": {
+          "complexity": 5,
+          "cognitive_complexity": 3,
+          "nodes": 9,
+          "edges": 13,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 29,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 7
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "parse_stats_args",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 66,
+        "start_column": 0,
+        "end_line": 76,
+        "metrics": {
+          "complexity": 4,
+          "cognitive_complexity": 5,
+          "nodes": 7,
+          "edges": 11,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 70,
+          "if_statements": 3,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 10
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "cmd_stats",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 79,
+        "start_column": 0,
+        "end_line": 93,
+        "metrics": {
+          "complexity": 4,
+          "cognitive_complexity": 3,
+          "nodes": 9,
+          "edges": 13,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 82,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 2,
+          "switch_cases": 0,
+          "sloc": 15
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "load_settings",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 96,
+        "start_column": 0,
+        "end_line": 109,
+        "metrics": {
+          "complexity": 4,
+          "cognitive_complexity": 3,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 102,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 12
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalService.validate",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\journal.py",
+        "start_line": 24,
+        "start_column": 4,
+        "end_line": 30,
+        "metrics": {
+          "complexity": 4,
+          "cognitive_complexity": 4,
+          "nodes": 7,
+          "edges": 11,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 25,
+          "if_statements": 3,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 7
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalService.review",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\journal.py",
+        "start_line": 38,
+        "start_column": 4,
+        "end_line": 49,
+        "metrics": {
+          "complexity": 4,
+          "cognitive_complexity": 6,
+          "nodes": 8,
+          "edges": 12,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 43,
+          "if_statements": 2,
+          "loop_statements": 1,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 11
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "InvestmentAgent.tools",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 91,
+        "start_column": 4,
+        "end_line": 96,
+        "metrics": {
+          "complexity": 4,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 93,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 5
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "InvestmentAgent.ask",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 101,
+        "start_column": 4,
+        "end_line": 116,
+        "metrics": {
+          "complexity": 4,
+          "cognitive_complexity": 7,
+          "nodes": 9,
+          "edges": 13,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 111,
+          "if_statements": 1,
+          "loop_statements": 2,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 15
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "InvestmentAgent._dispatch",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 133,
+        "start_column": 4,
+        "end_line": 141,
+        "metrics": {
+          "complexity": 4,
+          "cognitive_complexity": 3,
+          "nodes": 7,
+          "edges": 11,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 134,
+          "if_statements": 3,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 9
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "MarketDataService.portfolio",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 35,
+        "start_column": 4,
+        "end_line": 43,
+        "metrics": {
+          "complexity": 4,
+          "cognitive_complexity": 3,
+          "nodes": 6,
+          "edges": 8,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 9
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "run",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\__main__.py",
+        "start_line": 29,
+        "start_column": 0,
+        "end_line": 40,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 2,
+          "nodes": 10,
+          "edges": 14,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 34,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 12
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "_judge_direction.judge",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 61,
+        "start_column": 4,
+        "end_line": 65,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 4,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 63,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 5
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "_judge_hold",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 70,
+        "start_column": 0,
+        "end_line": 75,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 2,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 73,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 5
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "returns",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 81,
+        "start_column": 0,
+        "end_line": 83,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 0,
+          "nodes": 7,
+          "edges": 10,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "volatility_pct",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 86,
+        "start_column": 0,
+        "end_line": 92,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 89,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "max_drawdown_pct",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 95,
+        "start_column": 0,
+        "end_line": 102,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 3,
+          "nodes": 6,
+          "edges": 9,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 100,
+          "if_statements": 1,
+          "loop_statements": 1,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 7
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "trend",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 105,
+        "start_column": 0,
+        "end_line": 111,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 4,
+          "nodes": 5,
+          "edges": 8,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 107,
+          "if_statements": 2,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "cmd_price",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 53,
+        "start_column": 0,
+        "end_line": 63,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 2,
+          "nodes": 6,
+          "edges": 9,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 60,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 1,
+          "switch_cases": 0,
+          "sloc": 11
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "idea_hypothesis",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 135,
+        "start_column": 0,
+        "end_line": 149,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 2,
+          "nodes": 5,
+          "edges": 8,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 141,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 2,
+          "switch_cases": 0,
+          "sloc": 15
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "cmd_close",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 167,
+        "start_column": 0,
+        "end_line": 178,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 3,
+          "nodes": 6,
+          "edges": 9,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 175,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 1,
+          "switch_cases": 0,
+          "sloc": 12
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "free_text",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 187,
+        "start_column": 0,
+        "end_line": 196,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 2,
+          "nodes": 6,
+          "edges": 9,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 193,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 1,
+          "switch_cases": 0,
+          "sloc": 10
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "_parse_line",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 82,
+        "start_column": 0,
+        "end_line": 87,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 2,
+          "nodes": 8,
+          "edges": 11,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 84,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "split_list",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 112,
+        "start_column": 0,
+        "end_line": 114,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "mcp_settings",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 117,
+        "start_column": 0,
+        "end_line": 130,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 1,
+          "nodes": 7,
+          "edges": 10,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 13
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "format_journal",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\formatting.py",
+        "start_line": 32,
+        "start_column": 0,
+        "end_line": 35,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 33,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 4
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "format_portfolio",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\formatting.py",
+        "start_line": 55,
+        "start_column": 0,
+        "end_line": 69,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 3,
+          "nodes": 6,
+          "edges": 9,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 63,
+          "if_statements": 1,
+          "loop_statements": 1,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 15
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalService.close",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\journal.py",
+        "start_line": 51,
+        "start_column": 4,
+        "end_line": 59,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 2,
+          "nodes": 5,
+          "edges": 8,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 53,
+          "if_statements": 2,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 9
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "parse_arguments",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 156,
+        "start_column": 0,
+        "end_line": 162,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 3,
+          "nodes": 4,
+          "edges": 6,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 160,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 1,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "MarketDataService.candles",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 26,
+        "start_column": 4,
+        "end_line": 33,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 1,
+          "nodes": 8,
+          "edges": 11,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 27,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 8
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "_unwrap",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 44,
+        "start_column": 0,
+        "end_line": 50,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 4,
+          "nodes": 5,
+          "edges": 8,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 46,
+          "if_statements": 2,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalRepository.list_decisions",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 75,
+        "start_column": 4,
+        "end_line": 80,
+        "metrics": {
+          "complexity": 3,
+          "cognitive_complexity": 1,
+          "nodes": 8,
+          "edges": 11,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 77,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\__main__.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 50,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 2,
+          "edges": 4,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 48,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 36
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "build_dispatcher",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\__main__.py",
+        "start_line": 17,
+        "start_column": 0,
+        "end_line": 26,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 2,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 22,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 9
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "pct_change",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 38,
+        "start_column": 0,
+        "end_line": 41,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 39,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 4
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "review_decision",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 44,
+        "start_column": 0,
+        "end_line": 55,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 51,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 225,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 0,
+          "nodes": 0,
+          "edges": 1,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 176
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "cmd_portfolio",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 96,
+        "start_column": 0,
+        "end_line": 102,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 4,
+          "edges": 6,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 99,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 1,
+          "switch_cases": 0,
+          "sloc": 7
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "idea_kind",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 115,
+        "start_column": 0,
+        "end_line": 122,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 117,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 8
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "idea_ticker",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 125,
+        "start_column": 0,
+        "end_line": 132,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 127,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 8
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "cmd_review",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 157,
+        "start_column": 0,
+        "end_line": 164,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 4,
+          "edges": 6,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 161,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 1,
+          "switch_cases": 0,
+          "sloc": 8
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "cmd_reset",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 181,
+        "start_column": 0,
+        "end_line": 184,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 182,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 4
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "create_router",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 219,
+        "start_column": 0,
+        "end_line": 224,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 4,
+          "edges": 6,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 222,
+          "if_statements": 0,
+          "loop_statements": 1,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 5
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "_unquote",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 90,
+        "start_column": 0,
+        "end_line": 93,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 2,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 91,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 4
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "llm_settings",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 133,
+        "start_column": 0,
+        "end_line": 142,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 2,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 135,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 9
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "format_decision",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\formatting.py",
+        "start_line": 24,
+        "start_column": 0,
+        "end_line": 29,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "InvestmentAgent._run_tool",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 124,
+        "start_column": 4,
+        "end_line": 131,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 4,
+          "edges": 6,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 129,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 1,
+          "switch_cases": 0,
+          "sloc": 7
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "MarketDataService.last_price",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 19,
+        "start_column": 4,
+        "end_line": 24,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 2,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 22,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "quotation",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 66,
+        "start_column": 0,
+        "end_line": 70,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 4,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 68,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 4
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "parse_position",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 73,
+        "start_column": 0,
+        "end_line": 84,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 2,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 11
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "_from_text",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 35,
+        "start_column": 0,
+        "end_line": 41,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 40,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 1,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "McpToolClient.__aexit__",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 73,
+        "start_column": 4,
+        "end_line": 77,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 74,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 5
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "McpToolClient._require_session",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 79,
+        "start_column": 4,
+        "end_line": 82,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 80,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 4
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "McpToolClient.call",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 84,
+        "start_column": 4,
+        "end_line": 89,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 2,
+          "nodes": 4,
+          "edges": 6,
+          "nesting_depth": 2,
+          "deepest_nesting_line": 87,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 1,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "McpToolClient.list_tools",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 91,
+        "start_column": 4,
+        "end_line": 96,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 6,
+          "edges": 8,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalRepository.get_or_create_user",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 43,
+        "start_column": 4,
+        "end_line": 49,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 3,
+          "edges": 5,
+          "nesting_depth": 1,
+          "deepest_nesting_line": 45,
+          "if_statements": 1,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 7
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalRepository.get_decision",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 69,
+        "start_column": 4,
+        "end_line": 73,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 5
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalRepository._to_decision",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 94,
+        "start_column": 4,
+        "end_line": 105,
+        "metrics": {
+          "complexity": 2,
+          "cognitive_complexity": 1,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 12
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\__init__.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 2,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 0,
+          "edges": 1,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 0
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "main",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\__main__.py",
+        "start_line": 43,
+        "start_column": 0,
+        "end_line": 45,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 3
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 132,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 0,
+          "edges": 1,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 83
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "_judge_direction",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 58,
+        "start_column": 0,
+        "end_line": 67,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 7
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "cmd_start",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 48,
+        "start_column": 0,
+        "end_line": 50,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 3
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "cmd_idea",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 105,
+        "start_column": 0,
+        "end_line": 107,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 3
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "cmd_cancel",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 110,
+        "start_column": 0,
+        "end_line": 112,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 3
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "cmd_journal",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 152,
+        "start_column": 0,
+        "end_line": 154,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 3
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 143,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 0,
+          "edges": 1,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 103
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\formatting.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 82,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 0,
+          "edges": 1,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 62
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "money",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\formatting.py",
+        "start_line": 15,
+        "start_column": 0,
+        "end_line": 17,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 3
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "signed_pct",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\formatting.py",
+        "start_line": 20,
+        "start_column": 0,
+        "end_line": 21,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "format_review",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\formatting.py",
+        "start_line": 38,
+        "start_column": 0,
+        "end_line": 43,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "format_stats",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\formatting.py",
+        "start_line": 72,
+        "start_column": 0,
+        "end_line": 81,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 10
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\journal.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 60,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 0,
+          "edges": 1,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 43
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalService.__init__",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\journal.py",
+        "start_line": 16,
+        "start_column": 4,
+        "end_line": 18,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 3
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalService.user",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\journal.py",
+        "start_line": 20,
+        "start_column": 4,
+        "end_line": 21,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalService.record",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\journal.py",
+        "start_line": 32,
+        "start_column": 4,
+        "end_line": 36,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 4
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 163,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 0,
+          "edges": 1,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 127
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "ChatCompletionsClient.__init__",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 53,
+        "start_column": 4,
+        "end_line": 55,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 1,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 3
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "ChatCompletionsClient.aclose",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 75,
+        "start_column": 4,
+        "end_line": 76,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "InvestmentAgent.__init__",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 82,
+        "start_column": 4,
+        "end_line": 89,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 8
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "InvestmentAgent.reset",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 98,
+        "start_column": 4,
+        "end_line": 99,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "InvestmentAgent._remember",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 119,
+        "start_column": 4,
+        "end_line": 122,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 4
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "as_function",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 144,
+        "start_column": 0,
+        "end_line": 153,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 1,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 9
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 85,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 0,
+          "edges": 1,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 60
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "MarketDataService.__init__",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 15,
+        "start_column": 4,
+        "end_line": 17,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 3
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "MarketDataService.call_raw",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 45,
+        "start_column": 4,
+        "end_line": 47,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "MarketDataService.list_tools",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 49,
+        "start_column": 4,
+        "end_line": 51,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "parse_candle",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 54,
+        "start_column": 0,
+        "end_line": 63,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 1,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 9
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 97,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 0,
+          "edges": 1,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 67
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "ToolClient.call",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 21,
+        "start_column": 4,
+        "end_line": 21,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 1
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "ToolClient.list_tools",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 23,
+        "start_column": 4,
+        "end_line": 23,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 1
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "McpToolClient.__init__",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 56,
+        "start_column": 4,
+        "end_line": 59,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 4
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "McpToolClient.__aenter__",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 61,
+        "start_column": 4,
+        "end_line": 71,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 11
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 107,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 0,
+          "edges": 1,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 53
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Decision.is_open",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 64,
+        "start_column": 4,
+        "end_line": 66,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Position.is_empty_cash",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 94,
+        "start_column": 4,
+        "end_line": 96,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 1,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "\u003cmodule\u003e",
+        "scope_kind": "module",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 1,
+        "start_column": 0,
+        "end_line": 106,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 0,
+          "edges": 1,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 88
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "_now",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 28,
+        "start_column": 0,
+        "end_line": 29,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalRepository.__init__",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 35,
+        "start_column": 4,
+        "end_line": 38,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 4
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalRepository.close",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 40,
+        "start_column": 4,
+        "end_line": 41,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 2
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalRepository.add_decision",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 51,
+        "start_column": 4,
+        "end_line": 67,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 1,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 17
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalRepository.close_decision",
+        "scope_kind": "function",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 82,
+        "start_column": 4,
+        "end_line": 91,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 1,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 10
+        },
+        "risk_level": "low"
+      }
+    ],
+    "class_scopes": [
+      {
+        "name": "DecisionReview",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 13,
+        "start_column": 0,
+        "end_line": 20,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 6
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "CandleStats",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 24,
+        "start_column": 0,
+        "end_line": 35,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 10
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "IdeaForm",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 35,
+        "start_column": 0,
+        "end_line": 38,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 4
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "McpSettings",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 42,
+        "start_column": 0,
+        "end_line": 51,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 8
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "LlmSettings",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 55,
+        "start_column": 0,
+        "end_line": 61,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 5
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Settings",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 65,
+        "start_column": 0,
+        "end_line": 71,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 5
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalError",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\journal.py",
+        "start_line": 9,
+        "start_column": 0,
+        "end_line": 10,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 1
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalService",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\journal.py",
+        "start_line": 13,
+        "start_column": 0,
+        "end_line": 59,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 38
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "LlmError",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 46,
+        "start_column": 0,
+        "end_line": 47,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 1
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "ChatCompletionsClient",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 50,
+        "start_column": 0,
+        "end_line": 76,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 23
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "InvestmentAgent",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 79,
+        "start_column": 0,
+        "end_line": 141,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 52
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "MarketDataService",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 12,
+        "start_column": 0,
+        "end_line": 51,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 31
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "ToolError",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 14,
+        "start_column": 0,
+        "end_line": 15,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 1
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "ToolClient",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 18,
+        "start_column": 0,
+        "end_line": 23,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 3
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "McpToolClient",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 53,
+        "start_column": 0,
+        "end_line": 96,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 37
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "User",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 11,
+        "start_column": 0,
+        "end_line": 19,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 3
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "DecisionDraft",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 23,
+        "start_column": 0,
+        "end_line": 35,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 5
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Decision",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 39,
+        "start_column": 0,
+        "end_line": 66,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 13
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Candle",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 70,
+        "start_column": 0,
+        "end_line": 78,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 7
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Position",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 82,
+        "start_column": 0,
+        "end_line": 96,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 11
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Portfolio",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 100,
+        "start_column": 0,
+        "end_line": 106,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 5
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalRepository",
+        "scope_kind": "class",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 32,
+        "start_column": 0,
+        "end_line": 105,
+        "metrics": {
+          "complexity": 1,
+          "cognitive_complexity": 0,
+          "nodes": 1,
+          "edges": 2,
+          "nesting_depth": 0,
+          "deepest_nesting_line": 0,
+          "if_statements": 0,
+          "loop_statements": 0,
+          "exception_handlers": 0,
+          "switch_cases": 0,
+          "sloc": 65
+        },
+        "risk_level": "low"
+      }
+    ],
+    "by_directory": [
+      {
+        "directory_path": ".",
+        "function_count": 105,
+        "average_complexity": 2.1333333333333333,
+        "max_complexity": 7,
+        "high_risk_function_count": 0,
+        "average_nesting_depth": 0.6476190476190476,
+        "max_nesting_depth": 2
+      }
+    ],
+    "summary": {
+      "total_functions": 105,
+      "total_class_scopes": 22,
+      "max_class_complexity": 1,
+      "max_class_cognitive_complexity": 0,
+      "max_class_nesting_depth": 0,
+      "high_risk_class_scopes": 0,
+      "functions_parsed": 105,
+      "average_complexity": 2.1333333333333333,
+      "average_cognitive_complexity": 1.2380952380952381,
+      "average_nesting_depth": 0.6476190476190476,
+      "max_complexity": 7,
+      "min_complexity": 1,
+      "files_analyzed": 12,
+      "total_files": 12,
+      "skipped_files": 0,
+      "low_risk_functions": 105,
+      "medium_risk_functions": 0,
+      "high_risk_functions": 0,
+      "complexity_distribution": {
+        "1": 44,
+        "2-5": 58,
+        "6-10": 3
+      }
+    },
+    "raw_metrics": [
+      {
+        "file_path": "src\\investment_journal\\__init__.py",
+        "sloc": 0,
+        "lloc": 0,
+        "comment_lines": 0,
+        "docstring_lines": 1,
+        "blank_lines": 0,
+        "total_lines": 1,
+        "comment_ratio": 0
+      },
+      {
+        "file_path": "src\\investment_journal\\__main__.py",
+        "sloc": 36,
+        "lloc": 34,
+        "comment_lines": 0,
+        "docstring_lines": 2,
+        "blank_lines": 11,
+        "total_lines": 49,
+        "comment_ratio": 0
+      },
+      {
+        "file_path": "src\\investment_journal\\analytics.py",
+        "sloc": 83,
+        "lloc": 71,
+        "comment_lines": 1,
+        "docstring_lines": 16,
+        "blank_lines": 31,
+        "total_lines": 131,
+        "comment_ratio": 0.011904761904761904
+      },
+      {
+        "file_path": "src\\investment_journal\\bot.py",
+        "sloc": 176,
+        "lloc": 145,
+        "comment_lines": 2,
+        "docstring_lines": 3,
+        "blank_lines": 43,
+        "total_lines": 224,
+        "comment_ratio": 0.011235955056179775
+      },
+      {
+        "file_path": "src\\investment_journal\\config.py",
+        "sloc": 103,
+        "lloc": 57,
+        "comment_lines": 4,
+        "docstring_lines": 8,
+        "blank_lines": 27,
+        "total_lines": 142,
+        "comment_ratio": 0.037383177570093455
+      },
+      {
+        "file_path": "src\\investment_journal\\formatting.py",
+        "sloc": 62,
+        "lloc": 36,
+        "comment_lines": 0,
+        "docstring_lines": 1,
+        "blank_lines": 18,
+        "total_lines": 81,
+        "comment_ratio": 0
+      },
+      {
+        "file_path": "src\\investment_journal\\journal.py",
+        "sloc": 43,
+        "lloc": 42,
+        "comment_lines": 0,
+        "docstring_lines": 5,
+        "blank_lines": 11,
+        "total_lines": 59,
+        "comment_ratio": 0
+      },
+      {
+        "file_path": "src\\investment_journal\\llm.py",
+        "sloc": 127,
+        "lloc": 93,
+        "comment_lines": 0,
+        "docstring_lines": 9,
+        "blank_lines": 26,
+        "total_lines": 162,
+        "comment_ratio": 0
+      },
+      {
+        "file_path": "src\\investment_journal\\market.py",
+        "sloc": 60,
+        "lloc": 37,
+        "comment_lines": 0,
+        "docstring_lines": 7,
+        "blank_lines": 17,
+        "total_lines": 84,
+        "comment_ratio": 0
+      },
+      {
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "sloc": 67,
+        "lloc": 62,
+        "comment_lines": 0,
+        "docstring_lines": 6,
+        "blank_lines": 23,
+        "total_lines": 96,
+        "comment_ratio": 0
+      },
+      {
+        "file_path": "src\\investment_journal\\models.py",
+        "sloc": 53,
+        "lloc": 45,
+        "comment_lines": 1,
+        "docstring_lines": 30,
+        "blank_lines": 22,
+        "total_lines": 106,
+        "comment_ratio": 0.018518518518518517
+      },
+      {
+        "file_path": "src\\investment_journal\\storage.py",
+        "sloc": 88,
+        "lloc": 44,
+        "comment_lines": 0,
+        "docstring_lines": 2,
+        "blank_lines": 15,
+        "total_lines": 105,
+        "comment_ratio": 0
+      }
+    ],
+    "raw_metrics_summary": {
+      "files_analyzed": 12,
+      "sloc": 898,
+      "lloc": 666,
+      "comment_lines": 8,
+      "docstring_lines": 90,
+      "blank_lines": 244,
+      "total_lines": 1240,
+      "comment_ratio": 0.008830022075055188
+    },
+    "warnings": null,
+    "errors": [],
+    "generated_at": "2026-11-08T22:25:47+03:00",
+    "version": "1.33.2",
+    "config": {
+      "cognitive_complexity_threshold": 25,
+      "enabled": true,
+      "exclude_patterns": [],
+      "function_sloc_critical_threshold": 100,
+      "function_sloc_warn_threshold": 50,
+      "include_patterns": [],
+      "low_threshold": 9,
+      "max_complexity": 0,
+      "medium_threshold": 19,
+      "min_complexity": 1,
+      "nesting_depth_threshold": 7,
+      "output_format": "json",
+      "recursive": true,
+      "report_unchanged": true,
+      "show_details": false,
+      "sort_by": "complexity"
+    },
+    "request": {
+      "paths": [
+        "src\\investment_journal\\__init__.py",
+        "src\\investment_journal\\__main__.py",
+        "src\\investment_journal\\analytics.py",
+        "src\\investment_journal\\bot.py",
+        "src\\investment_journal\\config.py",
+        "src\\investment_journal\\formatting.py",
+        "src\\investment_journal\\journal.py",
+        "src\\investment_journal\\llm.py",
+        "src\\investment_journal\\market.py",
+        "src\\investment_journal\\mcp_client.py",
+        "src\\investment_journal\\models.py",
+        "src\\investment_journal\\storage.py"
+      ],
+      "output_format": "json",
+      "output_path": "",
+      "no_open": false,
+      "show_details": false,
+      "min_complexity": 1,
+      "max_complexity": 0,
+      "sort_by": "complexity",
+      "low_threshold": 9,
+      "medium_threshold": 19,
+      "cognitive_complexity_threshold": 25,
+      "nesting_depth_threshold": 7,
+      "function_sloc_warn_threshold": 50,
+      "function_sloc_critical_threshold": 100,
+      "enabled": true,
+      "report_unchanged": true,
+      "config_path": "",
+      "recursive": true,
+      "include_patterns": [],
+      "exclude_patterns": []
+    }
+  },
+  "dead_code": {
+    "files": [],
+    "summary": {
+      "total_files": 12,
+      "total_functions": 93,
+      "total_findings": 0,
+      "files_with_dead_code": 0,
+      "functions_with_dead_code": 0,
+      "total_class_scopes": 22,
+      "class_scopes_with_dead_code": 0,
+      "critical_findings": 0,
+      "warning_findings": 0,
+      "info_findings": 0,
+      "findings_by_reason": {},
+      "total_blocks": 692,
+      "dead_blocks": 0,
+      "overall_dead_ratio": 0
+    },
+    "warnings": null,
+    "errors": [],
+    "generated_at": "2026-11-08T22:25:47+03:00",
+    "version": "1.33.2",
+    "config": {
+      "context_lines": 3,
+      "detect_after_break": true,
+      "detect_after_continue": true,
+      "detect_after_raise": true,
+      "detect_after_return": true,
+      "detect_unreachable_branches": true,
+      "exclude_patterns": [
+        "test_*.py",
+        "*_test.py",
+        "**/tests/**",
+        "**/test/**",
+        "**/testing/**",
+        "**/migrations/**",
+        "**/examples/**",
+        "**/docs/**",
+        "**/docs_src/**",
+        "**/demo/**",
+        "**/samples/**"
+      ],
+      "ignore_patterns": [],
+      "include_patterns": [
+        "**/*.py"
+      ],
+      "min_severity": "warning",
+      "show_context": false,
+      "sort_by": "severity"
+    },
+    "request": {
+      "paths": [
+        "src\\investment_journal\\__init__.py",
+        "src\\investment_journal\\__main__.py",
+        "src\\investment_journal\\analytics.py",
+        "src\\investment_journal\\bot.py",
+        "src\\investment_journal\\config.py",
+        "src\\investment_journal\\formatting.py",
+        "src\\investment_journal\\journal.py",
+        "src\\investment_journal\\llm.py",
+        "src\\investment_journal\\market.py",
+        "src\\investment_journal\\mcp_client.py",
+        "src\\investment_journal\\models.py",
+        "src\\investment_journal\\storage.py"
+      ],
+      "output_format": "json",
+      "output_path": "",
+      "no_open": false,
+      "show_context": false,
+      "context_lines": 3,
+      "min_severity": "warning",
+      "sort_by": "severity",
+      "recursive": true,
+      "include_patterns": [
+        "**/*.py"
+      ],
+      "exclude_patterns": [
+        "test_*.py",
+        "*_test.py",
+        "**/tests/**",
+        "**/test/**",
+        "**/testing/**",
+        "**/migrations/**",
+        "**/examples/**",
+        "**/docs/**",
+        "**/docs_src/**",
+        "**/demo/**",
+        "**/samples/**"
+      ],
+      "ignore_patterns": [],
+      "config_path": "",
+      "detect_after_return": true,
+      "detect_after_break": true,
+      "detect_after_continue": true,
+      "detect_after_raise": true,
+      "detect_unreachable_branches": true
+    }
+  },
+  "clone": {
+    "clones": [],
+    "clone_pairs": null,
+    "clone_groups": null,
+    "statistics": {
+      "total_fragments": 46,
+      "duplicated_fragments": 0,
+      "duplicated_lines": 0,
+      "total_clones": 0,
+      "total_clone_pairs": 0,
+      "total_clone_groups": 0,
+      "clones_by_type": {},
+      "average_similarity": 0,
+      "lines_analyzed": 1240,
+      "nodes_analyzed": 5293,
+      "files_analyzed": 12
+    },
+    "request": {
+      "paths": [
+        "src\\investment_journal\\__init__.py",
+        "src\\investment_journal\\__main__.py",
+        "src\\investment_journal\\analytics.py",
+        "src\\investment_journal\\bot.py",
+        "src\\investment_journal\\config.py",
+        "src\\investment_journal\\formatting.py",
+        "src\\investment_journal\\journal.py",
+        "src\\investment_journal\\llm.py",
+        "src\\investment_journal\\market.py",
+        "src\\investment_journal\\mcp_client.py",
+        "src\\investment_journal\\models.py",
+        "src\\investment_journal\\storage.py"
+      ],
+      "recursive": true,
+      "include_patterns": [
+        "**/*.py"
+      ],
+      "exclude_patterns": [
+        "test_*.py",
+        "*_test.py",
+        "**/tests/**",
+        "**/test/**",
+        "**/testing/**",
+        "**/migrations/**",
+        "**/examples/**",
+        "**/docs/**",
+        "**/docs_src/**",
+        "**/demo/**",
+        "**/samples/**"
+      ],
+      "min_lines": 8,
+      "min_nodes": 20,
+      "similarity_threshold": 0.65,
+      "max_edit_distance": 50,
+      "ignore_literals": false,
+      "ignore_identifiers": false,
+      "skip_docstrings": true,
+      "type1_threshold": 0.85,
+      "type2_threshold": 0.75,
+      "type3_threshold": 0.7,
+      "type4_threshold": 0.65,
+      "enable_dfa": true,
+      "output_format": "json",
+      "output_path": "",
+      "no_open": false,
+      "show_details": false,
+      "show_content": false,
+      "sort_by": "similarity",
+      "group_clones": true,
+      "group_mode": "complete_linkage",
+      "group_threshold": 0.65,
+      "k_core_k": 2,
+      "min_similarity": 0,
+      "max_similarity": 1,
+      "clone_types": [
+        1,
+        2,
+        4
+      ],
+      "config_path": "",
+      "timeout": 0,
+      "lsh_enabled": "auto",
+      "lsh_auto_threshold": 500,
+      "lsh_similarity_threshold": 0.5,
+      "lsh_bands": 42,
+      "lsh_rows": 3,
+      "lsh_hashes": 128
+    },
+    "duration_ms": 17,
+    "success": true
+  },
+  "cbo": {
+    "classes": [
+      {
+        "name": "JournalRepository",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 32,
+        "end_line": 105,
+        "metrics": {
+          "coupling_count": 4,
+          "inheritance_dependencies": 0,
+          "type_hint_dependencies": 6,
+          "instantiation_dependencies": 3,
+          "attribute_access_dependencies": 1,
+          "import_dependencies": 4,
+          "dependent_classes": [
+            "Decision",
+            "User",
+            "datetime",
+            "sqlite3.Row"
+          ]
+        },
+        "risk_level": "medium",
+        "is_abstract": false,
+        "base_classes": []
+      },
+      {
+        "name": "McpToolClient",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 53,
+        "end_line": 96,
+        "metrics": {
+          "coupling_count": 3,
+          "inheritance_dependencies": 0,
+          "type_hint_dependencies": 3,
+          "instantiation_dependencies": 3,
+          "attribute_access_dependencies": 0,
+          "import_dependencies": 3,
+          "dependent_classes": [
+            "AsyncExitStack",
+            "ClientSession",
+            "StdioServerParameters"
+          ]
+        },
+        "risk_level": "low",
+        "is_abstract": false,
+        "base_classes": []
+      },
+      {
+        "name": "IdeaForm",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 35,
+        "end_line": 38,
+        "metrics": {
+          "coupling_count": 2,
+          "inheritance_dependencies": 1,
+          "type_hint_dependencies": 0,
+          "instantiation_dependencies": 1,
+          "attribute_access_dependencies": 0,
+          "import_dependencies": 2,
+          "dependent_classes": [
+            "State",
+            "StatesGroup"
+          ]
+        },
+        "risk_level": "low",
+        "is_abstract": false,
+        "base_classes": [
+          "StatesGroup"
+        ]
+      },
+      {
+        "name": "MarketDataService",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 12,
+        "end_line": 51,
+        "metrics": {
+          "coupling_count": 2,
+          "inheritance_dependencies": 0,
+          "type_hint_dependencies": 4,
+          "instantiation_dependencies": 2,
+          "attribute_access_dependencies": 0,
+          "import_dependencies": 2,
+          "dependent_classes": [
+            "Portfolio",
+            "ToolError"
+          ]
+        },
+        "risk_level": "low",
+        "is_abstract": false,
+        "base_classes": []
+      },
+      {
+        "name": "ChatCompletionsClient",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 50,
+        "end_line": 76,
+        "metrics": {
+          "coupling_count": 1,
+          "inheritance_dependencies": 0,
+          "type_hint_dependencies": 2,
+          "instantiation_dependencies": 1,
+          "attribute_access_dependencies": 0,
+          "import_dependencies": 1,
+          "dependent_classes": [
+            "httpx.AsyncClient"
+          ]
+        },
+        "risk_level": "low",
+        "is_abstract": false,
+        "base_classes": []
+      }
+    ],
+    "summary": {
+      "total_classes": 22,
+      "average_cbo": 0.5454545454545454,
+      "max_cbo": 4,
+      "min_cbo": 0,
+      "classes_analyzed": 22,
+      "files_analyzed": 12,
+      "low_risk_classes": 21,
+      "medium_risk_classes": 1,
+      "high_risk_classes": 0,
+      "cbo_distribution": {
+        "0": 17,
+        "1-5": 5
+      },
+      "most_coupled_classes": [
+        {
+          "name": "JournalRepository",
+          "file_path": "src\\investment_journal\\storage.py",
+          "start_line": 32,
+          "end_line": 105,
+          "metrics": {
+            "coupling_count": 4,
+            "inheritance_dependencies": 0,
+            "type_hint_dependencies": 6,
+            "instantiation_dependencies": 3,
+            "attribute_access_dependencies": 1,
+            "import_dependencies": 4,
+            "dependent_classes": [
+              "Decision",
+              "User",
+              "datetime",
+              "sqlite3.Row"
+            ]
+          },
+          "risk_level": "medium",
+          "is_abstract": false,
+          "base_classes": []
+        },
+        {
+          "name": "McpToolClient",
+          "file_path": "src\\investment_journal\\mcp_client.py",
+          "start_line": 53,
+          "end_line": 96,
+          "metrics": {
+            "coupling_count": 3,
+            "inheritance_dependencies": 0,
+            "type_hint_dependencies": 3,
+            "instantiation_dependencies": 3,
+            "attribute_access_dependencies": 0,
+            "import_dependencies": 3,
+            "dependent_classes": [
+              "AsyncExitStack",
+              "ClientSession",
+              "StdioServerParameters"
+            ]
+          },
+          "risk_level": "low",
+          "is_abstract": false,
+          "base_classes": []
+        },
+        {
+          "name": "IdeaForm",
+          "file_path": "src\\investment_journal\\bot.py",
+          "start_line": 35,
+          "end_line": 38,
+          "metrics": {
+            "coupling_count": 2,
+            "inheritance_dependencies": 1,
+            "type_hint_dependencies": 0,
+            "instantiation_dependencies": 1,
+            "attribute_access_dependencies": 0,
+            "import_dependencies": 2,
+            "dependent_classes": [
+              "State",
+              "StatesGroup"
+            ]
+          },
+          "risk_level": "low",
+          "is_abstract": false,
+          "base_classes": [
+            "StatesGroup"
+          ]
+        },
+        {
+          "name": "MarketDataService",
+          "file_path": "src\\investment_journal\\market.py",
+          "start_line": 12,
+          "end_line": 51,
+          "metrics": {
+            "coupling_count": 2,
+            "inheritance_dependencies": 0,
+            "type_hint_dependencies": 4,
+            "instantiation_dependencies": 2,
+            "attribute_access_dependencies": 0,
+            "import_dependencies": 2,
+            "dependent_classes": [
+              "Portfolio",
+              "ToolError"
+            ]
+          },
+          "risk_level": "low",
+          "is_abstract": false,
+          "base_classes": []
+        },
+        {
+          "name": "ChatCompletionsClient",
+          "file_path": "src\\investment_journal\\llm.py",
+          "start_line": 50,
+          "end_line": 76,
+          "metrics": {
+            "coupling_count": 1,
+            "inheritance_dependencies": 0,
+            "type_hint_dependencies": 2,
+            "instantiation_dependencies": 1,
+            "attribute_access_dependencies": 0,
+            "import_dependencies": 1,
+            "dependent_classes": [
+              "httpx.AsyncClient"
+            ]
+          },
+          "risk_level": "low",
+          "is_abstract": false,
+          "base_classes": []
+        },
+        {
+          "name": "DecisionReview",
+          "file_path": "src\\investment_journal\\analytics.py",
+          "start_line": 13,
+          "end_line": 20,
+          "metrics": {
+            "coupling_count": 0,
+            "inheritance_dependencies": 0,
+            "type_hint_dependencies": 1,
+            "instantiation_dependencies": 0,
+            "attribute_access_dependencies": 0,
+            "import_dependencies": 0,
+            "dependent_classes": []
+          },
+          "risk_level": "low",
+          "is_abstract": false,
+          "base_classes": []
+        },
+        {
+          "name": "CandleStats",
+          "file_path": "src\\investment_journal\\analytics.py",
+          "start_line": 24,
+          "end_line": 35,
+          "metrics": {
+            "coupling_count": 0,
+            "inheritance_dependencies": 0,
+            "type_hint_dependencies": 0,
+            "instantiation_dependencies": 0,
+            "attribute_access_dependencies": 0,
+            "import_dependencies": 0,
+            "dependent_classes": []
+          },
+          "risk_level": "low",
+          "is_abstract": false,
+          "base_classes": []
+        },
+        {
+          "name": "McpSettings",
+          "file_path": "src\\investment_journal\\config.py",
+          "start_line": 42,
+          "end_line": 51,
+          "metrics": {
+            "coupling_count": 0,
+            "inheritance_dependencies": 0,
+            "type_hint_dependencies": 0,
+            "instantiation_dependencies": 0,
+            "attribute_access_dependencies": 0,
+            "import_dependencies": 0,
+            "dependent_classes": []
+          },
+          "risk_level": "low",
+          "is_abstract": false,
+          "base_classes": []
+        },
+        {
+          "name": "LlmSettings",
+          "file_path": "src\\investment_journal\\config.py",
+          "start_line": 55,
+          "end_line": 61,
+          "metrics": {
+            "coupling_count": 0,
+            "inheritance_dependencies": 0,
+            "type_hint_dependencies": 0,
+            "instantiation_dependencies": 0,
+            "attribute_access_dependencies": 0,
+            "import_dependencies": 0,
+            "dependent_classes": []
+          },
+          "risk_level": "low",
+          "is_abstract": false,
+          "base_classes": []
+        },
+        {
+          "name": "Settings",
+          "file_path": "src\\investment_journal\\config.py",
+          "start_line": 65,
+          "end_line": 71,
+          "metrics": {
+            "coupling_count": 0,
+            "inheritance_dependencies": 0,
+            "type_hint_dependencies": 1,
+            "instantiation_dependencies": 0,
+            "attribute_access_dependencies": 0,
+            "import_dependencies": 0,
+            "dependent_classes": []
+          },
+          "risk_level": "low",
+          "is_abstract": false,
+          "base_classes": []
+        }
+      ],
+      "most_depended_upon_classes": null
+    },
+    "warnings": [
+      "[src\\investment_journal\\__init__.py] No classes found in file",
+      "[src\\investment_journal\\__main__.py] No classes found in file",
+      "[src\\investment_journal\\formatting.py] No classes found in file"
+    ],
+    "errors": [],
+    "generated_at": "2026-11-08T22:25:47+03:00",
+    "version": "1.33.2",
+    "config": {
+      "group_namespace_imports": true,
+      "include_builtins": false,
+      "include_imports": true,
+      "low_threshold": 3,
+      "max_cbo": 0,
+      "medium_threshold": 7,
+      "min_cbo": 0,
+      "output_format": "json",
+      "show_zeros": false,
+      "sort_by": "coupling"
+    }
+  },
+  "lcom": {
+    "classes": [
+      {
+        "name": "DecisionReview",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 13,
+        "end_line": 20,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "CandleStats",
+        "file_path": "src\\investment_journal\\analytics.py",
+        "start_line": 24,
+        "end_line": 35,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "IdeaForm",
+        "file_path": "src\\investment_journal\\bot.py",
+        "start_line": 35,
+        "end_line": 38,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "McpSettings",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 42,
+        "end_line": 51,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "LlmSettings",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 55,
+        "end_line": 61,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Settings",
+        "file_path": "src\\investment_journal\\config.py",
+        "start_line": 65,
+        "end_line": 71,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalError",
+        "file_path": "src\\investment_journal\\journal.py",
+        "start_line": 9,
+        "end_line": 10,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalService",
+        "file_path": "src\\investment_journal\\journal.py",
+        "start_line": 13,
+        "end_line": 59,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 6,
+          "excluded_methods": 2,
+          "instance_variables": 2,
+          "method_groups": [
+            [
+              "close",
+              "record",
+              "review",
+              "user"
+            ]
+          ]
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "LlmError",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 46,
+        "end_line": 47,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "ChatCompletionsClient",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 50,
+        "end_line": 76,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 3,
+          "excluded_methods": 1,
+          "instance_variables": 2,
+          "method_groups": [
+            [
+              "aclose",
+              "complete"
+            ]
+          ]
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "InvestmentAgent",
+        "file_path": "src\\investment_journal\\llm.py",
+        "start_line": 79,
+        "end_line": 141,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 7,
+          "excluded_methods": 2,
+          "instance_variables": 6,
+          "method_groups": [
+            [
+              "_dispatch",
+              "_run_tool",
+              "ask",
+              "reset",
+              "tools"
+            ]
+          ]
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "MarketDataService",
+        "file_path": "src\\investment_journal\\market.py",
+        "start_line": 12,
+        "end_line": 51,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 6,
+          "excluded_methods": 1,
+          "instance_variables": 2,
+          "method_groups": [
+            [
+              "call_raw",
+              "candles",
+              "last_price",
+              "list_tools",
+              "portfolio"
+            ]
+          ]
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "ToolError",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 14,
+        "end_line": 15,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "McpToolClient",
+        "file_path": "src\\investment_journal\\mcp_client.py",
+        "start_line": 53,
+        "end_line": 96,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 6,
+          "excluded_methods": 1,
+          "instance_variables": 3,
+          "method_groups": [
+            [
+              "__aenter__",
+              "__aexit__",
+              "_require_session",
+              "call",
+              "list_tools"
+            ]
+          ]
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "User",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 11,
+        "end_line": 19,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "DecisionDraft",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 23,
+        "end_line": 35,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Decision",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 39,
+        "end_line": 66,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 1,
+          "excluded_methods": 0,
+          "instance_variables": 1,
+          "method_groups": [
+            [
+              "is_open"
+            ]
+          ]
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Candle",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 70,
+        "end_line": 78,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Position",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 82,
+        "end_line": 96,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 1,
+          "excluded_methods": 0,
+          "instance_variables": 2,
+          "method_groups": [
+            [
+              "is_empty_cash"
+            ]
+          ]
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "Portfolio",
+        "file_path": "src\\investment_journal\\models.py",
+        "start_line": 100,
+        "end_line": 106,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 0,
+          "excluded_methods": 0,
+          "instance_variables": 0,
+          "method_groups": []
+        },
+        "risk_level": "low"
+      },
+      {
+        "name": "JournalRepository",
+        "file_path": "src\\investment_journal\\storage.py",
+        "start_line": 32,
+        "end_line": 105,
+        "metrics": {
+          "lcom4": 1,
+          "total_methods": 8,
+          "excluded_methods": 2,
+          "instance_variables": 1,
+          "method_groups": [
+            [
+              "add_decision",
+              "close",
+              "close_decision",
+              "get_decision",
+              "get_or_create_user",
+              "list_decisions"
+            ]
+          ]
+        },
+        "risk_level": "low"
+      }
+    ],
+    "summary": {
+      "total_classes": 21,
+      "average_lcom": 1,
+      "max_lcom": 1,
+      "min_lcom": 1,
+      "classes_analyzed": 21,
+      "files_analyzed": 12,
+      "low_risk_classes": 21,
+      "medium_risk_classes": 0,
+      "high_risk_classes": 0,
+      "lcom_distribution": {
+        "1": 21
+      },
+      "least_cohesive_classes": [
+        {
+          "name": "DecisionReview",
+          "file_path": "src\\investment_journal\\analytics.py",
+          "start_line": 13,
+          "end_line": 20,
+          "metrics": {
+            "lcom4": 1,
+            "total_methods": 0,
+            "excluded_methods": 0,
+            "instance_variables": 0,
+            "method_groups": []
+          },
+          "risk_level": "low"
+        },
+        {
+          "name": "CandleStats",
+          "file_path": "src\\investment_journal\\analytics.py",
+          "start_line": 24,
+          "end_line": 35,
+          "metrics": {
+            "lcom4": 1,
+            "total_methods": 0,
+            "excluded_methods": 0,
+            "instance_variables": 0,
+            "method_groups": []
+          },
+          "risk_level": "low"
+        },
+        {
+          "name": "IdeaForm",
+          "file_path": "src\\investment_journal\\bot.py",
+          "start_line": 35,
+          "end_line": 38,
+          "metrics": {
+            "lcom4": 1,
+            "total_methods": 0,
+            "excluded_methods": 0,
+            "instance_variables": 0,
+            "method_groups": []
+          },
+          "risk_level": "low"
+        },
+        {
+          "name": "McpSettings",
+          "file_path": "src\\investment_journal\\config.py",
+          "start_line": 42,
+          "end_line": 51,
+          "metrics": {
+            "lcom4": 1,
+            "total_methods": 0,
+            "excluded_methods": 0,
+            "instance_variables": 0,
+            "method_groups": []
+          },
+          "risk_level": "low"
+        },
+        {
+          "name": "LlmSettings",
+          "file_path": "src\\investment_journal\\config.py",
+          "start_line": 55,
+          "end_line": 61,
+          "metrics": {
+            "lcom4": 1,
+            "total_methods": 0,
+            "excluded_methods": 0,
+            "instance_variables": 0,
+            "method_groups": []
+          },
+          "risk_level": "low"
+        },
+        {
+          "name": "Settings",
+          "file_path": "src\\investment_journal\\config.py",
+          "start_line": 65,
+          "end_line": 71,
+          "metrics": {
+            "lcom4": 1,
+            "total_methods": 0,
+            "excluded_methods": 0,
+            "instance_variables": 0,
+            "method_groups": []
+          },
+          "risk_level": "low"
+        },
+        {
+          "name": "JournalError",
+          "file_path": "src\\investment_journal\\journal.py",
+          "start_line": 9,
+          "end_line": 10,
+          "metrics": {
+            "lcom4": 1,
+            "total_methods": 0,
+            "excluded_methods": 0,
+            "instance_variables": 0,
+            "method_groups": []
+          },
+          "risk_level": "low"
+        },
+        {
+          "name": "JournalService",
+          "file_path": "src\\investment_journal\\journal.py",
+          "start_line": 13,
+          "end_line": 59,
+          "metrics": {
+            "lcom4": 1,
+            "total_methods": 6,
+            "excluded_methods": 2,
+            "instance_variables": 2,
+            "method_groups": [
+              [
+                "close",
+                "record",
+                "review",
+                "user"
+              ]
+            ]
+          },
+          "risk_level": "low"
+        },
+        {
+          "name": "LlmError",
+          "file_path": "src\\investment_journal\\llm.py",
+          "start_line": 46,
+          "end_line": 47,
+          "metrics": {
+            "lcom4": 1,
+            "total_methods": 0,
+            "excluded_methods": 0,
+            "instance_variables": 0,
+            "method_groups": []
+          },
+          "risk_level": "low"
+        },
+        {
+          "name": "ChatCompletionsClient",
+          "file_path": "src\\investment_journal\\llm.py",
+          "start_line": 50,
+          "end_line": 76,
+          "metrics": {
+            "lcom4": 1,
+            "total_methods": 3,
+            "excluded_methods": 1,
+            "instance_variables": 2,
+            "method_groups": [
+              [
+                "aclose",
+                "complete"
+              ]
+            ]
+          },
+          "risk_level": "low"
+        }
+      ]
+    },
+    "warnings": [
+      "[src\\investment_journal\\__init__.py] No classes found in file",
+      "[src\\investment_journal\\__main__.py] No classes found in file",
+      "[src\\investment_journal\\formatting.py] No classes found in file"
+    ],
+    "errors": [],
+    "generated_at": "2026-11-08T22:25:47+03:00",
+    "version": "1.33.2",
+    "config": {
+      "low_threshold": 2,
+      "max_lcom": 0,
+      "medium_threshold": 5,
+      "min_lcom": 0,
+      "output_format": "json",
+      "sort_by": "cohesion"
+    }
+  },
+  "system": {
+    "dependency_analysis": {
+      "total_modules": 12,
+      "total_dependencies": 31,
+      "resolved_imports": 31,
+      "unresolved_imports": 0,
+      "root_modules": [
+        "investment_journal",
+        "investment_journal.config",
+        "investment_journal.models"
+      ],
+      "leaf_modules": [
+        "investment_journal",
+        "investment_journal.__main__"
+      ],
+      "module_metrics": {
+        "investment_journal": {
+          "module_name": "investment_journal",
+          "package": "",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\__init__.py",
+          "is_package": true,
+          "lines_of_code": 1,
+          "function_count": 0,
+          "class_count": 0,
+          "abstract_class_count": 0,
+          "public_interface": [],
+          "afferent_coupling": 0,
+          "efferent_coupling": 0,
+          "instability": 0,
+          "abstractness": 0,
+          "distance": 1,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "low",
+          "direct_dependencies": null,
+          "transitive_dependencies": null,
+          "dependents": null
+        },
+        "investment_journal.__main__": {
+          "module_name": "investment_journal.__main__",
+          "package": "investment_journal",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\__main__.py",
+          "is_package": false,
+          "lines_of_code": 49,
+          "function_count": 3,
+          "class_count": 0,
+          "abstract_class_count": 0,
+          "public_interface": [
+            "build_dispatcher",
+            "run",
+            "main"
+          ],
+          "afferent_coupling": 0,
+          "efferent_coupling": 7,
+          "instability": 1,
+          "abstractness": 0,
+          "distance": 0,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "low",
+          "direct_dependencies": [
+            "investment_journal.bot",
+            "investment_journal.config",
+            "investment_journal.journal",
+            "investment_journal.llm",
+            "investment_journal.market",
+            "investment_journal.mcp_client",
+            "investment_journal.storage"
+          ],
+          "transitive_dependencies": [
+            "investment_journal.analytics",
+            "investment_journal.bot",
+            "investment_journal.config",
+            "investment_journal.formatting",
+            "investment_journal.journal",
+            "investment_journal.llm",
+            "investment_journal.market",
+            "investment_journal.mcp_client",
+            "investment_journal.models",
+            "investment_journal.storage"
+          ],
+          "dependents": null
+        },
+        "investment_journal.analytics": {
+          "module_name": "investment_journal.analytics",
+          "package": "investment_journal",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\analytics.py",
+          "is_package": false,
+          "lines_of_code": 131,
+          "function_count": 10,
+          "class_count": 2,
+          "abstract_class_count": 0,
+          "public_interface": [
+            "DecisionReview",
+            "CandleStats",
+            "pct_change",
+            "review_decision",
+            "judge",
+            "returns",
+            "volatility_pct",
+            "max_drawdown_pct",
+            "trend",
+            "candle_stats"
+          ],
+          "afferent_coupling": 3,
+          "efferent_coupling": 1,
+          "instability": 0.25,
+          "abstractness": 0,
+          "distance": 0.75,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "high",
+          "direct_dependencies": [
+            "investment_journal.models"
+          ],
+          "transitive_dependencies": [
+            "investment_journal.models"
+          ],
+          "dependents": [
+            "investment_journal.bot",
+            "investment_journal.formatting",
+            "investment_journal.journal"
+          ]
+        },
+        "investment_journal.bot": {
+          "module_name": "investment_journal.bot",
+          "package": "investment_journal",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\bot.py",
+          "is_package": false,
+          "lines_of_code": 224,
+          "function_count": 16,
+          "class_count": 1,
+          "abstract_class_count": 0,
+          "public_interface": [
+            "IdeaForm",
+            "cmd_start",
+            "cmd_price",
+            "parse_stats_args",
+            "cmd_stats",
+            "cmd_portfolio",
+            "cmd_idea",
+            "cmd_cancel",
+            "idea_kind",
+            "idea_ticker",
+            "idea_hypothesis",
+            "cmd_journal",
+            "cmd_review",
+            "cmd_close",
+            "cmd_reset",
+            "free_text",
+            "create_router"
+          ],
+          "afferent_coupling": 1,
+          "efferent_coupling": 7,
+          "instability": 0.875,
+          "abstractness": 0,
+          "distance": 0.125,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "low",
+          "direct_dependencies": [
+            "investment_journal.analytics",
+            "investment_journal.formatting",
+            "investment_journal.journal",
+            "investment_journal.llm",
+            "investment_journal.market",
+            "investment_journal.mcp_client",
+            "investment_journal.models"
+          ],
+          "transitive_dependencies": [
+            "investment_journal.analytics",
+            "investment_journal.config",
+            "investment_journal.formatting",
+            "investment_journal.journal",
+            "investment_journal.llm",
+            "investment_journal.market",
+            "investment_journal.mcp_client",
+            "investment_journal.models",
+            "investment_journal.storage"
+          ],
+          "dependents": [
+            "investment_journal.__main__"
+          ]
+        },
+        "investment_journal.config": {
+          "module_name": "investment_journal.config",
+          "package": "investment_journal",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\config.py",
+          "is_package": false,
+          "lines_of_code": 142,
+          "function_count": 7,
+          "class_count": 3,
+          "abstract_class_count": 0,
+          "public_interface": [
+            "McpSettings",
+            "LlmSettings",
+            "Settings",
+            "read_dotenv",
+            "load_settings",
+            "split_list",
+            "mcp_settings",
+            "llm_settings"
+          ],
+          "afferent_coupling": 4,
+          "efferent_coupling": 0,
+          "instability": 0,
+          "abstractness": 0,
+          "distance": 1,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "high",
+          "direct_dependencies": null,
+          "transitive_dependencies": null,
+          "dependents": [
+            "investment_journal.__main__",
+            "investment_journal.llm",
+            "investment_journal.market",
+            "investment_journal.mcp_client"
+          ]
+        },
+        "investment_journal.formatting": {
+          "module_name": "investment_journal.formatting",
+          "package": "investment_journal",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\formatting.py",
+          "is_package": false,
+          "lines_of_code": 81,
+          "function_count": 8,
+          "class_count": 0,
+          "abstract_class_count": 0,
+          "public_interface": [
+            "money",
+            "signed_pct",
+            "format_decision",
+            "format_journal",
+            "format_review",
+            "format_reviews",
+            "format_portfolio",
+            "format_stats"
+          ],
+          "afferent_coupling": 2,
+          "efferent_coupling": 2,
+          "instability": 0.5,
+          "abstractness": 0,
+          "distance": 0.5,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "medium",
+          "direct_dependencies": [
+            "investment_journal.analytics",
+            "investment_journal.models"
+          ],
+          "transitive_dependencies": [
+            "investment_journal.analytics",
+            "investment_journal.models"
+          ],
+          "dependents": [
+            "investment_journal.bot",
+            "investment_journal.llm"
+          ]
+        },
+        "investment_journal.journal": {
+          "module_name": "investment_journal.journal",
+          "package": "investment_journal",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\journal.py",
+          "is_package": false,
+          "lines_of_code": 59,
+          "function_count": 6,
+          "class_count": 2,
+          "abstract_class_count": 0,
+          "public_interface": [
+            "JournalError",
+            "JournalService",
+            "user",
+            "validate",
+            "record",
+            "review",
+            "close"
+          ],
+          "afferent_coupling": 3,
+          "efferent_coupling": 4,
+          "instability": 0.5714285714285714,
+          "abstractness": 0,
+          "distance": 0.4285714285714286,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "medium",
+          "direct_dependencies": [
+            "investment_journal.analytics",
+            "investment_journal.market",
+            "investment_journal.models",
+            "investment_journal.storage"
+          ],
+          "transitive_dependencies": [
+            "investment_journal.analytics",
+            "investment_journal.config",
+            "investment_journal.market",
+            "investment_journal.mcp_client",
+            "investment_journal.models",
+            "investment_journal.storage"
+          ],
+          "dependents": [
+            "investment_journal.__main__",
+            "investment_journal.bot",
+            "investment_journal.llm"
+          ]
+        },
+        "investment_journal.llm": {
+          "module_name": "investment_journal.llm",
+          "package": "investment_journal",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\llm.py",
+          "is_package": false,
+          "lines_of_code": 162,
+          "function_count": 12,
+          "class_count": 3,
+          "abstract_class_count": 0,
+          "public_interface": [
+            "LlmError",
+            "ChatCompletionsClient",
+            "complete",
+            "aclose",
+            "InvestmentAgent",
+            "tools",
+            "reset",
+            "ask",
+            "as_function",
+            "parse_arguments"
+          ],
+          "afferent_coupling": 2,
+          "efferent_coupling": 5,
+          "instability": 0.7142857142857143,
+          "abstractness": 0,
+          "distance": 0.2857142857142857,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "low",
+          "direct_dependencies": [
+            "investment_journal.config",
+            "investment_journal.formatting",
+            "investment_journal.journal",
+            "investment_journal.mcp_client",
+            "investment_journal.models"
+          ],
+          "transitive_dependencies": [
+            "investment_journal.analytics",
+            "investment_journal.config",
+            "investment_journal.formatting",
+            "investment_journal.journal",
+            "investment_journal.market",
+            "investment_journal.mcp_client",
+            "investment_journal.models",
+            "investment_journal.storage"
+          ],
+          "dependents": [
+            "investment_journal.__main__",
+            "investment_journal.bot"
+          ]
+        },
+        "investment_journal.market": {
+          "module_name": "investment_journal.market",
+          "package": "investment_journal",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\market.py",
+          "is_package": false,
+          "lines_of_code": 84,
+          "function_count": 9,
+          "class_count": 1,
+          "abstract_class_count": 0,
+          "public_interface": [
+            "MarketDataService",
+            "last_price",
+            "candles",
+            "portfolio",
+            "call_raw",
+            "list_tools",
+            "parse_candle",
+            "quotation",
+            "parse_position"
+          ],
+          "afferent_coupling": 3,
+          "efferent_coupling": 3,
+          "instability": 0.5,
+          "abstractness": 0,
+          "distance": 0.5,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "medium",
+          "direct_dependencies": [
+            "investment_journal.config",
+            "investment_journal.mcp_client",
+            "investment_journal.models"
+          ],
+          "transitive_dependencies": [
+            "investment_journal.config",
+            "investment_journal.mcp_client",
+            "investment_journal.models"
+          ],
+          "dependents": [
+            "investment_journal.__main__",
+            "investment_journal.bot",
+            "investment_journal.journal"
+          ]
+        },
+        "investment_journal.mcp_client": {
+          "module_name": "investment_journal.mcp_client",
+          "package": "investment_journal",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\mcp_client.py",
+          "is_package": false,
+          "lines_of_code": 96,
+          "function_count": 11,
+          "class_count": 3,
+          "abstract_class_count": 0,
+          "public_interface": [
+            "ToolError",
+            "ToolClient",
+            "call",
+            "list_tools",
+            "parse_tool_result",
+            "McpToolClient",
+            "call",
+            "list_tools"
+          ],
+          "afferent_coupling": 4,
+          "efferent_coupling": 1,
+          "instability": 0.2,
+          "abstractness": 0,
+          "distance": 0.8,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "high",
+          "direct_dependencies": [
+            "investment_journal.config"
+          ],
+          "transitive_dependencies": [
+            "investment_journal.config"
+          ],
+          "dependents": [
+            "investment_journal.__main__",
+            "investment_journal.bot",
+            "investment_journal.llm",
+            "investment_journal.market"
+          ]
+        },
+        "investment_journal.models": {
+          "module_name": "investment_journal.models",
+          "package": "investment_journal",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\models.py",
+          "is_package": false,
+          "lines_of_code": 106,
+          "function_count": 2,
+          "class_count": 6,
+          "abstract_class_count": 0,
+          "public_interface": [
+            "User",
+            "DecisionDraft",
+            "Decision",
+            "is_open",
+            "Candle",
+            "Position",
+            "is_empty_cash",
+            "Portfolio"
+          ],
+          "afferent_coupling": 7,
+          "efferent_coupling": 0,
+          "instability": 0,
+          "abstractness": 0,
+          "distance": 1,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "high",
+          "direct_dependencies": null,
+          "transitive_dependencies": null,
+          "dependents": [
+            "investment_journal.analytics",
+            "investment_journal.bot",
+            "investment_journal.formatting",
+            "investment_journal.journal",
+            "investment_journal.llm",
+            "investment_journal.market",
+            "investment_journal.storage"
+          ]
+        },
+        "investment_journal.storage": {
+          "module_name": "investment_journal.storage",
+          "package": "investment_journal",
+          "file_path": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant\\src\\investment_journal\\storage.py",
+          "is_package": false,
+          "lines_of_code": 105,
+          "function_count": 9,
+          "class_count": 1,
+          "abstract_class_count": 0,
+          "public_interface": [
+            "JournalRepository",
+            "close",
+            "get_or_create_user",
+            "add_decision",
+            "get_decision",
+            "list_decisions",
+            "close_decision"
+          ],
+          "afferent_coupling": 2,
+          "efferent_coupling": 1,
+          "instability": 0.3333333333333333,
+          "abstractness": 0,
+          "distance": 0.6666666666666667,
+          "maintainability": 0,
+          "technical_debt": 0,
+          "risk_level": "medium",
+          "direct_dependencies": [
+            "investment_journal.models"
+          ],
+          "transitive_dependencies": [
+            "investment_journal.models"
+          ],
+          "dependents": [
+            "investment_journal.__main__",
+            "investment_journal.journal"
+          ]
+        }
+      },
+      "dependency_matrix": {
+        "investment_journal": {},
+        "investment_journal.__main__": {
+          "investment_journal.bot": true,
+          "investment_journal.config": true,
+          "investment_journal.journal": true,
+          "investment_journal.llm": true,
+          "investment_journal.market": true,
+          "investment_journal.mcp_client": true,
+          "investment_journal.storage": true
+        },
+        "investment_journal.analytics": {
+          "investment_journal.models": true
+        },
+        "investment_journal.bot": {
+          "investment_journal.analytics": true,
+          "investment_journal.formatting": true,
+          "investment_journal.journal": true,
+          "investment_journal.llm": true,
+          "investment_journal.market": true,
+          "investment_journal.mcp_client": true,
+          "investment_journal.models": true
+        },
+        "investment_journal.config": {},
+        "investment_journal.formatting": {
+          "investment_journal.analytics": true,
+          "investment_journal.models": true
+        },
+        "investment_journal.journal": {
+          "investment_journal.analytics": true,
+          "investment_journal.market": true,
+          "investment_journal.models": true,
+          "investment_journal.storage": true
+        },
+        "investment_journal.llm": {
+          "investment_journal.config": true,
+          "investment_journal.formatting": true,
+          "investment_journal.journal": true,
+          "investment_journal.mcp_client": true,
+          "investment_journal.models": true
+        },
+        "investment_journal.market": {
+          "investment_journal.config": true,
+          "investment_journal.mcp_client": true,
+          "investment_journal.models": true
+        },
+        "investment_journal.mcp_client": {
+          "investment_journal.config": true
+        },
+        "investment_journal.models": {},
+        "investment_journal.storage": {
+          "investment_journal.models": true
+        }
+      },
+      "circular_dependencies": {
+        "has_circular_dependencies": false,
+        "total_cycles": 0,
+        "total_modules_in_cycles": 0,
+        "circular_dependencies": null,
+        "cycle_breaking_suggestions": null,
+        "core_infrastructure": null
+      },
+      "coupling_analysis": {
+        "average_coupling": 5.166666666666667,
+        "coupling_distribution": null,
+        "highly_coupled_modules": [
+          "investment_journal.config",
+          "investment_journal.models",
+          "investment_journal.mcp_client",
+          "investment_journal.analytics",
+          "investment_journal.storage"
+        ],
+        "loosely_coupled_modules": null,
+        "average_instability": 0.4494588744588745,
+        "stable_modules": [
+          "investment_journal",
+          "investment_journal.analytics",
+          "investment_journal.config",
+          "investment_journal.mcp_client",
+          "investment_journal.models"
+        ],
+        "instable_modules": [
+          "investment_journal.__main__",
+          "investment_journal.bot",
+          "investment_journal.llm"
+        ],
+        "main_sequence_deviation": 0.5505411255411256,
+        "zone_of_pain": [
+          "investment_journal.analytics",
+          "investment_journal.config",
+          "investment_journal.mcp_client",
+          "investment_journal.models"
+        ],
+        "zone_of_uselessness": [],
+        "main_sequence": [
+          "investment_journal.__main__",
+          "investment_journal.bot"
+        ]
+      },
+      "longest_chains": [
+        {
+          "from": "investment_journal.__main__",
+          "to": "investment_journal.config",
+          "path": [
+            "investment_journal.__main__",
+            "investment_journal.bot",
+            "investment_journal.llm",
+            "investment_journal.journal",
+            "investment_journal.market",
+            "investment_journal.mcp_client",
+            "investment_journal.config"
+          ],
+          "length": 7
+        },
+        {
+          "from": "investment_journal.__main__",
+          "to": "investment_journal.config",
+          "path": [
+            "investment_journal.__main__",
+            "investment_journal.bot",
+            "investment_journal.journal",
+            "investment_journal.market",
+            "investment_journal.mcp_client",
+            "investment_journal.config"
+          ],
+          "length": 6
+        },
+        {
+          "from": "investment_journal.__main__",
+          "to": "investment_journal.models",
+          "path": [
+            "investment_journal.__main__",
+            "investment_journal.bot",
+            "investment_journal.llm",
+            "investment_journal.formatting",
+            "investment_journal.analytics",
+            "investment_journal.models"
+          ],
+          "length": 6
+        },
+        {
+          "from": "investment_journal.__main__",
+          "to": "investment_journal.models",
+          "path": [
+            "investment_journal.__main__",
+            "investment_journal.bot",
+            "investment_journal.llm",
+            "investment_journal.journal",
+            "investment_journal.analytics",
+            "investment_journal.models"
+          ],
+          "length": 6
+        },
+        {
+          "from": "investment_journal.__main__",
+          "to": "investment_journal.config",
+          "path": [
+            "investment_journal.__main__",
+            "investment_journal.bot",
+            "investment_journal.llm",
+            "investment_journal.journal",
+            "investment_journal.market",
+            "investment_journal.config"
+          ],
+          "length": 6
+        },
+        {
+          "from": "investment_journal.__main__",
+          "to": "investment_journal.models",
+          "path": [
+            "investment_journal.__main__",
+            "investment_journal.bot",
+            "investment_journal.llm",
+            "investment_journal.journal",
+            "investment_journal.market",
+            "investment_journal.models"
+          ],
+          "length": 6
+        },
+        {
+          "from": "investment_journal.__main__",
+          "to": "investment_journal.models",
+          "path": [
+            "investment_journal.__main__",
+            "investment_journal.bot",
+            "investment_journal.llm",
+            "investment_journal.journal",
+            "investment_journal.storage",
+            "investment_journal.models"
+          ],
+          "length": 6
+        },
+        {
+          "from": "investment_journal.__main__",
+          "to": "investment_journal.config",
+          "path": [
+            "investment_journal.__main__",
+            "investment_journal.llm",
+            "investment_journal.journal",
+            "investment_journal.market",
+            "investment_journal.mcp_client",
+            "investment_journal.config"
+          ],
+          "length": 6
+        },
+        {
+          "from": "investment_journal.bot",
+          "to": "investment_journal.config",
+          "path": [
+            "investment_journal.bot",
+            "investment_journal.llm",
+            "investment_journal.journal",
+            "investment_journal.market",
+            "investment_journal.mcp_client",
+            "investment_journal.config"
+          ],
+          "length": 6
+        },
+        {
+          "from": "investment_journal.__main__",
+          "to": "investment_journal.models",
+          "path": [
+            "investment_journal.__main__",
+            "investment_journal.bot",
+            "investment_journal.formatting",
+            "investment_journal.analytics",
+            "investment_journal.models"
+          ],
+          "length": 5
+        }
+      ],
+      "max_depth": 6
+    },
+    "architecture_analysis": {
+      "compliance_score": 1,
+      "total_violations": 0,
+      "weighted_violations": 0,
+      "total_rules": 44,
+      "layer_analysis": {
+        "layers_analyzed": 1,
+        "layer_violations": [],
+        "layer_coupling": {
+          "infrastructure": {
+            "domain": 1,
+            "unknown": 1
+          },
+          "unknown": {
+            "domain": 6,
+            "infrastructure": 6,
+            "unknown": 17
+          }
+        },
+        "layer_cohesion": {
+          "infrastructure": 0,
+          "unknown": 0.5862068965517241
+        },
+        "problematic_layers": [
+          "infrastructure"
+        ]
+      },
+      "cohesion_analysis": {
+        "package_cohesion": {
+          "investment_journal": 1
+        },
+        "low_cohesion_packages": [],
+        "cohesion_suggestions": {}
+      },
+      "responsibility_analysis": {
+        "srp_violations": [],
+        "module_responsibilities": {
+          "investment_journal": [],
+          "investment_journal.__main__": [
+            "investment_journal"
+          ],
+          "investment_journal.analytics": [
+            "investment_journal"
+          ],
+          "investment_journal.bot": [
+            "investment_journal"
+          ],
+          "investment_journal.config": [],
+          "investment_journal.formatting": [
+            "investment_journal"
+          ],
+          "investment_journal.journal": [
+            "investment_journal"
+          ],
+          "investment_journal.llm": [
+            "investment_journal"
+          ],
+          "investment_journal.market": [
+            "investment_journal"
+          ],
+          "investment_journal.mcp_client": [
+            "investment_journal"
+          ],
+          "investment_journal.models": [],
+          "investment_journal.storage": [
+            "investment_journal"
+          ]
+        },
+        "overloaded_modules": []
+      },
+      "violations": [],
+      "severity_breakdown": {},
+      "recommendations": [
+        {
+          "type": "restructure",
+          "priority": "medium",
+          "title": "Improve Cohesion in infrastructure Layer",
+          "description": "Layer 'infrastructure' has low cohesion (0.00), indicating mixed responsibilities",
+          "benefits": [
+            "Better separation of concerns",
+            "Increased code reusability",
+            "Easier to understand and maintain"
+          ],
+          "effort": "medium",
+          "modules": null,
+          "steps": [
+            "Review the responsibilities of modules in this layer",
+            "Group related functionality together",
+            "Consider splitting the layer if it has multiple distinct responsibilities"
+          ]
+        },
+        {
+          "type": "interface",
+          "priority": "low",
+          "title": "Introduce Dependency Injection",
+          "description": "Use dependency injection to reduce coupling between layers",
+          "benefits": [
+            "Better testability with mock dependencies",
+            "Reduced coupling between components",
+            "More flexible and maintainable code"
+          ],
+          "effort": "medium",
+          "modules": null,
+          "steps": [
+            "Identify tightly coupled components",
+            "Create interfaces for dependencies",
+            "Inject dependencies rather than creating them directly"
+          ]
+        }
+      ],
+      "refactoring_targets": null
+    },
+    "summary": {
+      "total_modules": 12,
+      "total_packages": 1,
+      "total_dependencies": 31,
+      "project_root": "C:\\Users\\Kirill\\source\\repos\\InvestmentAssistant",
+      "resolved_imports": 31,
+      "unresolved_imports": 0,
+      "overall_quality_score": 69.67,
+      "maintainability_score": 61.67,
+      "architecture_score": 100,
+      "modularity_score": 50,
+      "technical_debt_hours": 26,
+      "average_coupling": 5.166666666666667,
+      "average_instability": 0.4494588744588745,
+      "cyclic_dependencies": 0,
+      "architecture_violations": 0,
+      "high_risk_modules": 4,
+      "critical_issues": 0,
+      "refactoring_candidates": 5,
+      "architecture_improvements": 2
+    },
+    "issues": null,
+    "recommendations": null,
+    "warnings": null,
+    "errors": [],
+    "generated_at": "2026-11-08T22:25:47.7032135+03:00",
+    "duration": 5,
+    "version": "1.33.2",
+    "config": null
+  },
+  "community_analysis": {
+    "algorithm": "leiden",
+    "scope": "module",
+    "total_communities": 3,
+    "modularity": 0.1431,
+    "communities": [
+      {
+        "id": "community_1",
+        "modules": [
+          "investment_journal"
+        ],
+        "packages": [],
+        "internal_edges": 0,
+        "external_edges": 0,
+        "external_dependency_ratio": 0,
+        "incoming_cross_community_edges": 0,
+        "outgoing_cross_community_edges": 0,
+        "size": 1,
+        "risk_level": "low"
+      },
+      {
+        "id": "community_2",
+        "modules": [
+          "investment_journal.__main__",
+          "investment_journal.config",
+          "investment_journal.llm",
+          "investment_journal.market",
+          "investment_journal.mcp_client"
+        ],
+        "packages": [
+          "investment_journal"
+        ],
+        "internal_edges": 9,
+        "external_edges": 11,
+        "external_dependency_ratio": 0.55,
+        "incoming_cross_community_edges": 4,
+        "outgoing_cross_community_edges": 7,
+        "size": 5,
+        "dominant_package": "investment_journal",
+        "package_count": 1,
+        "package_alignment": 1,
+        "risk_level": "medium"
+      },
+      {
+        "id": "community_3",
+        "modules": [
+          "investment_journal.analytics",
+          "investment_journal.bot",
+          "investment_journal.formatting",
+          "investment_journal.journal",
+          "investment_journal.models",
+          "investment_journal.storage"
+        ],
+        "packages": [
+          "investment_journal"
+        ],
+        "internal_edges": 11,
+        "external_edges": 11,
+        "external_dependency_ratio": 0.5,
+        "incoming_cross_community_edges": 7,
+        "outgoing_cross_community_edges": 4,
+        "size": 6,
+        "dominant_package": "investment_journal",
+        "package_count": 1,
+        "package_alignment": 1,
+        "risk_level": "medium"
+      }
+    ],
+    "bridge_modules": [
+      {
+        "module": "investment_journal.__main__",
+        "community": "community_2",
+        "cross_community_edges": 3,
+        "target_communities": [
+          "community_3"
+        ]
+      },
+      {
+        "module": "investment_journal.bot",
+        "community": "community_3",
+        "cross_community_edges": 4,
+        "target_communities": [
+          "community_2"
+        ]
+      },
+      {
+        "module": "investment_journal.formatting",
+        "community": "community_3",
+        "cross_community_edges": 1,
+        "target_communities": [
+          "community_2"
+        ]
+      },
+      {
+        "module": "investment_journal.journal",
+        "community": "community_3",
+        "cross_community_edges": 3,
+        "target_communities": [
+          "community_2"
+        ]
+      },
+      {
+        "module": "investment_journal.llm",
+        "community": "community_2",
+        "cross_community_edges": 4,
+        "target_communities": [
+          "community_3"
+        ]
+      },
+      {
+        "module": "investment_journal.market",
+        "community": "community_2",
+        "cross_community_edges": 3,
+        "target_communities": [
+          "community_3"
+        ]
+      },
+      {
+        "module": "investment_journal.mcp_client",
+        "community": "community_2",
+        "cross_community_edges": 1,
+        "target_communities": [
+          "community_3"
+        ]
+      },
+      {
+        "module": "investment_journal.models",
+        "community": "community_3",
+        "cross_community_edges": 2,
+        "target_communities": [
+          "community_2"
+        ]
+      },
+      {
+        "module": "investment_journal.storage",
+        "community": "community_3",
+        "cross_community_edges": 1,
+        "target_communities": [
+          "community_2"
+        ]
+      }
+    ],
+    "community_risk_score": 80,
+    "community_context_map": {
+      "version": 1,
+      "bundles": [
+        {
+          "community_id": "community_1",
+          "modules": [
+            "investment_journal"
+          ],
+          "module_count": 1,
+          "packages": null,
+          "risk_level": "low",
+          "bridge_modules": null,
+          "summary": "1 module; 0 packages; risk low; 0 cross-community edges."
+        },
+        {
+          "community_id": "community_2",
+          "modules": [
+            "investment_journal.__main__",
+            "investment_journal.config",
+            "investment_journal.llm",
+            "investment_journal.market",
+            "investment_journal.mcp_client"
+          ],
+          "module_count": 5,
+          "packages": [
+            "investment_journal"
+          ],
+          "risk_level": "medium",
+          "bridge_modules": [
+            "investment_journal.__main__",
+            "investment_journal.llm",
+            "investment_journal.market",
+            "investment_journal.mcp_client"
+          ],
+          "suggested_review_scope": "investment_journal/",
+          "summary": "5 modules; 1 package; risk medium; 11 cross-community edges; 4 bridge modules."
+        },
+        {
+          "community_id": "community_3",
+          "modules": [
+            "investment_journal.analytics",
+            "investment_journal.bot",
+            "investment_journal.formatting",
+            "investment_journal.journal",
+            "investment_journal.models",
+            "investment_journal.storage"
+          ],
+          "module_count": 6,
+          "packages": [
+            "investment_journal"
+          ],
+          "risk_level": "medium",
+          "bridge_modules": [
+            "investment_journal.bot",
+            "investment_journal.formatting",
+            "investment_journal.journal",
+            "investment_journal.models",
+            "investment_journal.storage"
+          ],
+          "suggested_review_scope": "investment_journal/",
+          "summary": "6 modules; 1 package; risk medium; 11 cross-community edges; 5 bridge modules."
+        }
+      ],
+      "bridge_modules": [
+        {
+          "module": "investment_journal.__main__",
+          "connects": [
+            "community_2",
+            "community_3"
+          ],
+          "reason": "3 cross-community import edges"
+        },
+        {
+          "module": "investment_journal.bot",
+          "connects": [
+            "community_2",
+            "community_3"
+          ],
+          "reason": "4 cross-community import edges"
+        },
+        {
+          "module": "investment_journal.formatting",
+          "connects": [
+            "community_2",
+            "community_3"
+          ],
+          "reason": "1 cross-community import edge"
+        },
+        {
+          "module": "investment_journal.journal",
+          "connects": [
+            "community_2",
+            "community_3"
+          ],
+          "reason": "3 cross-community import edges"
+        },
+        {
+          "module": "investment_journal.llm",
+          "connects": [
+            "community_2",
+            "community_3"
+          ],
+          "reason": "4 cross-community import edges"
+        },
+        {
+          "module": "investment_journal.market",
+          "connects": [
+            "community_2",
+            "community_3"
+          ],
+          "reason": "3 cross-community import edges"
+        },
+        {
+          "module": "investment_journal.mcp_client",
+          "connects": [
+            "community_2",
+            "community_3"
+          ],
+          "reason": "1 cross-community import edge"
+        },
+        {
+          "module": "investment_journal.models",
+          "connects": [
+            "community_2",
+            "community_3"
+          ],
+          "reason": "2 cross-community import edges"
+        },
+        {
+          "module": "investment_journal.storage",
+          "connects": [
+            "community_2",
+            "community_3"
+          ],
+          "reason": "1 cross-community import edge"
+        }
+      ]
+    },
+    "generated_at": "2026-11-08T22:25:47+03:00",
+    "version": "1.33.2",
+    "config": {
+      "algorithm": "leiden",
+      "follow_relative": true,
+      "include_lazy_edges": true,
+      "include_std_lib": false,
+      "include_third_party": true,
+      "min_community_size": 2,
+      "report_bridge_modules": true,
+      "resolution": 1,
+      "scope": "module"
+    }
+  },
+  "module_quality": [
+    {
+      "module_name": "investment_journal.formatting",
+      "file_path": "src\\investment_journal\\formatting.py",
+      "lines_of_code": 81,
+      "function_count": 8,
+      "analyzed_function_count": 8,
+      "average_complexity": 2.375,
+      "average_cognitive_complexity": 0.75,
+      "max_complexity": 7,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 0,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    },
+    {
+      "module_name": "investment_journal.analytics",
+      "file_path": "src\\investment_journal\\analytics.py",
+      "lines_of_code": 131,
+      "function_count": 10,
+      "analyzed_function_count": 10,
+      "average_complexity": 2.9,
+      "average_cognitive_complexity": 1.8,
+      "max_complexity": 6,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 0,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    },
+    {
+      "module_name": "investment_journal.llm",
+      "file_path": "src\\investment_journal\\llm.py",
+      "lines_of_code": 162,
+      "function_count": 12,
+      "analyzed_function_count": 12,
+      "average_complexity": 2.4166666666666665,
+      "average_cognitive_complexity": 1.8333333333333333,
+      "max_complexity": 6,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 4,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    },
+    {
+      "module_name": "investment_journal.config",
+      "file_path": "src\\investment_journal\\config.py",
+      "lines_of_code": 142,
+      "function_count": 7,
+      "analyzed_function_count": 7,
+      "average_complexity": 3.142857142857143,
+      "average_cognitive_complexity": 1.5714285714285714,
+      "max_complexity": 5,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 0,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    },
+    {
+      "module_name": "investment_journal.mcp_client",
+      "file_path": "src\\investment_journal\\mcp_client.py",
+      "lines_of_code": 96,
+      "function_count": 11,
+      "analyzed_function_count": 11,
+      "average_complexity": 2,
+      "average_cognitive_complexity": 1.1818181818181819,
+      "max_complexity": 5,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 2,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    },
+    {
+      "module_name": "investment_journal.journal",
+      "file_path": "src\\investment_journal\\journal.py",
+      "lines_of_code": 59,
+      "function_count": 6,
+      "analyzed_function_count": 6,
+      "average_complexity": 2.3333333333333335,
+      "average_cognitive_complexity": 2,
+      "max_complexity": 4,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 0,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    },
+    {
+      "module_name": "investment_journal.bot",
+      "file_path": "src\\investment_journal\\bot.py",
+      "lines_of_code": 224,
+      "function_count": 16,
+      "analyzed_function_count": 16,
+      "average_complexity": 2.25,
+      "average_cognitive_complexity": 1.4375,
+      "max_complexity": 4,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 9,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    },
+    {
+      "module_name": "investment_journal.market",
+      "file_path": "src\\investment_journal\\market.py",
+      "lines_of_code": 84,
+      "function_count": 9,
+      "analyzed_function_count": 9,
+      "average_complexity": 1.8888888888888888,
+      "average_cognitive_complexity": 1.4444444444444444,
+      "max_complexity": 4,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 0,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    },
+    {
+      "module_name": "investment_journal.__main__",
+      "file_path": "src\\investment_journal\\__main__.py",
+      "lines_of_code": 49,
+      "function_count": 3,
+      "analyzed_function_count": 3,
+      "average_complexity": 2,
+      "average_cognitive_complexity": 1.3333333333333333,
+      "max_complexity": 3,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 0,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    },
+    {
+      "module_name": "investment_journal.storage",
+      "file_path": "src\\investment_journal\\storage.py",
+      "lines_of_code": 105,
+      "function_count": 9,
+      "analyzed_function_count": 9,
+      "average_complexity": 1.5555555555555556,
+      "average_cognitive_complexity": 0.6666666666666666,
+      "max_complexity": 3,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 0,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    },
+    {
+      "module_name": "investment_journal.models",
+      "file_path": "src\\investment_journal\\models.py",
+      "lines_of_code": 106,
+      "function_count": 2,
+      "analyzed_function_count": 2,
+      "average_complexity": 1,
+      "average_cognitive_complexity": 0.5,
+      "max_complexity": 1,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 0,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    },
+    {
+      "module_name": "investment_journal",
+      "file_path": "src\\investment_journal\\__init__.py",
+      "lines_of_code": 1,
+      "function_count": 0,
+      "analyzed_function_count": 0,
+      "average_complexity": 0,
+      "average_cognitive_complexity": 0,
+      "max_complexity": 0,
+      "high_risk_function_count": 0,
+      "exception_handler_count": 0,
+      "dead_code_finding_count": 0,
+      "dead_code_block_count": 0
+    }
+  ],
+  "suggestions": [
+    {
+      "category": "coupling",
+      "severity": "warning",
+      "effort": "moderate",
+      "title": "Reduce coupling in class 'JournalRepository'",
+      "description": "Class 'JournalRepository' depends on 4 other classes (Decision, User, datetime, sqlite3.Row). Consider applying dependency inversion or splitting responsibilities.",
+      "steps": [
+        "Review the 4 dependencies: Decision, User, datetime, sqlite3.Row",
+        "Look for dependencies that can be removed or replaced with interfaces"
+      ],
+      "file_path": "src\\investment_journal\\storage.py",
+      "class_name": "JournalRepository",
+      "start_line": 32,
+      "metric_value": "4",
+      "threshold": "7"
+    }
+  ],
+  "summary": {
+    "total_files": 12,
+    "analyzed_files": 12,
+    "skipped_files": 0,
+    "complexity_enabled": true,
+    "dead_code_enabled": true,
+    "clone_enabled": true,
+    "cbo_enabled": true,
+    "mock_data_enabled": false,
+    "deps_enabled": true,
+    "arch_enabled": true,
+    "communities_enabled": true,
+    "deps_total_modules": 12,
+    "deps_modules_in_cycles": 0,
+    "deps_max_depth": 6,
+    "deps_main_sequence_deviation": 0.5505411255411256,
+    "arch_compliance": 1,
+    "community_count": 3,
+    "community_total_modules": 12,
+    "community_modularity": 0.14308012486992722,
+    "community_bridge_modules": 9,
+    "community_internal_edges": 20,
+    "community_cross_edges": 11,
+    "total_functions": 105,
+    "total_class_scopes": 22,
+    "max_class_complexity": 1,
+    "max_class_cognitive_complexity": 0,
+    "max_class_nesting_depth": 0,
+    "high_complexity_class_scope_count": 0,
+    "functions_parsed": 105,
+    "average_complexity": 2.1333333333333333,
+    "average_cognitive_complexity": 1.2380952380952381,
+    "average_nesting_depth": 0.6476190476190476,
+    "high_complexity_count": 0,
+    "dead_code_count": 0,
+    "critical_dead_code": 0,
+    "warning_dead_code": 0,
+    "info_dead_code": 0,
+    "total_clones": 0,
+    "clone_pairs": 0,
+    "clone_groups": 0,
+    "code_duplication_percentage": 0,
+    "cbo_classes": 22,
+    "high_coupling_classes": 0,
+    "medium_coupling_classes": 1,
+    "average_coupling": 0.5454545454545454,
+    "lcom_enabled": true,
+    "lcom_classes": 21,
+    "high_lcom_classes": 0,
+    "medium_lcom_classes": 0,
+    "average_lcom": 1,
+    "mock_data_count": 0,
+    "mock_data_error_count": 0,
+    "mock_data_warning_count": 0,
+    "mock_data_info_count": 0,
+    "health_score": 88,
+    "grade": "B",
+    "complexity_score": 100,
+    "dead_code_score": 100,
+    "duplication_score": 100,
+    "coupling_score": 95,
+    "cohesion_score": 100,
+    "dependency_score": 80,
+    "architecture_score": 100,
+    "community_score": 20,
+    "community_scored": true,
+    "community_risk_score": 80
+  },
+  "schema_version": 2,
+  "generated_at": "2026-11-08T22:25:47.7454768+03:00",
+  "duration_ms": 76,
+  "version": "1.33.2"
+}

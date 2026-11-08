@@ -1,0 +1,6 @@
+src\investment_journal\analytics.py:44: warning: review_decision has 36 NLOC, 14 CCN, 192 token, 3 PARAM, 42 length, 0 ND
+src\investment_journal\analytics.py:88: warning: candle_stats has 43 NLOC, 18 CCN, 321 token, 1 PARAM, 44 length, 0 ND
+src\investment_journal\config.py:91: warning: load_settings has 34 NLOC, 11 CCN, 316 token, 2 PARAM, 42 length, 0 ND
+src\investment_journal\llm.py:109: warning: ask has 36 NLOC, 12 CCN, 351 token, 3 PARAM, 36 length, 0 ND
+src\investment_journal\market.py:47: warning: portfolio has 46 NLOC, 30 CCN, 435 token, 1 PARAM, 46 length, 0 ND
+src\investment_journal\mcp_client.py:26: warning: parse_tool_result has 16 NLOC, 12 CCN, 139 token, 1 PARAM, 18 length, 0 ND

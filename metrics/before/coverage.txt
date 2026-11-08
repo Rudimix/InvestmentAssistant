@@ -1,0 +1,16 @@
+Name                                   Stmts   Miss Branch BrPart  Cover
+------------------------------------------------------------------------
+src\investment_journal\__init__.py         0      0      0      0   100%
+src\investment_journal\__main__.py        32     32      4      0     0%
+src\investment_journal\analytics.py       86      0     44      2    98%
+src\investment_journal\bot.py            154      3     22      1    98%
+src\investment_journal\config.py          57      0     14      0   100%
+src\investment_journal\formatting.py      36      0      8      0   100%
+src\investment_journal\journal.py         43      0     16      0   100%
+src\investment_journal\llm.py             81      1     18      0    99%
+src\investment_journal\market.py          52      0     18      0   100%
+src\investment_journal\mcp_client.py      55      1     12      1    97%
+src\investment_journal\models.py          50      0      0      0   100%
+src\investment_journal\storage.py         45      0      4      0   100%
+------------------------------------------------------------------------
+TOTAL                                    691     37    160      4    95%

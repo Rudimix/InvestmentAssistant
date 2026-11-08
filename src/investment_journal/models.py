@@ -90,6 +90,11 @@ class Position:
     expected_yield: float
     currency: str = "rub"
 
+    @property
+    def is_empty_cash(self) -> bool:
+        """Нулевой остаток валюты — такие строки в портфеле не показываем."""
+        return self.instrument_type == "currency" and self.quantity == 0
+
 
 @dataclass
 class Portfolio:

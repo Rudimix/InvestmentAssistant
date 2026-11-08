@@ -17,9 +17,30 @@ dependencies = [
 [project.optional-dependencies]
 tinvest = ["t-invest-tinkoff-mcp @ git+https://github.com/viptdv333-boop/t-invest-tinkoff-mcp.git"]
 docs = ["Sphinx>=8,<10"]
+metrics = [
+    "radon>=6",
+    "lizard>=1.17",
+    "pylint>=3",
+    "flake8>=7",
+    "pyscn>=1.30",
+    "coverage>=7",
+]
 
 [project.scripts]
 investment-assistant = "investment_journal.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+# Пороги проверок дизайна pylint — аналог правил CA1501/CA150x анализаторов .NET.
+[tool.pylint.design]
+max-parents = 5        # R0901 too-many-ancestors   ≈ CA1501 (глубина наследования)
+max-branches = 12      # R0912 too-many-branches
+max-statements = 50    # R0915 too-many-statements
+max-args = 5           # R0913 too-many-arguments
+max-locals = 15        # R0914 too-many-locals
+max-returns = 6        # R0911 too-many-return-statements
+
+[tool.coverage.run]
+branch = true
+source = ["src/investment_journal"]

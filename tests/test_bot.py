@@ -29,6 +29,18 @@ def last_answer(msg) -> str:
     return msg.answer.call_args.args[0]
 
 
+class ParseStatsArgsTests(unittest.TestCase):
+    def test_defaults_and_values(self):
+        self.assertEqual(bot.parse_stats_args("siz6"), ("SIZ6", "1d", 30))
+        self.assertEqual(bot.parse_stats_args("siz6 1h"), ("SIZ6", "1h", 30))
+        self.assertEqual(bot.parse_stats_args("siz6 4h 100 extra"), ("SIZ6", "4h", 100))
+
+    def test_errors(self):
+        for args in (None, "", "SIZ6 1w", "SIZ6 1d 1", "SIZ6 1d -5"):
+            with self.subTest(args=args), self.assertRaises(ValueError):
+                bot.parse_stats_args(args)
+
+
 class BotTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         self.tools = FakeToolClient()

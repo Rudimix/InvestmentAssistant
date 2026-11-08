@@ -28,17 +28,24 @@ def parse_tool_result(result: Any) -> Any:
     texts = [c.text for c in result.content if getattr(c, "type", "") == "text"]
     if result.isError:
         raise ToolError("; ".join(texts) or "MCP tool error")
-    data = result.structuredContent
-    if data is None:
-        joined = "\n".join(texts)
-        try:
-            data = json.loads(joined)
-        except ValueError:
-            return joined
-    # FastMCP оборачивает не-словари в {"result": ...}
+    data = result.structuredContent if result.structuredContent is not None else _from_text(texts)
+    return _unwrap(data)
+
+
+def _from_text(texts: list[str]) -> Any:
+    """Текстовый ответ: JSON, если получается разобрать, иначе строка."""
+    joined = "\n".join(texts)
+    try:
+        return json.loads(joined)
+    except ValueError:
+        return joined
+
+
+def _unwrap(data: Any) -> Any:
+    """Снять обёртку FastMCP ``{"result": ...}`` и превратить ``{"error": ...}`` в исключение."""
     if isinstance(data, dict) and set(data) == {"result"}:
         data = data["result"]
-    if isinstance(data, dict) and "error" in data and len(data) == 1:
+    if isinstance(data, dict) and set(data) == {"error"}:
         raise ToolError(str(data["error"]))
     return data
 

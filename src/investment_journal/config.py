@@ -73,19 +73,24 @@ class Settings:
 
 def read_dotenv(path: Path) -> dict[str, str]:
     """Прочитать простой файл ``KEY=VALUE``; комментарии и пустые строки пропускаются."""
-    values: dict[str, str] = {}
     if not path.is_file():
-        return values
-    for line in path.read_text(encoding="utf-8").splitlines():
-        line = line.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        key, value = line.split("=", 1)
-        value = value.strip()
-        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
-            value = value[1:-1]
-        values[key.strip()] = value
-    return values
+        return {}
+    pairs = (_parse_line(line) for line in path.read_text(encoding="utf-8").splitlines())
+    return dict(pair for pair in pairs if pair)
+
+
+def _parse_line(line: str) -> tuple[str, str] | None:
+    line = line.strip()
+    if line.startswith("#") or "=" not in line:
+        return None
+    key, value = (part.strip() for part in line.split("=", 1))
+    return key, _unquote(value)
+
+
+def _unquote(value: str) -> str:
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+        return value[1:-1]
+    return value
 
 
 def load_settings(environ: dict[str, str] | None = None, dotenv: Path | None = Path(".env")) -> Settings:
@@ -96,37 +101,42 @@ def load_settings(environ: dict[str, str] | None = None, dotenv: Path | None = P
     bot_token = env.get("TELEGRAM_BOT_TOKEN", "")
     if not bot_token:
         raise ValueError("Не задан TELEGRAM_BOT_TOKEN")
-
-    server_env = {k: env[k] for k in FORWARDED_ENV if k in env}
-    # Ассистент никогда не торгует: торговые инструменты сервера выключены.
-    server_env["TINVEST_ALLOW_TRADING"] = "0"
-
-    read_only = DEFAULT_READ_ONLY_TOOLS
-    if env.get("TINVEST_MCP_READ_TOOLS"):
-        read_only = tuple(t.strip() for t in env["TINVEST_MCP_READ_TOOLS"].split(",") if t.strip())
-
-    mcp = McpSettings(
-        command=env.get("TINVEST_MCP_COMMAND", "tinvest-mcp"),
-        args=tuple(shlex.split(env.get("TINVEST_MCP_ARGS", ""))),
-        env=server_env,
-        price_tool=env.get("TINVEST_MCP_PRICE_TOOL", "get_last_price"),
-        candles_tool=env.get("TINVEST_MCP_CANDLES_TOOL", "get_candles"),
-        portfolio_tool=env.get("TINVEST_MCP_PORTFOLIO_TOOL", "get_portfolio"),
-        read_only_tools=read_only,
-    )
-
-    llm = None
-    if env.get("LLM_API_KEY") or env.get("LLM_BASE_URL"):
-        llm = LlmSettings(
-            base_url=env.get("LLM_BASE_URL", "https://api.openai.com/v1"),
-            api_key=env.get("LLM_API_KEY", ""),
-            model=env.get("LLM_MODEL", "gpt-4o-mini"),
-            max_steps=int(env.get("LLM_MAX_STEPS", "6")),
-        )
-
     return Settings(
         bot_token=bot_token,
         db_path=Path(env.get("JOURNAL_DB", "journal.sqlite3")),
-        mcp=mcp,
-        llm=llm,
+        mcp=mcp_settings(env),
+        llm=llm_settings(env),
+    )
+
+
+def split_list(value: str) -> tuple[str, ...]:
+    """``"a, b ,"`` → ``("a", "b")``."""
+    return tuple(item.strip() for item in value.split(",") if item.strip())
+
+
+def mcp_settings(env: dict[str, str]) -> McpSettings:
+    server_env = {k: env[k] for k in FORWARDED_ENV if k in env}
+    # Ассистент никогда не торгует: торговые инструменты сервера выключены.
+    server_env["TINVEST_ALLOW_TRADING"] = "0"
+    defaults = McpSettings()
+    return McpSettings(
+        command=env.get("TINVEST_MCP_COMMAND", defaults.command),
+        args=tuple(shlex.split(env.get("TINVEST_MCP_ARGS", ""))),
+        env=server_env,
+        price_tool=env.get("TINVEST_MCP_PRICE_TOOL", defaults.price_tool),
+        candles_tool=env.get("TINVEST_MCP_CANDLES_TOOL", defaults.candles_tool),
+        portfolio_tool=env.get("TINVEST_MCP_PORTFOLIO_TOOL", defaults.portfolio_tool),
+        read_only_tools=split_list(env.get("TINVEST_MCP_READ_TOOLS", "")) or defaults.read_only_tools,
+    )
+
+
+def llm_settings(env: dict[str, str]) -> LlmSettings | None:
+    """Настройки LLM или ``None``, если свободный диалог не настроен."""
+    if not (env.get("LLM_API_KEY") or env.get("LLM_BASE_URL")):
+        return None
+    return LlmSettings(
+        base_url=env.get("LLM_BASE_URL", "https://api.openai.com/v1"),
+        api_key=env.get("LLM_API_KEY", ""),
+        model=env.get("LLM_MODEL", "gpt-4o-mini"),
+        max_steps=int(env.get("LLM_MAX_STEPS", "6")),
     )

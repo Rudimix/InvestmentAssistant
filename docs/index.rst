@@ -26,7 +26,7 @@ MCP-клиент и рыночные данные
    :member-order: bysource
 
 .. automodule:: investment_journal.market
-   :members: MarketDataService
+   :members: MarketDataService, quotation, parse_position, parse_candle
    :member-order: bysource
 
 Журнал и аналитика
@@ -37,12 +37,12 @@ MCP-клиент и рыночные данные
    :member-order: bysource
 
 .. automodule:: investment_journal.analytics
-   :members: DecisionReview, CandleStats, review_decision, candle_stats
+   :members: DecisionReview, CandleStats, review_decision, candle_stats, volatility_pct, max_drawdown_pct
    :member-order: bysource
 
 LLM-агент
 ---------
 
 .. automodule:: investment_journal.llm
-   :members: ChatCompletionsClient, InvestmentAgent
+   :members: ChatCompletionsClient, InvestmentAgent, as_function, parse_arguments
    :member-order: bysource

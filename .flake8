@@ -1,0 +1,5 @@
+[flake8]
+# C901 (mccabe): цикломатическая сложность функции больше 10 — аналог CA1502 с порогом из методички
+max-complexity = 10
+max-line-length = 120
+exclude = .venv,build,dist,docs/_build

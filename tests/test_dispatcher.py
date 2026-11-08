@@ -5,14 +5,14 @@ import unittest
 from datetime import datetime
 from unittest.mock import AsyncMock, patch
 
-from aiogram import Bot, Dispatcher
+from aiogram import Bot
 from aiogram.methods import SendMessage
 from aiogram.types import Chat, Message, Update, User
 
-from _support import FakeToolClient, mcp_settings
-from investment_journal.bot import router
-from investment_journal.journal import JournalService
-from investment_journal.market import MarketDataService
+from _support import FakeToolClient
+from investment_journal.__main__ import build_dispatcher
+from investment_journal.config import load_settings
+from investment_journal.llm import ChatCompletionsClient, InvestmentAgent
 from investment_journal.storage import JournalRepository
 
 _ids = itertools.count(1)
@@ -35,9 +35,8 @@ def update(text: str) -> Update:
 class DispatcherTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.tools = FakeToolClient()
-        self.journal = JournalService(JournalRepository(), MarketDataService(self.tools, mcp_settings()))
-        self.dp = Dispatcher(journal=self.journal, agent=None)
-        self.dp.include_router(router)
+        settings = load_settings({"TELEGRAM_BOT_TOKEN": "42:TEST"}, dotenv=None)
+        self.dp = build_dispatcher(settings, self.tools, JournalRepository())
         self.bot = Bot("42:TEST")
         self.sent: list[str] = []
 
@@ -67,6 +66,17 @@ class DispatcherTests(unittest.IsolatedAsyncioTestCase):
         self.tools.prices["SIZ6"] = 93000.0
         self.assertIn("подтверждается 1", await self.send("/review"))
         self.assertIn("не настроен", await self.send("какой у меня портфель?"))
+
+
+class BuildDispatcherTests(unittest.IsolatedAsyncioTestCase):
+    async def test_agent_created_only_with_llm(self):
+        env = {"TELEGRAM_BOT_TOKEN": "42:TEST", "LLM_BASE_URL": "http://localhost:11434/v1"}
+        settings = load_settings(env, dotenv=None)
+        llm = ChatCompletionsClient(settings.llm)
+        dp = build_dispatcher(settings, FakeToolClient(), JournalRepository(), llm)
+        self.assertIsInstance(dp["agent"], InvestmentAgent)
+        self.assertIsNone(build_dispatcher(settings, FakeToolClient(), JournalRepository())["agent"])
+        await llm.aclose()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,3 @@
+src\investment_journal\analytics.py:44:1: C901 'review_decision' is too complex (12)
+src\investment_journal\analytics.py:88:1: C901 'candle_stats' is too complex (11)
+src\investment_journal\llm.py:109:5: C901 'InvestmentAgent.ask' is too complex (11)

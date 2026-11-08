@@ -1,0 +1,9 @@
+﻿************* Module investment_journal.bot
+src\investment_journal\bot.py:35:0: R0901: Too many ancestors (1/0) (too-many-ancestors)
+************* Module investment_journal.journal
+src\investment_journal\journal.py:9:0: R0901: Too many ancestors (3/0) (too-many-ancestors)
+************* Module investment_journal.llm
+src\investment_journal\llm.py:46:0: R0901: Too many ancestors (3/0) (too-many-ancestors)
+************* Module investment_journal.mcp_client
+src\investment_journal\mcp_client.py:14:0: R0901: Too many ancestors (3/0) (too-many-ancestors)
+src\investment_journal\mcp_client.py:18:0: R0901: Too many ancestors (1/0) (too-many-ancestors)

@@ -3,8 +3,17 @@
 import unittest
 
 from _support import FakeToolClient, mcp_settings
-from investment_journal.market import MarketDataService
+from investment_journal.market import MarketDataService, quotation
 from investment_journal.mcp_client import ToolError
+
+
+class QuotationTests(unittest.TestCase):
+    def test_quotation(self):
+        self.assertEqual(quotation({"units": "12", "nano": 500000000}), 12.5)
+        self.assertEqual(quotation({"units": "-3", "nano": -250000000}), -3.25)
+        self.assertEqual(quotation({}), 0.0)
+        self.assertEqual(quotation(None), 0.0)
+        self.assertEqual(quotation("7.5"), 7.5)
 
 
 class MarketDataTests(unittest.IsolatedAsyncioTestCase):

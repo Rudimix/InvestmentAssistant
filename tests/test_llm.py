@@ -8,7 +8,7 @@ import httpx
 from _support import FakeToolClient, mcp_settings
 from investment_journal.config import LlmSettings
 from investment_journal.journal import JournalService
-from investment_journal.llm import ChatCompletionsClient, InvestmentAgent, LlmError
+from investment_journal.llm import ChatCompletionsClient, InvestmentAgent, LlmError, parse_arguments
 from investment_journal.market import MarketDataService
 from investment_journal.models import DecisionDraft
 from investment_journal.storage import JournalRepository
@@ -100,6 +100,14 @@ class AgentTests(unittest.IsolatedAsyncioTestCase):
         reply["tool_calls"][0]["function"]["arguments"] = "{oops"
         agent = self.make_agent([reply, {"role": "assistant", "content": "ок"}])
         self.assertEqual(await agent.ask(1, "?"), "ок")
+
+    def test_parse_arguments(self):
+        def call(arguments):
+            return {"function": {"name": "x", "arguments": arguments}}
+        self.assertEqual(parse_arguments(call('{"ticker": "SiZ6"}')), {"ticker": "SiZ6"})
+        self.assertEqual(parse_arguments(call("[1, 2]")), {})
+        self.assertEqual(parse_arguments(call("{oops")), {})
+        self.assertEqual(parse_arguments(call(None)), {})
 
     async def test_step_limit(self):
         agent = self.make_agent([tool_call("journal_list", {})] * 2, max_steps=2)

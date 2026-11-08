@@ -1,0 +1,6 @@
+﻿************* Module investment_journal.analytics
+src\investment_journal\analytics.py:24:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
+************* Module investment_journal.bot
+src\investment_journal\bot.py:35:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+************* Module investment_journal.models
+src\investment_journal\models.py:39:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
