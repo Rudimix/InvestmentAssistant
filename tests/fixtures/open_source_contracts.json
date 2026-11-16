@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-11-16T11:34:18.950364+00:00",
+  "sources": [
+    {
+      "url": "https://www.interfax.ru/rss",
+      "status": 200,
+      "content_type": "application/xml; charset=utf-8",
+      "sha256": "4a4dacd52df177c60fd85dacb04409de4b219f18e539c4813a4477e6611421bd",
+      "bytes": 21724,
+      "sample": {
+        "title": "Под санкции Евросоюза попали \"РусХимАльянс и \"РусГазДобыча\"",
+        "link": "https://www.interfax.ru/russia/1129302",
+        "pubDate": "Mon, 16 Nov 2026 14:28:00 +0300"
+      }
+    },
+    {
+      "url": "https://www.sberbank.com/common/img/uploaded/files/info/reporting_q4_aolql6na_2025.pdf",
+      "status": 200,
+      "content_type": "application/pdf, application/pdf",
+      "sha256": "06ac4bd4164d576e8256c1458730b04e505a5a784868fb93a81041e92e00f91f",
+      "bytes": 4097264,
+      "pages": 170,
+      "metadata": {
+        "/Author": "Прокофьев Лев Евгеньевич",
+        "/CreationDate": "D:20260225233735+03'00'",
+        "/ModDate": "D:20260225234123+03'00'"
+      },
+      "text_sample": "Обобщенная консолидированная финансовая отчетность Публичное акционерное общество «Сбербанк России» и его дочерние организации за 2025"
+    }
+  ]
+}

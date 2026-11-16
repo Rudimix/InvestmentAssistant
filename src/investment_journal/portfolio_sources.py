@@ -5,7 +5,8 @@
 на стороне приложения, а instrument_reports возвращает календарь публикаций.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from decimal import Decimal
 from hashlib import sha256
 from typing import TYPE_CHECKING
 from urllib.parse import urlsplit
@@ -14,38 +15,114 @@ from uuid import UUID
 from .market import optional_decimal
 from .mcp_client import ToolError
 from .models import (
-    EventBatch, InstrumentEvent, OperationBatch, PortfolioOperation, SnapshotPosition, data_json, timestamp,
+    EventBatch, InstrumentEvent, OperationBatch, OperationFill, PortfolioOperation, SnapshotPosition, data_json, timestamp,
 )
 
 if TYPE_CHECKING:
     from .market import MarketDataService
 
 
+QUANTITY_DIRECTIONS = {
+    "BUY": 1, "BUY_MARGIN": 1, "BUY_CARD": 1, "DELIVERY_BUY": 1, "INPUT_SECURITIES": 1,
+    "SELL": -1, "SELL_MARGIN": -1, "SELL_CARD": -1, "DELIVERY_SELL": -1, "OUTPUT_SECURITIES": -1,
+    "BOND_REPAYMENT_FULL": -1,
+}
+
+
+def operation_fills(raw: dict) -> tuple[list[OperationFill], list[str]]:
+    """Прочитать исполненные части, сохранив полноту при непригодной записи."""
+    info = raw.get("tradesInfo") or {}
+    fills, quality = {}, []
+    rows = info.get("trades", []) if isinstance(info, dict) else []
+    if not isinstance(rows, list):
+        return [], ["Список исполненных сделок непригоден"]
+    for index, item in enumerate(rows):
+        try:
+            price = item.get("price") or {}
+            fill = OperationFill(
+                id=str(item.get("num") or item.get("tradeId") or f"{raw['id']}:{index}"),
+                executed_at=timestamp(item.get("date") or item.get("dateTime")),
+                quantity=optional_decimal(item.get("quantity")), price=optional_decimal(price),
+                currency=str(price.get("currency") or "").lower(),
+            )
+            if fill.id in fills and fills[fill.id] != fill:
+                quality.append("Повтор исполнения содержит противоречащие данные")
+            fills[fill.id] = fill
+        except (ValueError, TypeError, KeyError, AttributeError):
+            quality.append("Часть исполненных сделок не удалось прочитать")
+    return sorted(fills.values(), key=lambda fill: (fill.executed_at, fill.id)), quality
+
+
 def operation_from(raw: dict) -> PortfolioOperation:
-    """Прочитать операцию с сохранением состояний и исходной валюты."""
+    """Прочитать реальную операцию и фактические исполнения без потери исходных эффектов."""
     payment = raw.get("payment") or {}
+    price = raw.get("price") or {}
+    commission = raw.get("commission") or {}
+    state = raw.get("state", "")
+    kind = raw.get("type") or raw.get("operationType", "")
+    name = kind.removeprefix("OPERATION_TYPE_")
+    trades, quality = operation_fills(raw)
+    quantity = optional_decimal(raw.get("quantityDone"))
+    if quantity is None and state == "OPERATION_STATE_EXECUTED":
+        quantity = optional_decimal(raw.get("quantity"))
+    complete = bool(trades) and not quality and quantity == sum((fill.quantity for fill in trades), Decimal(0))
+    if trades and not complete:
+        quality.append("Количество исполненных частей не подтверждает общее исполнение")
+    instrument_id = raw.get("instrumentUid") or raw.get("positionUid") or raw.get("figi") or ""
+    if not instrument_id and raw.get("ticker") and raw.get("classCode"):
+        instrument_id = f"{raw['ticker']}_{raw['classCode']}"
+    direction = QUANTITY_DIRECTIONS.get(name)
+    change = quantity * direction if quantity is not None and direction is not None else None
+    if state == "OPERATION_STATE_CANCELED":
+        change = Decimal(0)
+    executed_at = timestamp(raw["executedAt"]) if raw.get("executedAt") else None
+    if complete:
+        executed_at = max(fill.executed_at for fill in trades)
+    children = raw.get("childOperations") or []
+    corporate = raw.get("corporateAction") or {}
+    if not isinstance(children, list) or not all(isinstance(item, dict) for item in children):
+        quality.append("Дочерние операции непригодны для разбора")
+        children = []
+    if not isinstance(corporate, dict):
+        quality.append("Корпоративный эффект непригоден для разбора")
+        corporate = {}
     return PortfolioOperation(
         id=str(raw["id"]), occurred_at=timestamp(raw["date"]),
-        operation_type=raw.get("type") or raw.get("operationType", ""),
-        state=raw.get("state", ""), payment=optional_decimal(payment),
+        operation_type=kind, state=state, payment=optional_decimal(payment),
         currency=str(payment.get("currency") or raw.get("currency") or "").lower(),
-        instrument_id=raw.get("instrumentUid") or raw.get("positionUid") or raw.get("figi") or "",
-        ticker=raw.get("ticker", ""), quantity=optional_decimal(raw.get("quantityDone", raw.get("quantity"))),
-        parent_id=raw.get("parentOperationId", ""), commission=optional_decimal(raw.get("commission")),
+        instrument_id=instrument_id, ticker=raw.get("ticker", ""), quantity=quantity,
+        parent_id=raw.get("parentOperationId", ""), commission=optional_decimal(commission),
+        class_code=raw.get("classCode", ""), executed_at=executed_at,
+        requested_quantity=optional_decimal(raw.get("quantity")), quantity_change=change,
+        price=optional_decimal(price), price_currency=str(price.get("currency") or "").lower(),
+        commission_currency=str(commission.get("currency") or "").lower(),
+        trades=trades, execution_complete=complete, quality=list(dict.fromkeys(quality)),
+        child_operations=children, corporate_effect=corporate,
     )
 
 
-async def fetch_operations(market: "MarketDataService", start: datetime, end: datetime) -> OperationBatch:
-    """Получить все доступные страницы за (start, end] без предположения о полноте."""
+async def fetch_operations(market: "MarketDataService", start: datetime, end: datetime,
+                           boundary: str = "open_closed") -> OperationBatch:
+    """Получить страницы за (start, end] или исторический [start, end)."""
+    start, end = timestamp(start), timestamp(end)
+    if boundary not in {"open_closed", "closed_open"} or start >= end:
+        raise ValueError("Некорректные границы истории операций")
+
+    def in_period(moment):
+        return start <= moment < end if boundary == "closed_open" else start < moment <= end
+
     batch = OperationBatch()
     items: dict[str, PortfolioOperation] = {}
     cursor = ""
     seen = set()
     try:
         account_id = await market.account_id()
+        query_start = start
+        if boundary == "closed_open" and start > datetime.min.replace(tzinfo=timezone.utc):
+            query_start -= timedelta(microseconds=1)
         for _ in range(100):
             raw = await market.report_call("invest_get_operations", {
-                "accountId": account_id, "from": timestamp(start).isoformat(),
+                "accountId": account_id, "from": query_start.isoformat(),
                 "to": timestamp(end).isoformat(), "cursor": cursor, "limit": 1000,
                 "responseView": ["FULL"],
             })
@@ -55,7 +132,7 @@ async def fetch_operations(market: "MarketDataService", start: datetime, end: da
                 except (ValueError, KeyError, TypeError):
                     batch.quality.append("Часть операций не удалось прочитать")
                     continue
-                if start < operation.occurred_at <= end:
+                if in_period(operation.occurred_at) or any(in_period(fill.executed_at) for fill in operation.trades):
                     items[operation.id] = operation
             if raw.get("hasNext") is False:
                 batch.complete = not batch.quality
@@ -149,7 +226,7 @@ async def report_instrument_id(market: "MarketDataService", position: SnapshotPo
 
 
 async def fetch_news(market: "MarketDataService", position: SnapshotPosition,
-                     start: datetime, end: datetime, batch: EventBatch) -> None:
+                     start: datetime, end: datetime, batch: EventBatch, clock=None) -> None:
     """Проверить страницы новостей и фактические времена в заданном периоде."""
     source = f"news:{position.ticker}"
     batch.sources[source] = "partial"
@@ -160,8 +237,10 @@ async def fetch_news(market: "MarketDataService", position: SnapshotPosition,
             raw = await market.report_call("invest_get_news", {
                 "instrumentId": position.ticker, "cursor": cursor, "limit": 100,
             })
+            retrieved_at = clock() if clock else datetime.now(timezone.utc)
             for item in raw.get("items", []):
                 event = news_from(item, position)
+                event.retrieved_at = retrieved_at
                 if event.published_at is None or start < event.published_at <= end:
                     batch.items.append(event)
             if raw.get("hasNext") is False:
@@ -179,7 +258,7 @@ async def fetch_news(market: "MarketDataService", position: SnapshotPosition,
 
 
 async def fetch_reports(market: "MarketDataService", position: SnapshotPosition,
-                        start: datetime, end: datetime, batch: EventBatch) -> None:
+                        start: datetime, end: datetime, batch: EventBatch, clock=None) -> None:
     """Получить календарь и явно сохранить отсутствие текста и исходных ссылок."""
     source = f"reports:{position.instrument_id}"
     try:
@@ -187,8 +266,10 @@ async def fetch_reports(market: "MarketDataService", position: SnapshotPosition,
         raw = await market.report_call("invest_get_instrument_reports", {
             "instrumentId": instrument_id, "from": timestamp(start).isoformat(), "to": timestamp(end).isoformat(),
         })
+        retrieved_at = clock() if clock else datetime.now(timezone.utc)
         for item in raw.get("events", []):
             event = report_from(item, instrument_id)
+            event.retrieved_at = retrieved_at
             event.instrument_ids = list(dict.fromkeys(event.instrument_ids + [position.instrument_id, position.ticker]))
             if event.event_at is None or start.date() <= event.event_at.date() <= end.date():
                 batch.items.append(event)
@@ -199,16 +280,16 @@ async def fetch_reports(market: "MarketDataService", position: SnapshotPosition,
 
 
 async def fetch_events(market: "MarketDataService", positions: list[SnapshotPosition],
-                       start: datetime, end: datetime) -> EventBatch:
+                       start: datetime, end: datetime, clock=None) -> EventBatch:
     """Собрать источники для позиций с отдельным состоянием каждого поиска."""
     batch = EventBatch()
     instruments = {item.instrument_id: item for item in positions if item.instrument_type != "currency"}
     news_tickers = set()
     for position in instruments.values():
         if position.ticker not in news_tickers:
-            await fetch_news(market, position, start, end, batch)
+            await fetch_news(market, position, start, end, batch, clock)
             news_tickers.add(position.ticker)
-        await fetch_reports(market, position, start, end, batch)
+        await fetch_reports(market, position, start, end, batch, clock)
     batch.found = len(batch.items)
     if any(item.url is None for item in batch.items):
         batch.quality.append("Часть событий получена без исходной ссылки")

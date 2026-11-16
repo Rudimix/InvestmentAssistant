@@ -373,6 +373,7 @@ def snapshot_position(raw: dict, base_currency: str, details: dict) -> SnapshotP
         asset_id=raw.get("assetUid", ""), price_currency=price_currency,
         source_time=raw.get("lastPriceDate") or raw.get("priceTime"), quality=quality,
         aliases=[f"{ticker}_{raw['classCode']}"] if raw.get("classCode") else [],
+        sector=str(raw.get("sector") or ""),
     )
 
 
