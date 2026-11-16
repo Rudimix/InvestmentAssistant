@@ -17,6 +17,11 @@ from .config import McpSettings
 class ToolError(RuntimeError):
     """Инструмент MCP вернул ошибку."""
 
+    def __init__(self, message: str, *, authorization: bool = False, temporary: bool = True):
+        super().__init__(message)
+        self.authorization = authorization
+        self.temporary = temporary
+
 
 class ToolClient(Protocol):
     """То, что нужно сервисам от MCP: вызвать инструмент и узнать список инструментов."""
@@ -65,6 +70,24 @@ def ssl_context(ca_files: tuple[str, ...] = ()) -> ssl.SSLContext:
     return context
 
 
+def _leaf_errors(exc: BaseException) -> list[BaseException]:
+    """Исключения внутри (возможно вложенных) ``ExceptionGroup`` из anyio."""
+    if isinstance(exc, BaseExceptionGroup):
+        return [leaf for sub in exc.exceptions for leaf in _leaf_errors(sub)]
+    return [exc]
+
+
+def connection_error(exc: Exception) -> ToolError:
+    """Понятная ошибка вместо ``ExceptionGroup`` при открытии сессии."""
+    leaves = _leaf_errors(exc)
+    for leaf in leaves:
+        if isinstance(leaf, httpx.HTTPStatusError) and leaf.response.status_code in (401, 403):
+            return ToolError("сервер Т-Инвестиций не принял токен — проверьте его или выпустите новый",
+                             authorization=True, temporary=False)
+    cause = next((leaf for leaf in leaves if isinstance(leaf, (httpx.HTTPError, OSError))), leaves[-1])
+    return ToolError(f"MCP-сервер недоступен: {cause}")
+
+
 class McpToolClient:
     """Долгоживущая сессия с MCP-сервером по Streamable HTTP."""
 
@@ -79,8 +102,15 @@ class McpToolClient:
             read, write = await self._open_transport(self._stack)
             self._session = await self._stack.enter_async_context(ClientSession(read, write))
             await self._session.initialize()
-        except BaseException:
-            await self.__aexit__(None, None, None)
+        except BaseException as exc:
+            # при сбое транспорта anyio отменяет initialize(), а настоящую причину
+            # (401, нет соединения) отдаёт только при закрытии стека
+            try:
+                await self.__aexit__(None, None, None)
+            except Exception as cleanup:  # pylint: disable=broad-exception-caught
+                raise connection_error(cleanup) from cleanup
+            if isinstance(exc, Exception):
+                raise connection_error(exc) from exc
             raise
         return self
 
@@ -105,14 +135,19 @@ class McpToolClient:
         return self._session
 
     async def call(self, name: str, arguments: dict[str, Any] | None = None) -> Any:
+        session = self._require_session()
         try:
-            result = await self._require_session().call_tool(name, arguments or {})
-        except McpError as exc:
-            raise ToolError(f"MCP-сервер недоступен: {exc}") from exc
+            result = await session.call_tool(name, arguments or {})
+        except (McpError, httpx.HTTPError, OSError, ExceptionGroup) as exc:
+            raise connection_error(exc) from exc
         return parse_tool_result(result)
 
     async def list_tools(self) -> list[dict[str, Any]]:
-        listed = await self._require_session().list_tools()
+        session = self._require_session()
+        try:
+            listed = await session.list_tools()
+        except (McpError, httpx.HTTPError, OSError, ExceptionGroup) as exc:
+            raise connection_error(exc) from exc
         return [
             {"name": t.name, "description": t.description or "", "input_schema": t.inputSchema}
             for t in listed.tools

@@ -10,10 +10,12 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import certifi
+import httpx
 
 import _support  # noqa: F401
 from investment_journal.config import McpSettings
-from investment_journal.mcp_client import McpToolClient, ToolError, parse_tool_result, ssl_context
+from investment_journal.mcp_client import (McpToolClient, ToolError, connection_error, parse_tool_result,
+                                           ssl_context)
 
 SERVER = Path(__file__).resolve().parent / "fake_tinvest_server.py"
 
@@ -86,9 +88,21 @@ class HttpSessionTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_unreachable_server_fails_on_enter(self):
         settings = McpSettings(url=f"http://127.0.0.1:{_free_port()}/mcp")
-        with self.assertRaises(BaseException):
+        with self.assertRaisesRegex(ToolError, "недоступен"):
             async with McpToolClient(settings):
                 pass
+
+
+class ConnectionErrorTests(unittest.TestCase):
+    def test_rejected_token(self):
+        request = httpx.Request("POST", "https://invest-public-api.tbank.ru/mcp")
+        status = httpx.HTTPStatusError("401", request=request, response=httpx.Response(401, request=request))
+        error = connection_error(ExceptionGroup("task group", [ExceptionGroup("inner", [status])]))
+        self.assertIn("не принял токен", str(error))
+
+    def test_other_error(self):
+        error = connection_error(ExceptionGroup("task group", [OSError("connection refused")]))
+        self.assertEqual(str(error), "MCP-сервер недоступен: connection refused")
 
 
 class SslContextTests(unittest.TestCase):

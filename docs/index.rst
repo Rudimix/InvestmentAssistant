@@ -26,7 +26,14 @@ MCP-клиент и рыночные данные
    :member-order: bysource
 
 .. automodule:: investment_journal.market
-   :members: MarketDataService, quotation, pick_instrument, parse_candle, parse_position, parse_portfolio
+   :members: MarketDataService, quotation, pick_instrument, parse_accounts, parse_candle, parse_position, parse_portfolio
+   :member-order: bysource
+
+Подключения пользователей
+-------------------------
+
+.. automodule:: investment_journal.connections
+   :members: Connections, TokenCipher, NotConnected, looks_like_token, generate_key
    :member-order: bysource
 
 Журнал и аналитика
@@ -45,4 +52,19 @@ LLM-агент
 
 .. automodule:: investment_journal.llm
    :members: ChatCompletionsClient, InvestmentAgent, as_function, parse_arguments
+
+Анализ портфеля и отчёты
+------------------------------
+
+.. automodule:: investment_journal.portfolio_analysis
+   :members: PortfolioAnalysisService
+
+.. automodule:: investment_journal.portfolio_reports
+   :members: PortfolioReportService
+
+Расписания
+----------
+
+.. automodule:: investment_journal.report_scheduling
+   :members: IntervalRule, CalendarRule, rule_from_dict, schedule_preview, ReportScheduler
    :member-order: bysource
