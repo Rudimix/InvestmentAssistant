@@ -1,6 +1,7 @@
 """Устойчивые фоновые отчёты с управляемым временем."""
 
 import asyncio
+import json
 from contextlib import closing
 from datetime import timedelta
 from pathlib import Path
@@ -16,7 +17,8 @@ from _support import TEST_TOKEN, make_connections
 from investment_journal.connections import Connections
 from investment_journal.mcp_client import ToolError
 from investment_journal.portfolio_reports import PortfolioReportService
-from investment_journal.report_scheduling import IntervalRule, ReportScheduler
+from investment_journal.report_scheduling import IntervalRule, ReportScheduler, latest_due
+from investment_journal.analysis_periods import rolling_period
 from investment_journal.storage import JournalRepository
 from test_portfolio_market import NOW
 from test_portfolio_reports import report_tools
@@ -64,6 +66,23 @@ class SchedulerTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(self.repo.get_schedule(self.user.id)["next_run_at"], NOW+timedelta(hours=6))
         finally:
             await other.stop()
+
+    async def test_rolling_period_uses_latest_due_and_is_frozen_in_queue(self):
+        first = NOW-timedelta(days=21)
+        rule = IntervalRule(7, "days", first, "Europe/Moscow")
+        schedule = self.repo.save_schedule(self.user.id, "2000000001", rule.to_dict(), first,
+                                          {"kind": "rolling", "days": 30}, ["analysis", "advice", "screening"])
+        planned = latest_due(rule, NOW+timedelta(hours=2))
+        self.assertEqual(planned, NOW)
+        self.repo.enqueue_schedule(schedule, rule.next_after(NOW), NOW+timedelta(hours=2), planned)
+        run = self.repo.last_run(self.user.id)
+        expected = rolling_period(30, "Europe/Moscow", planned)
+        period = json.loads(run["resolved_period"])
+        self.assertEqual(period["local_start"], expected.local_start)
+        self.assertEqual(period["local_end"], expected.local_end)
+        self.assertEqual(json.loads(run["manifest"])["sections"], ["analysis", "advice", "screening"])
+        self.repo.enqueue_schedule(schedule, rule.next_after(NOW), NOW+timedelta(days=1), planned)
+        self.assertEqual(self.repo.get_run(self.user.id, run["id"])["resolved_period"], run["resolved_period"])
 
     async def test_renewed_then_expired_lease_and_future_nominal_time(self):
         self.repo.enqueue_schedule(self.schedule, NOW+timedelta(hours=6), NOW)

@@ -29,10 +29,27 @@ class JournalService:
         if len(draft.hypothesis.strip()) < 10:
             raise JournalError("Опишите гипотезу подробнее (не меньше 10 символов)")
 
-    async def record(self, draft: DecisionDraft) -> Decision:
+    async def record(self, draft: DecisionDraft, advice_source: dict | None = None) -> Decision:
         """Проверить черновик, получить текущую цену через MCP и сохранить решение."""
         self.validate(draft)
+        if advice_source:
+            if advice_source["account_id"] != await self.market.account_id():
+                raise JournalError("Счёт изменился. Откройте исходное предложение заново через /advice.")
+            previous = self.repo.linked_decision(draft.user_id, advice_source["account_id"], advice_source["request_key"])
+            if previous:
+                return previous
         price = await self.market.last_price(draft.ticker)
+        if advice_source:
+            try:
+                if advice_source.get("source_kind") == "screening":
+                    if draft.ticker.upper() != advice_source["ticker"].upper():
+                        raise ValueError("Тикер должен совпадать с выбранной бумагой подборки")
+                    return self.repo.add_screening_decision(draft, price, advice_source["account_id"],
+                        advice_source["screening_id"], advice_source["request_key"])
+                return self.repo.add_advice_decision(draft, price, advice_source["account_id"],
+                                                     advice_source["proposal_id"], advice_source["request_key"])
+            except ValueError as exc:
+                raise JournalError(str(exc)) from exc
         return self.repo.add_decision(draft, price)
 
     async def review(self, user: User, open_only: bool = True) -> list[DecisionReview]:

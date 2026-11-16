@@ -2,6 +2,7 @@
 
 from datetime import timedelta
 from secrets import token_hex
+import json
 
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
@@ -23,6 +24,7 @@ RUN_LABELS = {"queued": "ожидает выполнения", "running": "вы�
 class ScheduleForm(StatesGroup):
     zone = State()
     details = State()
+    period = State()
     confirmation = State()
 
 
@@ -51,7 +53,8 @@ async def show_status(message: Message, connections: Connections, reports: Portf
     if schedule:
         rule = rule_from_dict(schedule["rule"])
         next_at = schedule["next_run_at"] if schedule["enabled"] else initial_run(rule, reports.clock())
-        text = schedule_preview(schedule["account_id"], rule, reports.clock(), next_at)
+        text = schedule_preview(schedule["account_id"], rule, reports.clock(), next_at,
+                                json.loads(schedule["analysis_policy"]), json.loads(schedule["sections"]))
         if schedule["enabled"]:
             text += "\nДоставка включена"
             rows.append([("Пауза", "pause")])
@@ -82,11 +85,34 @@ async def show_confirmation(message: Message, state: FSMContext, connections: Co
     account_id = await selected_account(connections, message.chat.id)
     next_at = initial_run(rule, reports.clock())
     nonce = token_hex(4)
+    previous = await state.get_data()
+    policy = previous.get("schedule_policy", {"kind": "rolling", "days": 30})
+    sections = previous.get("schedule_sections", ["analysis", "advice"])
+    preview = schedule_preview(account_id, rule, reports.clock(), next_at, policy, sections)
     await state.set_data({"schedule_nonce": nonce, "schedule_rule": rule.to_dict(),
-                          "schedule_account": account_id, "schedule_next": next_at.isoformat()})
+                          "schedule_account": account_id, "schedule_next": next_at.isoformat(),
+                          "schedule_policy": policy, "schedule_sections": sections})
     await state.set_state(ScheduleForm.confirmation)
-    await message.answer(schedule_preview(account_id, rule, reports.clock(), next_at),
-                         reply_markup=keyboard(message.chat.id, [[("Сохранить", "save"), ("Отмена", "cancel")]], nonce))
+    await message.answer(preview,
+                         reply_markup=keyboard(message.chat.id, [[("Период анализа", "period"), ("Разделы", "sections")],
+                                                                 [("Сохранить", "save"), ("Отмена", "cancel")]], nonce))
+
+
+async def period_text(message: Message, state: FSMContext, connections: Connections, reports: PortfolioReportService):
+    text = message.text.strip().lower()
+    if text in {"сравнение", "legacy"}:
+        policy = {"kind": "legacy_delivered"}
+    elif text.isdigit() and int(text) > 0:
+        policy = {"kind": "rolling", "days": int(text)}
+    else:
+        await message.answer("Введите положительное число календарных дней, например 30, или слово сравнение.")
+        return
+    data = await state.get_data()
+    await state.update_data(schedule_policy=policy)
+    try:
+        await show_confirmation(message, state, connections, reports, rule_from_dict(data["schedule_rule"]))
+    except ValueError as exc:
+        await message.answer(str(exc))
 
 
 async def accept_zone(message: Message, state: FSMContext, reports: PortfolioReportService, zone: str) -> None:
@@ -138,7 +164,8 @@ async def save_draft(query: CallbackQuery, state: FSMContext, connections: Conne
         if account_id != data["schedule_account"] or next_at != timestamp(data["schedule_next"]):
             await show_confirmation(query.message, state, connections, reports, rule)
             return
-        connections.repo.save_schedule(user.id, account_id, rule.to_dict(), next_at)
+        connections.repo.save_schedule(user.id, account_id, rule.to_dict(), next_at,
+                                       data["schedule_policy"], data["schedule_sections"])
         await state.clear()
     await query.message.answer("Расписание сохранено.")
     await show_status(query.message, connections, reports)
@@ -162,7 +189,11 @@ async def schedule_callback(query: CallbackQuery, state: FSMContext, connections
         if len(parts) == 3:
             if action in {"interval", "calendar"}:
                 nonce = token_hex(4)
-                await state.set_data({"schedule_mode": action, "schedule_nonce": nonce})
+                schedule = connections.repo.get_schedule(user.id)
+                draft = {"schedule_mode": action, "schedule_nonce": nonce}
+                if schedule:
+                    draft.update(schedule_policy=json.loads(schedule["analysis_policy"]), schedule_sections=json.loads(schedule["sections"]))
+                await state.set_data(draft)
                 await state.set_state(ScheduleForm.zone)
                 await message.answer("Выберите часовой пояс или введите его IANA-имя, например Asia/Yekaterinburg.",
                                      reply_markup=keyboard(message.chat.id, [[("Москва", "moscow"), ("UTC", "utc")],
@@ -175,6 +206,8 @@ async def schedule_callback(query: CallbackQuery, state: FSMContext, connections
             elif action == "resume":
                 schedule = connections.repo.get_schedule(user.id)
                 if schedule:
+                    await state.update_data(schedule_policy=json.loads(schedule["analysis_policy"]),
+                                            schedule_sections=json.loads(schedule["sections"]))
                     await show_confirmation(message, state, connections, reports, rule_from_dict(schedule["rule"]))
             return
         data = await state.get_data()
@@ -188,6 +221,21 @@ async def schedule_callback(query: CallbackQuery, state: FSMContext, connections
             await accept_zone(message, state, reports, "Europe/Moscow" if action == "moscow" else "UTC")
         elif action == "save":
             await save_draft(query, state, connections, reports, parts[3])
+        elif action == "period" and await state.get_state() == ScheduleForm.confirmation.state:
+            await state.set_state(ScheduleForm.period)
+            await message.answer("За сколько завершённых календарных дней показывать динамику? Введите число, например 30. Для прежнего сравнения введите сравнение.")
+        elif action == "sections" and await state.get_state() == ScheduleForm.confirmation.state:
+            await message.answer("Выберите разделы автоматического отчёта.", reply_markup=keyboard(message.chat.id,
+                [[("Только анализ", "only"), ("Анализ и советы", "withadvice")],
+                 [("Анализ и акции", "withstocks"), ("Все разделы", "allsections")]], data["schedule_nonce"]))
+        elif action in {"only", "withadvice", "withstocks", "allsections"} and await state.get_state() == ScheduleForm.confirmation.state:
+            sections = ["analysis"]
+            if action in {"withadvice", "allsections"}:
+                sections.append("advice")
+            if action in {"withstocks", "allsections"}:
+                sections.append("screening")
+            await state.update_data(schedule_sections=sections)
+            await show_confirmation(message, state, connections, reports, rule_from_dict(data["schedule_rule"]))
     except (ValueError, NotConnected) as exc:
         await message.answer(str(exc) or "Подключите токен через /connect.")
 
@@ -195,4 +243,5 @@ async def schedule_callback(query: CallbackQuery, state: FSMContext, connections
 def register_schedule_handlers(router: Router) -> None:
     router.message.register(zone_text, ScheduleForm.zone, F.text)
     router.message.register(details_text, ScheduleForm.details, F.text)
+    router.message.register(period_text, ScheduleForm.period, F.text, ~F.text.startswith("/"))
     router.callback_query.register(schedule_callback, F.data.startswith("schedule:"))

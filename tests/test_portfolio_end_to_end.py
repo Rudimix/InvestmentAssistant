@@ -196,6 +196,8 @@ class PortfolioEndToEndTests(unittest.IsolatedAsyncioTestCase):
         await self.click("Интервал")
         await self.click("UTC")
         await self.send("6ч")
+        await self.click("Период анализа")
+        await self.send("сравнение")
         await self.click("Сохранить")
         self.now += timedelta(hours=6)
         await self.tick()

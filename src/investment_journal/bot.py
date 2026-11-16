@@ -6,6 +6,7 @@
 
 from contextlib import nullcontext
 from datetime import datetime, timezone
+import json
 
 from aiogram import F, Router
 from aiogram.exceptions import TelegramAPIError
@@ -15,6 +16,12 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import ErrorEvent, KeyboardButton, Message, ReplyKeyboardMarkup, ReplyKeyboardRemove
 
 from .analytics import candle_stats
+from .analysis_ui import register_analysis_handlers, start_period
+from .investor_profile import register_profile_handlers
+from .advice_ui import advice_links, register_advice_handlers
+from .stock_ui import register_stock_handlers
+from .forecast_observation import refresh_forecast, observation_lines
+from .portfolio_formatting import plain_chunks
 from .connections import Connections, NotConnected, looks_like_token
 from .formatting import (format_accounts, format_journal, format_portfolio, format_review, format_reviews,
                          format_stats)
@@ -36,7 +43,12 @@ HELP = (
     "/stats ТИКЕР [интервал] [свечей] — статистика по свечам (интервалы: 1m 5m 15m 1h 4h 1d 1w)\n"
     "/portfolio — портфель выбранного счёта\n"
     "/analysis — аналитический отчёт по выбранному счёту\n"
-    "/schedule — расписание аналитических отчётов\n"
+    "/analysis период — выбрать даты и часовой пояс\n"
+    "/analysis 30 Europe/Moscow — анализ за 30 завершённых дней\n"
+    "/profile — цели и ограничения портфеля\n"
+    "/advice — история предложений и их основания\n"
+    "/stocks — подбор акций российского бизнеса\n"
+    "/schedule — частота, период анализа и разделы автоматического отчёта\n"
     "/idea — записать гипотезу (buy/sell/hold) с текущей ценой\n"
     "/journal — все записи журнала\n"
     "/review — проверить открытые гипотезы по текущим ценам\n"
@@ -64,6 +76,9 @@ COMMANDS = (
     ("connect", "Подключить токен T-Invest API"),
     ("portfolio", "Портфель выбранного счёта"),
     ("analysis", "Аналитический отчёт по портфелю"),
+    ("profile", "Цели и ограничения портфеля"),
+    ("advice", "Предложения и их основания"),
+    ("stocks", "Подбор акций российского бизнеса"),
     ("schedule", "Настроить автоматические отчёты"),
     ("price", "Последняя цена: /price SBER"),
     ("stats", "Статистика по свечам: /stats SBER 1d 30"),
@@ -193,7 +208,7 @@ async def cmd_account(message: Message, command: CommandObject, connections: Con
         rule = rule_from_dict(schedule["rule"])
         now = reports.clock() if reports else datetime.now(timezone.utc)
         text += "\nАвтоматические отчёты переключены на этот счёт.\n" + schedule_preview(
-            account.id, rule, now, schedule["next_run_at"])
+            account.id, rule, now, schedule["next_run_at"], json.loads(schedule["analysis_policy"]), json.loads(schedule["sections"]))
     await message.answer(text)
 
 
@@ -252,11 +267,17 @@ async def cmd_portfolio(message: Message, connections: Connections) -> None:
     await message.answer(format_portfolio(portfolio))
 
 
-async def cmd_analysis(message: Message, connections: Connections, reports: PortfolioReportService) -> None:
+async def cmd_analysis(message: Message, connections: Connections, reports: PortfolioReportService,
+                       state: FSMContext, command: CommandObject) -> None:
     """Сформировать сохраняемый отчёт с текущими данными, событиями и доступным объяснением AI."""
     if not connections.is_connected(message.chat.id):
         raise NotConnected
-    await message.answer("Готовлю анализ выбранного счёта. Это может занять некоторое время.")
+    if command.args:
+        await start_period(message, state, connections, reports, command.args)
+        return
+    await state.clear()
+    await message.answer("Готовлю анализ выбранного счёта. Это может занять некоторое время.\n"
+                         "Для выбора исторического периода используйте /analysis период.")
     try:
         run = await reports.request(message.chat.id, str(message.message_id), message.bot.send_message)
     except ToolError:
@@ -265,7 +286,7 @@ async def cmd_analysis(message: Message, connections: Connections, reports: Port
     states = {
         "retry": "Источник или доставка временно недоступны. Повтор запланирован автоматически.",
         "failed": "Не удалось подготовить или доставить отчёт. Повторите /analysis позже.",
-        "cancelled": "Настройки подключения изменились во время анализа. Повторите /analysis.",
+        "cancelled": "Счёт, подключение или профиль изменились во время анализа. Повторите /analysis.",
         "delivery_unknown": "Исход доставки отчёта неизвестен. Новый отчёт можно запросить через /analysis.",
         "queued": "Запрос сохранён и ожидает завершения предыдущего отчёта.",
     }
@@ -276,6 +297,7 @@ async def cmd_analysis(message: Message, connections: Connections, reports: Port
 async def cmd_idea(message: Message, state: FSMContext, connections: Connections) -> None:
     if not connections.is_connected(message.chat.id):
         raise NotConnected
+    await state.clear()
     await state.set_state(IdeaForm.kind)
     await message.answer("Какое решение? buy, sell или hold", reply_markup=KIND_KEYBOARD)
 
@@ -291,6 +313,12 @@ async def idea_kind(message: Message, state: FSMContext) -> None:
         await message.answer("Выберите buy, sell или hold", reply_markup=KIND_KEYBOARD)
         return
     await state.update_data(kind=kind)
+    source = (await state.get_data()).get("advice_source", {})
+    if source.get("source_kind") == "screening":
+        await state.update_data(ticker=source["ticker"])
+        await state.set_state(IdeaForm.hypothesis)
+        await message.answer(f"Опишите собственную гипотезу по {source['ticker']}.", reply_markup=ReplyKeyboardRemove())
+        return
     await state.set_state(IdeaForm.ticker)
     await message.answer("Тикер инструмента?", reply_markup=ReplyKeyboardRemove())
 
@@ -314,22 +342,38 @@ async def idea_hypothesis(message: Message, state: FSMContext, connections: Conn
     except JournalError as exc:
         await message.answer(str(exc))
         return
-    await state.clear()
+    source = data.get("advice_source")
+    if not source:
+        await state.clear()
     try:
         async with connections.journal(message.chat.id) as journal:
-            decision = await journal.record(draft)
-    except ToolError as exc:
+            decision = await journal.record(draft, source)
+    except (ToolError, JournalError) as exc:
         await message.answer(f"Не удалось получить цену {draft.ticker}: {exc}. Гипотеза не сохранена.")
         return
+    await state.clear()
     await message.answer(f"Записано #{decision.id}: {decision.kind} {decision.ticker} по {decision.entry_price:g}")
 
 
 async def cmd_journal(message: Message, connections: Connections) -> None:
     user = connections.user(message.chat.id)
-    await message.answer(format_journal(connections.repo.list_decisions(user.id)))
+    decisions = connections.repo.list_decisions(user.id)
+    entries = []
+    if connections.is_connected(message.chat.id):
+        account = connections.selected_account(message.chat.id)
+        entries = [(f"Основания гипотезы #{decision.id}", source["id"]) for decision in decisions
+                   for source in connections.repo.hypothesis_sources(user.id, account, decision.id) if source["kind"] == "advice"]
+    parts = list(plain_chunks(format_journal(decisions), 3500))
+    if connections.is_connected(message.chat.id):
+        for decision in decisions:
+            for source in connections.repo.hypothesis_sources(user.id, account, decision.id):
+                if source["kind"] == "screening":
+                    parts.extend(plain_chunks(f"Основания гипотезы #{decision.id} · /stocks бумага {source['id']} {source['proof']['candidate']['entry']['ticker']}", 3500))
+    for index, text in enumerate(parts):
+        await message.answer(text, reply_markup=advice_links(message.chat.id, entries) if index == len(parts)-1 else None)
 
 
-async def cmd_review(message: Message, connections: Connections) -> None:
+async def cmd_review(message: Message, connections: Connections, reports: PortfolioReportService | None = None) -> None:
     user = connections.user(message.chat.id)
     try:
         async with connections.journal(message.chat.id) as journal:
@@ -338,6 +382,23 @@ async def cmd_review(message: Message, connections: Connections) -> None:
         await message.answer(f"Не удалось получить цены: {exc}")
         return
     await message.answer(format_reviews(reviews))
+    if reports:
+        account = connections.selected_account(message.chat.id)
+        forecast_ids = set()
+        for review in reviews:
+            for source in connections.repo.hypothesis_sources(user.id, account, review.decision.id):
+                forecast = source["proof"].get("candidate", {}).get("forecast", {})
+                if forecast.get("available"):
+                    forecast_ids.add(forecast["forecast"]["id"])
+        if forecast_ids:
+            async with connections.market(message.chat.id) as market:
+                for forecast_id in sorted(forecast_ids):
+                    try:
+                        observation = await refresh_forecast(connections.repo, market, reports.screening.forecasts,
+                            user.id, account, forecast_id, reports.clock())
+                        await message.answer("\n".join(observation_lines(observation)))
+                    except (ToolError, ValueError):
+                        await message.answer("Наблюдение связанного прогноза временно недоступно.")
 
 
 async def cmd_close(message: Message, command: CommandObject, connections: Connections) -> None:
@@ -419,9 +480,13 @@ def create_router() -> Router:
     router = Router(name="assistant")
     # у каждого пользователя свой токен и журнал: в группах бот молчит
     router.message.filter(F.chat.type == "private")
+    register_advice_handlers(router)
+    register_profile_handlers(router)
+    register_stock_handlers(router)
     for handler, filters in HANDLERS[:-1]:
         router.message.register(handler, *filters)
     register_schedule_handlers(router)
+    register_analysis_handlers(router)
     fallback, filters = HANDLERS[-1]
     router.message.register(fallback, *filters)
     router.errors.register(on_not_connected, ExceptionTypeFilter(NotConnected))
