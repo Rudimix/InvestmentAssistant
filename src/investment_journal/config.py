@@ -1,6 +1,7 @@
 """Настройки приложения из переменных окружения и файла ``.env``."""
 
 import os
+import math
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -56,6 +57,11 @@ class LlmSettings:
     api_key: str
     model: str
     max_steps: int = 6
+    timeout_seconds: float = 180
+
+    def __post_init__(self):
+        if not math.isfinite(self.timeout_seconds) or self.timeout_seconds <= 0:
+            raise ValueError("LLM_TIMEOUT_SECONDS должен быть положительным конечным числом")
 
 
 @dataclass(frozen=True)
@@ -68,6 +74,9 @@ class Settings:
     llm: LlmSettings | None = None
     #: Ключ Fernet, которым шифруются токены пользователей в базе.
     token_key: str = ""
+    evidence_sources_path: Path | None = None
+    evidence_ca_files: tuple[str, ...] = ()
+    forecast_models_path: Path = Path("forecast-models")
 
 
 def read_dotenv(path: Path) -> dict[str, str]:
@@ -111,6 +120,9 @@ def load_settings(environ: dict[str, str] | None = None, dotenv: Path | None = P
         mcp=mcp_settings(env),
         llm=llm_settings(env),
         token_key=env.get("TOKEN_ENCRYPTION_KEY", ""),
+        evidence_sources_path=Path(env["EVIDENCE_SOURCES"]) if env.get("EVIDENCE_SOURCES") else None,
+        forecast_models_path=Path(env.get("FORECAST_MODELS", "forecast-models")),
+        evidence_ca_files=split_list(env.get("EVIDENCE_CA_FILES", env.get("TINVEST_CA_FILES", ""))),
     )
 
 
@@ -146,8 +158,9 @@ def llm_settings(env: dict[str, str]) -> LlmSettings | None:
     if not (env.get("LLM_API_KEY") or env.get("LLM_BASE_URL")):
         return None
     return LlmSettings(
-        base_url=env.get("LLM_BASE_URL", "https://api.openai.com/v1"),
+        base_url=env.get("LLM_BASE_URL") or "https://api.openai.com/v1",
         api_key=env.get("LLM_API_KEY", ""),
-        model=env.get("LLM_MODEL", "gpt-4o-mini"),
-        max_steps=int(env.get("LLM_MAX_STEPS", "6")),
+        model=env.get("LLM_MODEL") or "gpt-4o-mini",
+        max_steps=int(env.get("LLM_MAX_STEPS") or "6"),
+        timeout_seconds=float(env.get("LLM_TIMEOUT_SECONDS") or "180"),
     )

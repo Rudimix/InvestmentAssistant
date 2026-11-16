@@ -5,7 +5,7 @@ import unittest
 
 import httpx
 
-from _support import FakeToolClient, mcp_settings
+from _support import FakeToolClient, TEST_TOKEN, mcp_settings
 from investment_journal.config import LlmSettings
 from investment_journal.journal import JournalService
 from investment_journal.llm import ChatCompletionsClient, InvestmentAgent, LlmError, parse_arguments
@@ -54,7 +54,8 @@ class AgentTests(unittest.IsolatedAsyncioTestCase):
         agent = self.make_agent([{"role": "assistant", "content": "ok"}])
         await agent.ask(1, "что есть?", self.journal)
         names = {t["function"]["name"] for t in self.llm.requests[0]["tools"]}
-        self.assertEqual(names, {"invest_get_market_values", "invest_get_portfolio", "journal_list", "journal_review"})
+        self.assertEqual(names, {"invest_get_market_values", "invest_get_portfolio", "journal_list", "journal_review",
+                                 "portfolio_profile", "portfolio_evidence_search", "portfolio_advice"})
 
     async def test_mcp_tool_call_roundtrip(self):
         agent = self.make_agent([
@@ -94,6 +95,20 @@ class AgentTests(unittest.IsolatedAsyncioTestCase):
         ])
         await agent.ask(1, "цена SBER?", self.journal)
         self.assertIn("Ошибка", self.llm.requests[1]["messages"][-1]["content"])
+        self.assertFalse(any(name == "invest_get_portfolio" for name, args in self.tools.calls))
+
+    async def test_profile_tool_reads_only_current_users_revision(self):
+        from dataclasses import replace
+        from test_analysis_models import profile
+        agent = self.make_agent([tool_call("portfolio_profile", {}), {"role": "assistant", "content": "готово"}])
+        user, other = self.journal.user(1), self.journal.user(2)
+        self.journal.repo.save_profile(user.id, replace(profile(), user_id=user.id, goal="Своя цель"))
+        self.journal.repo.save_profile(other.id, replace(profile(), user_id=other.id, goal="Чужая цель"))
+        await agent.ask(1, "моя цель", self.journal)
+        content = self.llm.requests[1]["messages"][-1]["content"]
+        self.assertIn("Своя цель", content)
+        self.assertNotIn("Чужая цель", content)
+        self.assertNotIn("user_id", content)
 
     async def test_bad_arguments_json(self):
         reply = tool_call("journal_list", {})
@@ -128,6 +143,16 @@ class ClientErrorTests(unittest.IsolatedAsyncioTestCase):
         http = httpx.AsyncClient(transport=httpx.MockTransport(lambda r: httpx.Response(401, text="bad key")))
         with self.assertRaisesRegex(LlmError, "401"):
             await ChatCompletionsClient(SETTINGS, http).complete([], [])
+
+    async def test_quota_error_type_is_available_without_response_body(self):
+        http = httpx.AsyncClient(transport=httpx.MockTransport(lambda request: httpx.Response(429, json={
+            "error": {"type": "insufficient_quota", "code": None, "message": TEST_TOKEN}})))
+        self.addAsyncCleanup(http.aclose)
+        with self.assertRaises(LlmError) as caught:
+            await ChatCompletionsClient(SETTINGS, http).complete([], [])
+        self.assertEqual(caught.exception.code, "insufficient_quota")
+        self.assertEqual(caught.exception.status, 429)
+        self.assertNotIn(TEST_TOKEN, str(caught.exception))
 
     async def test_malformed_body(self):
         http = httpx.AsyncClient(transport=httpx.MockTransport(lambda r: httpx.Response(200, json={})))
