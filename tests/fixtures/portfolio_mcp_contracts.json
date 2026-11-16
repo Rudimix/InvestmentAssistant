@@ -1,0 +1,407 @@
+{
+  "source": "T-Invest MCP list_tools; public response examples with text replaced",
+  "tools": [
+    {
+      "name": "invest_get_instrument_reports",
+      "description": "Get scheduled financial report publication events for an instrument over a date range. Returns report dates, fiscal period year and number, report type (quarterly, semi-annual, annual), and record creation timestamp. Use to track upcoming earnings releases.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "description": "Start of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier (UID).",
+            "type": "string"
+          },
+          "to": {
+            "description": "End of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "instrumentId"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_operations",
+      "description": "Get a paginated list of operations for a brokerage account. Use accountId to specify the account, from/to for the time range (ISO 8601 UTC), cursor for pagination, and operationTypes/state to filter results. Use responseView to limit returned fields.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "description": "Brokerage account identifier. Must be a value returned by invest_list_broker_accounts.",
+            "type": "string"
+          },
+          "cursor": {
+            "description": "Pagination cursor. Pass nextCursor from the previous response to fetch the next page.",
+            "type": "string"
+          },
+          "from": {
+            "description": "Start of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier (UID or ticker_classCode).",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum number of operations to return. Default is 100, maximum is 1000.",
+            "type": "integer"
+          },
+          "operationTypes": {
+            "description": "Array of operation types to filter by.",
+            "items": {
+              "enum": [
+                "OPERATION_TYPE_UNSPECIFIED",
+                "OPERATION_TYPE_INPUT",
+                "OPERATION_TYPE_OUTPUT",
+                "OPERATION_TYPE_BUY",
+                "OPERATION_TYPE_BUY_CARD",
+                "OPERATION_TYPE_SELL",
+                "OPERATION_TYPE_SELL_CARD",
+                "OPERATION_TYPE_SELL_MARGIN",
+                "OPERATION_TYPE_BUY_MARGIN",
+                "OPERATION_TYPE_BROKER_FEE",
+                "OPERATION_TYPE_SERVICE_FEE",
+                "OPERATION_TYPE_MARGIN_FEE",
+                "OPERATION_TYPE_DIVIDEND",
+                "OPERATION_TYPE_DIVIDEND_TAX",
+                "OPERATION_TYPE_DIVIDEND_TRANSFER",
+                "OPERATION_TYPE_DIV_EXT",
+                "OPERATION_TYPE_COUPON",
+                "OPERATION_TYPE_BOND_TAX",
+                "OPERATION_TYPE_BOND_REPAYMENT",
+                "OPERATION_TYPE_BOND_REPAYMENT_FULL",
+                "OPERATION_TYPE_TAX",
+                "OPERATION_TYPE_TAX_CORRECTION",
+                "OPERATION_TYPE_TAX_CORRECTION_COUPON",
+                "OPERATION_TYPE_BENEFIT_TAX",
+                "OPERATION_TYPE_TAX_PROGRESSIVE",
+                "OPERATION_TYPE_BOND_TAX_PROGRESSIVE",
+                "OPERATION_TYPE_DIVIDEND_TAX_PROGRESSIVE",
+                "OPERATION_TYPE_BENEFIT_TAX_PROGRESSIVE",
+                "OPERATION_TYPE_TAX_CORRECTION_PROGRESSIVE",
+                "OPERATION_TYPE_TAX_REPO",
+                "OPERATION_TYPE_TAX_REPO_HOLD",
+                "OPERATION_TYPE_TAX_REPO_REFUND",
+                "OPERATION_TYPE_TAX_REPO_PROGRESSIVE",
+                "OPERATION_TYPE_TAX_REPO_HOLD_PROGRESSIVE",
+                "OPERATION_TYPE_TAX_REPO_REFUND_PROGRESSIVE",
+                "OPERATION_TYPE_OVERNIGHT",
+                "OPERATION_TYPE_OUTPUT_SECURITIES",
+                "OPERATION_TYPE_INPUT_SECURITIES",
+                "OPERATION_TYPE_ACCRUING_VARMARGIN",
+                "OPERATION_TYPE_WRITING_OFF_VARMARGIN",
+                "OPERATION_TYPE_FUNDING",
+                "OPERATION_TYPE_DELIVERY_BUY",
+                "OPERATION_TYPE_DELIVERY_SELL",
+                "OPERATION_TYPE_TRACK_MFEE",
+                "OPERATION_TYPE_TRACK_PFEE",
+                "OPERATION_TYPE_CASH_FEE",
+                "OPERATION_TYPE_OUT_FEE",
+                "OPERATION_TYPE_OUT_STAMP_DUTY",
+                "OPERATION_TYPE_OUTPUT_SWIFT",
+                "OPERATION_TYPE_INPUT_SWIFT",
+                "OPERATION_TYPE_OUTPUT_ACQUIRING",
+                "OPERATION_TYPE_INPUT_ACQUIRING",
+                "OPERATION_TYPE_OUTPUT_PENALTY",
+                "OPERATION_TYPE_ADVICE_FEE",
+                "OPERATION_TYPE_TRANS_IIS_BS",
+                "OPERATION_TYPE_TRANS_BS_BS",
+                "OPERATION_TYPE_INP_MULTI",
+                "OPERATION_TYPE_OUT_MULTI",
+                "OPERATION_TYPE_OVER_PLACEMENT",
+                "OPERATION_TYPE_OVER_COM",
+                "OPERATION_TYPE_OVER_INCOME",
+                "OPERATION_TYPE_OPTION_EXPIRATION",
+                "OPERATION_TYPE_FUTURE_EXPIRATION",
+                "OPERATION_TYPE_SUCCESS_FEE",
+                "OPERATION_TYPE_OTHER_FEE",
+                "OPERATION_TYPE_OTHER",
+                "OPERATION_TYPE_DFA_REDEMPTION",
+                "OPERATION_TYPE_PRIMARY_ORDER"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "responseView": {
+            "description": "BASE (hasNext, nextCursor, items cursor/id/date/type/ticker/classCode/price/quantityDone/state) always included. Add: ADDITIONAL_INFO=quantity/parentOperationId/cancelDateTime/cancelReason, PAYMENTS=payment/accruedInt/commission/yield/yieldRelative, CHILD_OPERATIONS=child op DETAILS, TRADES=tradesInfo.TRADES DETAILS. Use FULL for all. Default: BASE.",
+            "items": {
+              "enum": [
+                "BASE",
+                "ADDITIONAL_INFO",
+                "PAYMENTS",
+                "CHILD_OPERATIONS",
+                "TRADES",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "state": {
+            "description": "Filter by operation state.",
+            "enum": [
+              "OPERATION_STATE_UNSPECIFIED",
+              "OPERATION_STATE_EXECUTED",
+              "OPERATION_STATE_CANCELED",
+              "OPERATION_STATE_PROGRESS"
+            ],
+            "type": "string"
+          },
+          "to": {
+            "description": "End of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountId"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_portfolio",
+      "description": "Get the portfolio for a brokerage account. Returns total portfolio value, yield metrics, and per-position details. Use responseView to limit returned fields.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "description": "Brokerage account identifier. Must be a value returned by invest_list_broker_accounts.",
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (totalAmountPortfolio, expectedYield, dailyYieldRelative, dailyYield) always included. Add: BY_INSTRUMENT_TYPE=total amounts by asset type, DETAILED=per-position DETAILS. Use FULL for all. Default: BASE.",
+            "items": {
+              "enum": [
+                "BASE",
+                "BY_INSTRUMENT_TYPE",
+                "DETAILED",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "accountId"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_bond",
+      "description": "Get a bond by its identifier. Returns detailed information about a single bond instrument including its maturity date, coupon structure, nominal value, trading flags, and market data. Use idType to specify the type of identifier provided: UID is preferred for uniqueness, TICKER requires classCode to disambiguate exchange and trading mode.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "classCode": {
+            "description": "Deprecated. Optional. Trading mode, e.g. TQBR, TQCB, TQOB, SPBFUT.",
+            "type": "string"
+          },
+          "idType": {
+            "description": "Type of the identifier supplied in 'instrumentId'. UID is preferred (globally unique). TICKER requires classCode to specify the trading mode — you can instead pass instrumentId in the ticker_classCode format, e.g. SBER_TQBR. INSTRUMENT_ID_TYPE_ID accepts uid or ticker_classCode.",
+            "enum": [
+              "INSTRUMENT_ID_TYPE_TICKER",
+              "INSTRUMENT_ID_TYPE_UID",
+              "INSTRUMENT_ID_TYPE_POSITION_UID",
+              "INSTRUMENT_ID_TYPE_ID"
+            ],
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier. Value format depends on idType.",
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (name, uid) always included. Add: IDENTIFIERS=exchange codes (ticker/classCode/isin), STATIC_DATA=maturity/nominal/lot, ADDITIONAL_INFO=coupon structure and amortization flags, TRADING_FLAGS=trading restrictions, MARKET_DATA=exchange/prices/candle dates. Use FULL for all.",
+            "items": {
+              "enum": [
+                "BASE",
+                "IDENTIFIERS",
+                "STATIC_DATA",
+                "ADDITIONAL_INFO",
+                "TRADING_FLAGS",
+                "MARKET_DATA",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "instrumentId",
+          "idType"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_future",
+      "description": "Get a futures contract by its identifier. Returns details including expiration date, trade dates, underlying asset, and trading flags. Use idType to specify the type of identifier: UID is preferred for uniqueness, TICKER requires classCode to disambiguate trading mode.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "classCode": {
+            "description": "Deprecated. Optional. Trading mode, e.g. TQBR, TQCB, TQOB, SPBFUT.",
+            "type": "string"
+          },
+          "idType": {
+            "description": "Type of the identifier supplied in 'instrumentId'. UID is preferred (globally unique). TICKER requires classCode to specify the trading mode — you can instead pass instrumentId in the ticker_classCode format, e.g. SBER_TQBR. INSTRUMENT_ID_TYPE_ID accepts uid or ticker_classCode.",
+            "enum": [
+              "INSTRUMENT_ID_TYPE_TICKER",
+              "INSTRUMENT_ID_TYPE_UID",
+              "INSTRUMENT_ID_TYPE_POSITION_UID",
+              "INSTRUMENT_ID_TYPE_ID"
+            ],
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier. Value format depends on idType.",
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (name, uid) always included. Add: IDENTIFIERS=ticker/classCode/positionUid/basicAssetPositionUid, STATIC_DATA=expiration/trade DATES/currency/lot, ADDITIONAL_INFO=futuresType/basicAsset/assetType, TRADING_FLAGS=trading restrictions, MARKET_DATA=exchange/prices/price-step value/candle dates. Use FULL for all.",
+            "items": {
+              "enum": [
+                "BASE",
+                "IDENTIFIERS",
+                "STATIC_DATA",
+                "ADDITIONAL_INFO",
+                "TRADING_FLAGS",
+                "MARKET_DATA",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "instrumentId",
+          "idType"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_news",
+      "description": "Get a paginated list of news items. Each item includes a title, full content, summary, related instrument identifiers, and a priority flag. Use instrumentId (ticker) to get news for a specific instrument. Use cursor for pagination; pass nextCursor from the response to fetch the next page.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "description": "Optional. Pagination cursor. Pass nextCursor from the previous response to fetch the next page.",
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Ticker of the instrument. If passed, the most recent news items for this instrument are returned.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Optional. Maximum number of news items to return. Default is 1000.",
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "name": "invest_get_share",
+      "description": "Get a share (equity) by its identifier. Returns details including nominal value, trading flags, and market data. Use idType to specify the identifier type; UID is preferred for uniqueness.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "classCode": {
+            "description": "Deprecated. Optional. Trading mode, e.g. TQBR, TQCB, TQOB, SPBFUT.",
+            "type": "string"
+          },
+          "idType": {
+            "description": "Type of the identifier supplied in 'instrumentId'. UID is preferred (globally unique). TICKER requires classCode to specify the trading mode — you can instead pass instrumentId in the ticker_classCode format, e.g. SBER_TQBR. INSTRUMENT_ID_TYPE_ID accepts uid or ticker_classCode.",
+            "enum": [
+              "INSTRUMENT_ID_TYPE_TICKER",
+              "INSTRUMENT_ID_TYPE_UID",
+              "INSTRUMENT_ID_TYPE_POSITION_UID",
+              "INSTRUMENT_ID_TYPE_ID"
+            ],
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier. Value format depends on idType.",
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (name, uid) always included. Add: IDENTIFIERS=exchange codes (ticker/classCode/isin), STATIC_DATA=currency/nominal/lot, TRADING_FLAGS=trading restrictions, MARKET_DATA=exchange/prices/candle dates. Use FULL for all.",
+            "items": {
+              "enum": [
+                "BASE",
+                "IDENTIFIERS",
+                "STATIC_DATA",
+                "TRADING_FLAGS",
+                "MARKET_DATA",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "instrumentId",
+          "idType"
+        ]
+      }
+    }
+  ],
+  "news": {
+    "hasNext": false,
+    "items": [
+      {
+        "id": "110108157",
+        "source": "tass",
+        "title": "Тестовый материал источника",
+        "content": "Тестовый материал источника",
+        "tables": [],
+        "instrumentId": [
+          {
+            "instrument": {
+              "instrumentUid": "c190ff1f-1447-4227-b543-316332699ca5",
+              "ticker": "SBERP",
+              "classCode": "TQBR"
+            }
+          },
+          {
+            "instrument": {
+              "instrumentUid": "e6123145-9665-43e0-8413-cd61b8aa9b13",
+              "ticker": "SBER",
+              "classCode": "TQBR"
+            }
+          }
+        ],
+        "priority": false,
+        "ts": "2026-11-15T11:17:46.613805446Z"
+      }
+    ]
+  },
+  "reports": {
+    "events": [
+      {
+        "instrumentId": "e6123145-9665-43e0-8413-cd61b8aa9b13",
+        "reportDate": "2026-10-28",
+        "periodYear": 2026,
+        "periodNum": 3,
+        "periodType": "PERIOD_TYPE_QUARTER",
+        "createdAt": "2026-10-28T00:31:30.935125Z"
+      },
+      {
+        "instrumentId": "e6123145-9665-43e0-8413-cd61b8aa9b13",
+        "reportDate": "2026-10-09",
+        "periodYear": 2026,
+        "periodNum": 3,
+        "periodType": "PERIOD_TYPE_QUARTER",
+        "createdAt": "2026-10-09T00:30:54.287358Z"
+      }
+    ]
+  }
+}

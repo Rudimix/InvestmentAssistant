@@ -118,7 +118,7 @@ class Connections:
         """Рыночные данные с токеном пользователя на время ``async with``."""
         encrypted, account_id = self._credentials(chat_id)
         async with self._open(self._cipher.decrypt(encrypted)) as tools:
-            yield MarketDataService(tools, account_id, self._instrument_ids)
+            yield MarketDataService(tools, account_id, self._instrument_ids, self._settings.read_only_tools)
 
     @asynccontextmanager
     async def journal(self, chat_id: int) -> AsyncIterator[JournalService]:

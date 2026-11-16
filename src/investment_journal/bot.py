@@ -4,6 +4,9 @@
 работает только со своими счетами. Бот отвечает только в личных чатах.
 """
 
+from contextlib import nullcontext
+from datetime import datetime, timezone
+
 from aiogram import F, Router
 from aiogram.exceptions import TelegramAPIError
 from aiogram.filters import Command, CommandObject, CommandStart, ExceptionTypeFilter
@@ -20,6 +23,9 @@ from .llm import InvestmentAgent, LlmError
 from .market import INTERVALS
 from .mcp_client import ToolError
 from .models import DECISION_KINDS, DecisionDraft
+from .portfolio_reports import PortfolioReportService
+from .schedule_ui import cmd_schedule, register_schedule_handlers
+from .report_scheduling import rule_from_dict, schedule_preview
 
 HELP = (
     "Я веду журнал инвестиционных гипотез и беру данные из ваших Т-Инвестиций через MCP.\n\n"
@@ -29,6 +35,8 @@ HELP = (
     "/price ТИКЕР — последняя цена\n"
     "/stats ТИКЕР [интервал] [свечей] — статистика по свечам (интервалы: 1m 5m 15m 1h 4h 1d 1w)\n"
     "/portfolio — портфель выбранного счёта\n"
+    "/analysis — аналитический отчёт по выбранному счёту\n"
+    "/schedule — расписание аналитических отчётов\n"
     "/idea — записать гипотезу (buy/sell/hold) с текущей ценой\n"
     "/journal — все записи журнала\n"
     "/review — проверить открытые гипотезы по текущим ценам\n"
@@ -50,6 +58,24 @@ CONNECT_HELP = (
 TOKEN_IN_CHAT = ("Похоже, вы прислали токен T-Invest API. Сообщение я удалил и никуда его не передавал. "
                  "Чтобы подключить токен, отправьте /connect и затем токен.")
 
+
+#: Меню команд в Telegram (кнопка «/» в поле ввода).
+COMMANDS = (
+    ("connect", "Подключить токен T-Invest API"),
+    ("portfolio", "Портфель выбранного счёта"),
+    ("analysis", "Аналитический отчёт по портфелю"),
+    ("schedule", "Настроить автоматические отчёты"),
+    ("price", "Последняя цена: /price SBER"),
+    ("stats", "Статистика по свечам: /stats SBER 1d 30"),
+    ("idea", "Записать гипотезу"),
+    ("review", "Проверить открытые гипотезы"),
+    ("journal", "Журнал гипотез"),
+    ("close", "Закрыть гипотезу: /close 3"),
+    ("accounts", "Счета и выбор счёта"),
+    ("reset", "Забыть историю диалога"),
+    ("disconnect", "Удалить токен из бота"),
+    ("help", "Справка"),
+)
 
 #: Значения по умолчанию для «/stats ТИКЕР [интервал] [свечей]».
 STATS_DEFAULTS = ["", "1d", "30"]
@@ -91,11 +117,13 @@ async def cmd_connect(message: Message, state: FSMContext) -> None:
 
 
 async def connect_token(message: Message, state: FSMContext, connections: Connections,
-                        agent: InvestmentAgent | None = None) -> None:
+                        agent: InvestmentAgent | None = None, reports: PortfolioReportService | None = None) -> None:
     await delete_quietly(message)
     await state.clear()
     try:
-        accounts = await connections.connect(message.chat.id, message.text)
+        user = connections.user(message.chat.id)
+        async with reports.settings_lock(user.id) if reports else nullcontext():
+            accounts = await connections.connect(message.chat.id, message.text)
     except ToolError as exc:
         await message.answer(f"Не удалось подключить токен: {exc}.\nПопробуйте ещё раз: /connect")
         return
@@ -109,8 +137,13 @@ async def connect_token(message: Message, state: FSMContext, connections: Connec
 
 
 async def cmd_disconnect(message: Message, connections: Connections,
-                         agent: InvestmentAgent | None = None) -> None:
-    removed = connections.disconnect(message.chat.id)
+                         agent: InvestmentAgent | None = None, reports: PortfolioReportService | None = None,
+                         state: FSMContext | None = None) -> None:
+    user = connections.user(message.chat.id)
+    async with reports.settings_lock(user.id) if reports else nullcontext():
+        removed = connections.disconnect(message.chat.id)
+        if state is not None:
+            await state.clear()
     if agent is not None:
         agent.reset(message.chat.id)
     if not removed:
@@ -130,11 +163,14 @@ async def cmd_accounts(message: Message, connections: Connections) -> None:
     await message.answer(format_accounts(accounts, connections.selected_account(message.chat.id)))
 
 
-async def cmd_account(message: Message, command: CommandObject, connections: Connections) -> None:
+async def cmd_account(message: Message, command: CommandObject, connections: Connections,
+                      reports: PortfolioReportService | None = None) -> None:
     arg = (command.args or "").strip()
     if not arg.isdigit():
         await message.answer("Укажите номер счёта из /accounts: /account 2")
         return
+    user = connections.user(message.chat.id)
+    credentials_before = connections.repo.get_credentials(user.id)
     try:
         async with connections.market(message.chat.id) as market:
             accounts = await market.accounts()
@@ -145,8 +181,20 @@ async def cmd_account(message: Message, command: CommandObject, connections: Con
         await message.answer(f"Нет счёта №{arg}. Список: /accounts")
         return
     account = accounts[int(arg) - 1]
-    connections.select_account(message.chat.id, account.id)
-    await message.answer(f"Для /portfolio выбран счёт «{account.name or account.id}».")
+    async with reports.settings_lock(user.id) if reports else nullcontext():
+        credentials_now = connections.repo.get_credentials(user.id)
+        if credentials_now is None or credentials_before is None or credentials_now[0] != credentials_before[0]:
+            await message.answer("Подключение изменилось. Получите список счетов заново через /accounts.")
+            return
+        connections.select_account(message.chat.id, account.id)
+        schedule = connections.repo.get_schedule(user.id)
+    text = f"Для /portfolio выбран счёт «{account.name or account.id}»."
+    if schedule is not None and schedule["enabled"]:
+        rule = rule_from_dict(schedule["rule"])
+        now = reports.clock() if reports else datetime.now(timezone.utc)
+        text += "\nАвтоматические отчёты переключены на этот счёт.\n" + schedule_preview(
+            account.id, rule, now, schedule["next_run_at"])
+    await message.answer(text)
 
 
 async def cmd_price(message: Message, command: CommandObject, connections: Connections) -> None:
@@ -202,6 +250,27 @@ async def cmd_portfolio(message: Message, connections: Connections) -> None:
         await message.answer(f"Не удалось получить портфель: {exc}")
         return
     await message.answer(format_portfolio(portfolio))
+
+
+async def cmd_analysis(message: Message, connections: Connections, reports: PortfolioReportService) -> None:
+    """Сформировать сохраняемый отчёт с текущими данными, событиями и доступным объяснением AI."""
+    if not connections.is_connected(message.chat.id):
+        raise NotConnected
+    await message.answer("Готовлю анализ выбранного счёта. Это может занять некоторое время.")
+    try:
+        run = await reports.request(message.chat.id, str(message.message_id), message.bot.send_message)
+    except ToolError:
+        await message.answer("Анализ временно недоступен. Повторите /analysis позже.")
+        return
+    states = {
+        "retry": "Источник или доставка временно недоступны. Повтор запланирован автоматически.",
+        "failed": "Не удалось подготовить или доставить отчёт. Повторите /analysis позже.",
+        "cancelled": "Настройки подключения изменились во время анализа. Повторите /analysis.",
+        "delivery_unknown": "Исход доставки отчёта неизвестен. Новый отчёт можно запросить через /analysis.",
+        "queued": "Запрос сохранён и ожидает завершения предыдущего отчёта.",
+    }
+    if run["state"] in states:
+        await message.answer(states[run["state"]])
 
 
 async def cmd_idea(message: Message, state: FSMContext, connections: Connections) -> None:
@@ -329,6 +398,8 @@ HANDLERS = (
     (cmd_price, (Command("price"),)),
     (cmd_stats, (Command("stats"),)),
     (cmd_portfolio, (Command("portfolio"),)),
+    (cmd_analysis, (Command("analysis"),)),
+    (cmd_schedule, (Command("schedule"),)),
     (cmd_idea, (Command("idea"),)),
     (cmd_cancel, (Command("cancel"),)),
     (cmd_journal, (Command("journal"),)),
@@ -348,7 +419,10 @@ def create_router() -> Router:
     router = Router(name="assistant")
     # у каждого пользователя свой токен и журнал: в группах бот молчит
     router.message.filter(F.chat.type == "private")
-    for handler, filters in HANDLERS:
+    for handler, filters in HANDLERS[:-1]:
         router.message.register(handler, *filters)
+    register_schedule_handlers(router)
+    fallback, filters = HANDLERS[-1]
+    router.message.register(fallback, *filters)
     router.errors.register(on_not_connected, ExceptionTypeFilter(NotConnected))
     return router

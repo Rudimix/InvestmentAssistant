@@ -52,4 +52,19 @@ LLM-агент
 
 .. automodule:: investment_journal.llm
    :members: ChatCompletionsClient, InvestmentAgent, as_function, parse_arguments
+
+Анализ портфеля и отчёты
+------------------------------
+
+.. automodule:: investment_journal.portfolio_analysis
+   :members: PortfolioAnalysisService
+
+.. automodule:: investment_journal.portfolio_reports
+   :members: PortfolioReportService
+
+Расписания
+----------
+
+.. automodule:: investment_journal.report_scheduling
+   :members: IntervalRule, CalendarRule, rule_from_dict, schedule_preview, ReportScheduler
    :member-order: bysource

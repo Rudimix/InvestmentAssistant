@@ -14,6 +14,7 @@ dependencies = [
     "httpx>=0.27",
     # шифрование токенов пользователей в базе
     "cryptography>=42",
+    "tzdata",
 ]
 
 [project.optional-dependencies]
