@@ -27,6 +27,9 @@ class SnapshotStorageTests(unittest.TestCase):
             snapshot = snapshot_from(portfolio_response(), 1, "account", NOW)
             repo = JournalRepository(path)
             repo.save_snapshot(snapshot)
+            repo.save_snapshot(snapshot)
+            with self.assertRaises(ValueError):
+                repo.save_snapshot(replace(snapshot, user_id=2))
             repo.close()
             repo = JournalRepository(path)
             self.assertEqual(repo.get_snapshot(1, "account", snapshot.id), snapshot)
@@ -174,7 +177,7 @@ class MigrationTests(unittest.TestCase):
                 repo = JournalRepository(path)
                 self.assertEqual(repo.get_credentials(1), (b"encrypted", "account"))
                 self.assertEqual(len(repo.list_decisions(1)), 1)
-                self.assertEqual(repo._db.execute("PRAGMA user_version").fetchone()[0], 1)
+                self.assertEqual(repo._db.execute("PRAGMA user_version").fetchone()[0], storage.LATEST_SCHEMA_VERSION)
                 repo.close()
 
     def test_interrupted_migration_rolls_back_all_new_tables_and_version(self):
@@ -187,7 +190,7 @@ class MigrationTests(unittest.TestCase):
                 self.assertEqual(db.execute("PRAGMA user_version").fetchone()[0], 0)
                 self.assertIsNone(db.execute("SELECT name FROM sqlite_master WHERE name='portfolio_snapshots'").fetchone())
             repo = JournalRepository(path)
-            self.assertEqual(repo._db.execute("PRAGMA user_version").fetchone()[0], 1)
+            self.assertEqual(repo._db.execute("PRAGMA user_version").fetchone()[0], storage.LATEST_SCHEMA_VERSION)
             repo.close()
 
     def test_new_database_has_full_schema(self):
