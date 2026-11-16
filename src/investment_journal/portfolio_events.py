@@ -3,24 +3,24 @@
 from dataclasses import asdict, replace
 from datetime import datetime, timedelta, timezone
 import json
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from .models import EventBatch, PortfolioAnalysis, SnapshotPosition, data_json
+from .evidence_ingestion import canonical_url
 
 
 def canonical_event_url(url: str | None) -> str | None:
     if not url:
         return None
-    parsed = urlsplit(url)
-    query = [(key, value) for key, value in parse_qsl(parsed.query)
-             if not key.lower().startswith("utm_") and key.lower() not in {"gclid", "fbclid"}]
-    return urlunsplit((parsed.scheme.lower(), parsed.netloc.lower(), parsed.path, urlencode(query), ""))
+    try:
+        return canonical_url(url)
+    except ValueError:
+        return None
 
 
 def select_events(batch: EventBatch, positions: list[SnapshotPosition], start: datetime, end: datetime) -> EventBatch:
     """Сопоставить инструменты и эмитентов, объединить материалы по ID или исходной ссылке."""
     identifiers = {value.casefold() for position in positions
-                   for value in (position.key, position.instrument_id, position.ticker, position.asset_id) if value}
+                   for value in (position.key, position.instrument_id, position.ticker, getattr(position, "asset_id", "")) if value}
     selected = []
     by_id = {}
     by_url = {}
@@ -48,7 +48,7 @@ def select_events(batch: EventBatch, positions: list[SnapshotPosition], start: d
         by_id[event.id] = existing
         if url:
             by_url[url] = existing
-    return EventBatch(selected, dict(batch.sources), list(batch.quality), len(selected))
+    return EventBatch(selected, dict(batch.sources), list(batch.quality), len(selected), dict(batch.freshness))
 
 
 def event_window(analysis: PortfolioAnalysis) -> tuple[datetime, datetime]:

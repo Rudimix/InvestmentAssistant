@@ -27,6 +27,28 @@ class ConfigTests(unittest.TestCase):
         self.assertIsNone(s.llm)
         self.assertEqual(s.db_path, Path("journal.sqlite3"))
 
+    def test_key_only_with_empty_template_fields_uses_provider_defaults(self):
+        settings = load_settings({"TELEGRAM_BOT_TOKEN": "t", "LLM_API_KEY": "test-value", "LLM_BASE_URL": "",
+                                  "LLM_MODEL": "", "LLM_MAX_STEPS": ""}, dotenv=None)
+        self.assertEqual(settings.llm.base_url, "https://api.openai.com/v1")
+        self.assertEqual(settings.llm.model, "gpt-4o-mini")
+        self.assertEqual(settings.llm.max_steps, 6)
+        self.assertEqual(settings.llm.timeout_seconds, 180)
+
+    def test_llm_read_timeout_is_configurable_and_validated(self):
+        settings = load_settings({"TELEGRAM_BOT_TOKEN": "t", "LLM_API_KEY": "test", "LLM_TIMEOUT_SECONDS": "240"}, dotenv=None)
+        self.assertEqual(settings.llm.timeout_seconds, 240)
+        for value in ("0", "-1", "nan", "inf"):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                load_settings({"TELEGRAM_BOT_TOKEN": "t", "LLM_API_KEY": "test", "LLM_TIMEOUT_SECONDS": value}, dotenv=None)
+
+    def test_open_sources_configuration_and_separate_certificates(self):
+        settings = load_settings({"TELEGRAM_BOT_TOKEN": "t", "EVIDENCE_SOURCES": "sources.json",
+                                  "TINVEST_CA_FILES": "broker.cer", "EVIDENCE_CA_FILES": "public.cer"}, dotenv=None)
+        self.assertEqual(settings.evidence_sources_path, Path("sources.json"))
+        self.assertEqual(settings.evidence_ca_files, ("public.cer",))
+        self.assertEqual(settings.mcp.ca_files, ("broker.cer",))
+
     def test_read_only_tools_exclude_trading(self):
         for name in ("invest_create_order", "invest_replace_order", "invest_cancel_order",
                      "invest_create_stoporder", "invest_cancel_stoporder", "invest_deposit_sandbox_account",

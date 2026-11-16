@@ -18,15 +18,18 @@ from .mcp_client import McpToolClient
 from .storage import JournalRepository
 from .portfolio_reports import PortfolioReportService
 from .report_scheduling import ReportScheduler
+from .evidence_service import EvidenceService
+from .evidence_sources import EvidenceHttpClient, source_registry
 
 
 def build_dispatcher(settings: Settings, connections: Connections,
-                     llm: ChatCompletionsClient | None = None) -> Dispatcher:
+                     llm: ChatCompletionsClient | None = None, evidence=None) -> Dispatcher:
     """Собрать сервисы и Dispatcher; зависимости попадают в обработчики по имени."""
     agent = None
     if llm is not None and settings.llm is not None:
         agent = InvestmentAgent(llm, settings.mcp.read_only_tools, settings.llm.max_steps)
-    dp = Dispatcher(connections=connections, agent=agent, reports=PortfolioReportService(connections, llm))
+    dp = Dispatcher(connections=connections, agent=agent, reports=PortfolioReportService(
+        connections, llm, evidence=evidence, forecast_directory=settings.forecast_models_path))
     dp.include_router(create_router())
     return dp
 
@@ -51,7 +54,9 @@ async def run(settings: Settings) -> None:
         bot = Bot(settings.bot_token)
         resources.push_async_callback(bot.session.close)
         connections = Connections(repo, cipher, settings.mcp)
-        dispatcher = build_dispatcher(settings, connections, llm)
+        evidence = EvidenceService(repo, EvidenceHttpClient(settings.evidence_ca_files), source_registry(settings.evidence_sources_path))
+        resources.push_async_callback(evidence.aclose)
+        dispatcher = build_dispatcher(settings, connections, llm, evidence)
         reports = dispatcher["reports"]
         resources.push_async_callback(reports.aclose)
         resources.push_async_callback(cancel_update_tasks, dispatcher)

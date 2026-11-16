@@ -1,6 +1,7 @@
 """Подготовка, форматирование и восстановление доставки отчёта."""
 
 import asyncio
+from dataclasses import replace
 from datetime import timedelta
 from html.parser import HTMLParser
 import json
@@ -19,6 +20,8 @@ from investment_journal.portfolio_reports import PortfolioReportService
 from investment_journal.market import snapshot_from
 from test_portfolio_market import NOW, portfolio_response
 from test_portfolio_sources import SourceTools
+from test_analysis_models import profile
+from unittest.mock import patch
 
 
 def report_tools(count=2, long_news=False):
@@ -97,6 +100,114 @@ class ReportServiceTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(self.sent), sent_count)
         self.assertNotIn(TEST_TOKEN, json.dumps(saved))
         self.assertIn("240.00", "".join(part["text"] for part in self.sent))
+
+    async def test_profile_and_same_account_reconnection_cancel_pending_preparation(self):
+        for change in ("profile", "connection"):
+            with self.subTest(change=change):
+                connections = make_connections(report_tools())
+                try:
+                    repo = connections.repo
+                    user = connections.user(7)
+                    first = replace(profile(), user_id=user.id)
+                    repo.save_profile(user.id, first)
+                    service = PortfolioReportService(connections, clock=lambda: self.now)
+                    original = service.analysis.analyze
+                    started, release = asyncio.Event(), asyncio.Event()
+
+                    async def delayed(*args, **kwargs):
+                        started.set()
+                        await release.wait()
+                        return await original(*args, **kwargs)
+
+                    service.analysis.analyze = delayed
+                    task = asyncio.create_task(service.request(7, change, self.send))
+                    await asyncio.wait_for(started.wait(), 2)
+                    if change == "profile":
+                        repo.save_profile(user.id, replace(first, revision=2, goal="Изменённая цель"))
+                    else:
+                        token, account = repo.get_credentials(user.id)
+                        repo.save_credentials(user.id, token, account)
+                    release.set()
+                    run = await task
+                    self.assertEqual(run["state"], "cancelled")
+                    self.assertEqual(repo.get_parts(user.id, run["id"]), [])
+                finally:
+                    connections.repo.close()
+
+    async def test_profile_change_interrupts_blocked_preparation_on_heartbeat(self):
+        user = self.connections.user(7)
+        first = replace(profile(), user_id=user.id)
+        self.connections.repo.save_profile(user.id, first)
+        started, stopped = asyncio.Event(), asyncio.Event()
+
+        async def blocked(*args, **kwargs):
+            started.set()
+            try:
+                await asyncio.Event().wait()
+            finally:
+                stopped.set()
+
+        self.service.analysis.analyze = blocked
+        original_sleep = asyncio.sleep
+
+        async def fast_sleep(seconds):
+            await original_sleep(min(seconds, 0.01))
+
+        with patch("investment_journal.portfolio_reports.asyncio.sleep", fast_sleep):
+            task = asyncio.create_task(self.service.request(7, "interrupt-profile", self.send))
+            await asyncio.wait_for(started.wait(), 2)
+            self.connections.repo.save_profile(user.id, replace(first, revision=2, goal="Новая цель"))
+            result = await asyncio.wait_for(task, 2)
+        self.assertEqual(result["state"], "cancelled")
+        self.assertTrue(stopped.is_set())
+
+    async def test_profile_revision_frozen_and_changed_before_preparation(self):
+        user = self.connections.user(7)
+        repo = self.connections.repo
+        first = replace(profile(), user_id=user.id)
+        repo.save_profile(user.id, first)
+        run = repo.create_run(user.id, "2000000001", "manual", "frozen", self.now)
+        self.assertEqual(run["profile_revision"], 1)
+        repo.save_profile(user.id, replace(first, revision=2, goal="Новая цель"))
+        result = await self.service.execute_run(run, self.send)
+        self.assertEqual(result["state"], "cancelled")
+        self.assertEqual(result["profile_revision"], 1)
+        self.assertFalse(self.sent)
+
+    async def test_public_source_original_link_and_freshness_in_delivered_report(self):
+        from unittest.mock import AsyncMock
+        event = InstrumentEvent("open", "news", ["share"], "Публикация эмитента", "Открытый источник",
+                                url="https://example.org/report?section=2", published_at=self.now-timedelta(hours=1), content="Подтверждённые данные")
+        events = EventBatch([event], {"issuer": "complete"}, found=1,
+                             freshness={"issuer": {"name": "Эмитент", "last_success_at": self.now.isoformat(), "status": "complete"}})
+        self.service.evidence = AsyncMock()
+        self.service.evidence.collect.return_value = events
+        run = await self.service.request(7, "public-source", self.send)
+        self.assertEqual(run["state"], "delivered")
+        text = "".join(part["text"] for part in self.sent)
+        self.assertIn('href="https://example.org/report?section=2"', text)
+        self.assertIn("последнее получение", text)
+        self.service.evidence.collect.assert_awaited_once()
+
+    async def test_profile_change_during_delivery_preserves_original_payload(self):
+        user = self.connections.user(7)
+        repo = self.connections.repo
+        first = replace(profile(), user_id=user.id)
+        repo.save_profile(user.id, first)
+
+        async def changing_sender(**kwargs):
+            result = await self.send(**kwargs)
+            if len(self.sent) == 1:
+                repo.save_profile(user.id, replace(first, revision=2, goal="Другая цель"))
+            return result
+
+        with patch("investment_journal.portfolio_reports.portfolio_report_parts", return_value=["first", "second"]):
+            run = await self.service.request(7, "change-during-send", changing_sender)
+        self.assertEqual(run["state"], "cancelled")
+        self.assertEqual(len(self.sent), 1)
+        self.assertEqual(json.loads(run["payload"])["profile_revision"], 1)
+        self.assertEqual(repo.get_profile(user.id, 1).goal, first.goal)
+        self.assertIsNone(repo.get_profile(user.id+1, 1))
 
     async def test_requests_of_one_user_are_serialized(self):
         original = self.tools.call

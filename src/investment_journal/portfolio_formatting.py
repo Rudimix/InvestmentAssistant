@@ -6,6 +6,8 @@ from html import escape
 from .formatting import money
 from .models import EventBatch, PortfolioAnalysis, decimal_value
 from .portfolio_events import event_window
+from .profile_metrics import profile_assessment_lines
+from .advice_formatting import advice_lines
 
 METRIC_LABELS = {
     "total": "Стоимость портфеля", "cash": "Денежные позиции", "known_value": "Стоимость оценённой части",
@@ -78,6 +80,13 @@ def portfolio_report_parts(analysis: PortfolioAnalysis, events: EventBatch, expl
 
     observed = analysis.snapshot.observed_at.strftime("%d.%m.%Y %H:%M UTC")
     add(f"Анализ портфеля\nДанные получены {observed}")
+    if context.get("profile_revision") is not None:
+        revision = context["profile_revision"]
+        add(f"Профиль · версия {revision}" if revision else "Профиль потребностей доступен через /profile")
+    if context.get("profile_assessment"):
+        add("\n".join(profile_assessment_lines(context["profile_assessment"])))
+    if context.get("advice"):
+        add("\n".join(advice_lines(context["advice"])))
     if analysis.snapshot.source_time:
         add(f"Время данных источника — {analysis.snapshot.source_time}")
     add("\n".join(metric_text(key, analysis.metrics[key], analysis)
@@ -122,6 +131,8 @@ def portfolio_report_parts(analysis: PortfolioAnalysis, events: EventBatch, expl
     else:
         add(explanation.get("reason", "AI-объяснение недоступно"))
     start, end = event_window(analysis)
+    for source in events.freshness.values():
+        add(f"{source['name']} · последнее получение {source['last_success_at'] or 'недоступно'} · {source['status']}")
     add(f"События за период {start:%d.%m.%Y %H:%M} — {end:%d.%m.%Y %H:%M} UTC")
     for index, event in enumerate(events.items, 1):
         event_at = event.published_at or event.event_at

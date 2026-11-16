@@ -4,6 +4,17 @@ Investment Assistant
 Telegram-бот — инвестиционный ассистент: журнал гипотез buy/sell/hold, рыночные
 данные и портфель из Т-Инвестиций через MCP-сервер, свободный диалог с LLM.
 
+.. toctree::
+   :maxdepth: 1
+
+   analysis_storage
+   market_evidence
+   portfolio_advice
+   stock_screening
+   growth_forecasts
+   automatic_reports
+   recommendation_evaluation
+
 Модели
 ------
 

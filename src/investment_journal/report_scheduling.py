@@ -133,7 +133,7 @@ def initial_run(rule: IntervalRule | CalendarRule, now: datetime) -> datetime:
 
 
 def schedule_preview(account_id: str, rule: IntervalRule | CalendarRule, now: datetime,
-                     next_run_at: datetime | None = None) -> str:
+                     next_run_at: datetime | None = None, analysis_policy=None, sections=None) -> str:
     """Показать понятное правило и фактический ближайший момент в выбранной зоне."""
     if isinstance(rule, IntervalRule):
         unit = "ч." if rule.unit == "hours" else "дн. по 24 ч."
@@ -143,8 +143,31 @@ def schedule_preview(account_id: str, rule: IntervalRule | CalendarRule, now: da
         description = f"{', '.join(days[index] for index in rule.weekdays)}, {rule.local_time}"
     next_at = next_run_at if next_run_at is not None else initial_run(rule, now)
     local = timestamp(next_at).astimezone(schedule_zone(rule.timezone))
-    return (f"Счёт — {account_id}\nПравило — {description}\nЧасовой пояс — {rule.timezone}\n"
+    text = (f"Счёт — {account_id}\nПравило — {description}\nЧасовой пояс — {rule.timezone}\n"
             f"Ближайший запуск — {local:%d.%m.%Y %H:%M %z}")
+    if analysis_policy:
+        if analysis_policy.get("kind") == "rolling":
+            from .analysis_periods import rolling_period, period_description
+            text += "\n"+period_description(rolling_period(analysis_policy["days"], rule.timezone, next_at))
+            text += f"\nСкользящий период — {analysis_policy['days']} завершённых календарных дней"
+        else:
+            text += "\nПериод — с последнего доставленного аналитического отчёта"
+    if sections:
+        labels = {"analysis": "анализ", "advice": "советы", "screening": "подбор акций"}
+        text += "\nРазделы — "+", ".join(labels[value] for value in sections)
+    return text
+
+
+def latest_due(rule, now):
+    """Последний наступивший плановый момент после пропуска нескольких запусков."""
+    now = timestamp(now)
+    if isinstance(rule, IntervalRule):
+        return rule.first_at+((now-rule.first_at)//rule.step)*rule.step
+    result = rule.next_after(now-timedelta(days=8))
+    following = rule.next_after(result)
+    while following <= now:
+        result, following = following, rule.next_after(following)
+    return result
 
 
 def rule_from_dict(raw: dict) -> IntervalRule | CalendarRule:
@@ -226,7 +249,7 @@ class ReportScheduler:
             try:
                 rule = rule_from_dict(schedule["rule"])
                 next_at = rule.next_after(now)
-                self.repo.enqueue_schedule(schedule, next_at, now)
+                self.repo.enqueue_schedule(schedule, next_at, now, latest_due(rule, now))
             except (ValueError, KeyError, TypeError):
                 self.repo.pause_schedule(schedule["user_id"], "правило требует повторной настройки через /schedule")
         for run in self.repo.ready_runs(now):

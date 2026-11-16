@@ -54,6 +54,15 @@ class PortfolioLlmTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse((await self.call(httpx.ReadTimeout("timeout")))["available"])
         self.assertFalse((await portfolio_explanation(None, {}))["available"])
 
+    async def test_report_numbers_are_bound_to_known_metric_templates(self):
+        answer = explanation()
+        answer["findings"][0]["text"] = "Доля крупнейшей позиции {{metric:largest_weight}}."
+        result = await self.call(json.dumps(answer))
+        self.assertTrue(result["available"])
+        self.assertIn("70%", result["findings"][0]["text"])
+        answer["findings"][0]["text"] = "Гарантированный рост на 999%."
+        self.assertFalse((await self.call(json.dumps(answer)))["available"])
+
     async def test_possible_explanation_needs_both_sources_and_limited_confidence(self):
         answer = explanation()
         answer["findings"][0].update(kind="possible_explanation", event_ids=["news"], confidence="medium")
