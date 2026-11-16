@@ -6,7 +6,9 @@ from datetime import datetime, timezone
 
 from .analytics import apply_portfolio_flows, apply_position_contributions, portfolio_structure
 from .market import MarketDataService
-from .models import PortfolioAnalysis
+from .models import AnalysisPeriod, HistoricalAnalysis, PortfolioAnalysis
+from .historical_service import historical_analysis
+from .broker_metadata import enrich_snapshot_sectors
 from .portfolio_sources import fetch_operations
 from .storage import JournalRepository
 
@@ -18,9 +20,13 @@ class PortfolioAnalysisService:
         self.repo = repo
         self.clock = clock or (lambda: datetime.now(timezone.utc))
 
-    async def analyze(self, user_id: int, market: MarketDataService, origin: str) -> PortfolioAnalysis:
+    async def analyze(self, user_id: int, market: MarketDataService, origin: str,
+                      period: AnalysisPeriod | None = None) -> PortfolioAnalysis | HistoricalAnalysis:
+        if period is not None:
+            return await historical_analysis(self.repo, market, user_id, period, self.clock)
         snapshot = await market.snapshot(user_id, self.clock())
         snapshot.observed_at = self.clock()
+        await enrich_snapshot_sectors(self.repo, market, snapshot, self.clock)
         self.repo.save_snapshot(snapshot)
         result = portfolio_structure(snapshot)
         baseline = self.repo.baseline_snapshot(user_id, snapshot.account_id, origin, snapshot.observed_at)

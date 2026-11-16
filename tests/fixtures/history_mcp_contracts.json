@@ -1,0 +1,1645 @@
+{
+  "source": "Official T-Invest MCP list_tools, 2026-11-16",
+  "tools": [
+    {
+      "name": "invest_get_bond_events",
+      "description": "Get the schedule of events for a bond (coupons, call options/offers, redemptions, conversions) over a date range. Use type to filter by a specific event type. Use responseView to control how much detail is returned per event.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "description": "Start of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier (UID).",
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (eventDate, eventType) always included. Add: EVENT_INFO=event DETAILS (number/DATES/payment/execution), COUPON_INFO=coupon DATES/period/rate. Use FULL for all.",
+            "items": {
+              "enum": [
+                "BASE",
+                "EVENT_INFO",
+                "COUPON_INFO",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "to": {
+            "description": "End of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          },
+          "type": {
+            "description": "Filter by event type. EVENT_TYPE_CPN — coupon payment. EVENT_TYPE_CALL — call option / offer. EVENT_TYPE_MTY — redemption at maturity. EVENT_TYPE_CONV — conversion.",
+            "enum": [
+              "EVENT_TYPE_CPN",
+              "EVENT_TYPE_CALL",
+              "EVENT_TYPE_MTY",
+              "EVENT_TYPE_CONV"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "instrumentId"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_share_dividends",
+      "description": "Get the list of dividend payments for a share over a date range. Returns dividend amount per share, payment date, last buy date (to qualify for dividend), record date, yield, and the closing price on the last buy date.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "description": "Start of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier. Pass it as ticker_classCode.",
+            "type": "string"
+          },
+          "to": {
+            "description": "End of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "instrumentId"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_operations",
+      "description": "Get a paginated list of operations for a brokerage account. Use accountId to specify the account, from/to for the time range (ISO 8601 UTC), cursor for pagination, and operationTypes/state to filter results. Use responseView to limit returned fields.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "description": "Brokerage account identifier. Must be a value returned by invest_list_broker_accounts.",
+            "type": "string"
+          },
+          "cursor": {
+            "description": "Pagination cursor. Pass nextCursor from the previous response to fetch the next page.",
+            "type": "string"
+          },
+          "from": {
+            "description": "Start of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier (UID or ticker_classCode).",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum number of operations to return. Default is 100, maximum is 1000.",
+            "type": "integer"
+          },
+          "operationTypes": {
+            "description": "Array of operation types to filter by.",
+            "items": {
+              "enum": [
+                "OPERATION_TYPE_UNSPECIFIED",
+                "OPERATION_TYPE_INPUT",
+                "OPERATION_TYPE_OUTPUT",
+                "OPERATION_TYPE_BUY",
+                "OPERATION_TYPE_BUY_CARD",
+                "OPERATION_TYPE_SELL",
+                "OPERATION_TYPE_SELL_CARD",
+                "OPERATION_TYPE_SELL_MARGIN",
+                "OPERATION_TYPE_BUY_MARGIN",
+                "OPERATION_TYPE_BROKER_FEE",
+                "OPERATION_TYPE_SERVICE_FEE",
+                "OPERATION_TYPE_MARGIN_FEE",
+                "OPERATION_TYPE_DIVIDEND",
+                "OPERATION_TYPE_DIVIDEND_TAX",
+                "OPERATION_TYPE_DIVIDEND_TRANSFER",
+                "OPERATION_TYPE_DIV_EXT",
+                "OPERATION_TYPE_COUPON",
+                "OPERATION_TYPE_BOND_TAX",
+                "OPERATION_TYPE_BOND_REPAYMENT",
+                "OPERATION_TYPE_BOND_REPAYMENT_FULL",
+                "OPERATION_TYPE_TAX",
+                "OPERATION_TYPE_TAX_CORRECTION",
+                "OPERATION_TYPE_TAX_CORRECTION_COUPON",
+                "OPERATION_TYPE_BENEFIT_TAX",
+                "OPERATION_TYPE_TAX_PROGRESSIVE",
+                "OPERATION_TYPE_BOND_TAX_PROGRESSIVE",
+                "OPERATION_TYPE_DIVIDEND_TAX_PROGRESSIVE",
+                "OPERATION_TYPE_BENEFIT_TAX_PROGRESSIVE",
+                "OPERATION_TYPE_TAX_CORRECTION_PROGRESSIVE",
+                "OPERATION_TYPE_TAX_REPO",
+                "OPERATION_TYPE_TAX_REPO_HOLD",
+                "OPERATION_TYPE_TAX_REPO_REFUND",
+                "OPERATION_TYPE_TAX_REPO_PROGRESSIVE",
+                "OPERATION_TYPE_TAX_REPO_HOLD_PROGRESSIVE",
+                "OPERATION_TYPE_TAX_REPO_REFUND_PROGRESSIVE",
+                "OPERATION_TYPE_OVERNIGHT",
+                "OPERATION_TYPE_OUTPUT_SECURITIES",
+                "OPERATION_TYPE_INPUT_SECURITIES",
+                "OPERATION_TYPE_ACCRUING_VARMARGIN",
+                "OPERATION_TYPE_WRITING_OFF_VARMARGIN",
+                "OPERATION_TYPE_FUNDING",
+                "OPERATION_TYPE_DELIVERY_BUY",
+                "OPERATION_TYPE_DELIVERY_SELL",
+                "OPERATION_TYPE_TRACK_MFEE",
+                "OPERATION_TYPE_TRACK_PFEE",
+                "OPERATION_TYPE_CASH_FEE",
+                "OPERATION_TYPE_OUT_FEE",
+                "OPERATION_TYPE_OUT_STAMP_DUTY",
+                "OPERATION_TYPE_OUTPUT_SWIFT",
+                "OPERATION_TYPE_INPUT_SWIFT",
+                "OPERATION_TYPE_OUTPUT_ACQUIRING",
+                "OPERATION_TYPE_INPUT_ACQUIRING",
+                "OPERATION_TYPE_OUTPUT_PENALTY",
+                "OPERATION_TYPE_ADVICE_FEE",
+                "OPERATION_TYPE_TRANS_IIS_BS",
+                "OPERATION_TYPE_TRANS_BS_BS",
+                "OPERATION_TYPE_INP_MULTI",
+                "OPERATION_TYPE_OUT_MULTI",
+                "OPERATION_TYPE_OVER_PLACEMENT",
+                "OPERATION_TYPE_OVER_COM",
+                "OPERATION_TYPE_OVER_INCOME",
+                "OPERATION_TYPE_OPTION_EXPIRATION",
+                "OPERATION_TYPE_FUTURE_EXPIRATION",
+                "OPERATION_TYPE_SUCCESS_FEE",
+                "OPERATION_TYPE_OTHER_FEE",
+                "OPERATION_TYPE_OTHER",
+                "OPERATION_TYPE_DFA_REDEMPTION",
+                "OPERATION_TYPE_PRIMARY_ORDER"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "responseView": {
+            "description": "BASE (hasNext, nextCursor, items cursor/id/date/type/ticker/classCode/price/quantityDone/state) always included. Add: ADDITIONAL_INFO=quantity/parentOperationId/cancelDateTime/cancelReason, PAYMENTS=payment/accruedInt/commission/yield/yieldRelative, CHILD_OPERATIONS=child op DETAILS, TRADES=tradesInfo.TRADES DETAILS. Use FULL for all. Default: BASE.",
+            "items": {
+              "enum": [
+                "BASE",
+                "ADDITIONAL_INFO",
+                "PAYMENTS",
+                "CHILD_OPERATIONS",
+                "TRADES",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "state": {
+            "description": "Filter by operation state.",
+            "enum": [
+              "OPERATION_STATE_UNSPECIFIED",
+              "OPERATION_STATE_EXECUTED",
+              "OPERATION_STATE_CANCELED",
+              "OPERATION_STATE_PROGRESS"
+            ],
+            "type": "string"
+          },
+          "to": {
+            "description": "End of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountId"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_portfolio",
+      "description": "Get the portfolio for a brokerage account. Returns total portfolio value, yield metrics, and per-position details. Use responseView to limit returned fields.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "description": "Brokerage account identifier. Must be a value returned by invest_list_broker_accounts.",
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (totalAmountPortfolio, expectedYield, dailyYieldRelative, dailyYield) always included. Add: BY_INSTRUMENT_TYPE=total amounts by asset type, DETAILED=per-position DETAILS. Use FULL for all. Default: BASE.",
+            "items": {
+              "enum": [
+                "BASE",
+                "BY_INSTRUMENT_TYPE",
+                "DETAILED",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "accountId"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_positions",
+      "description": "Get the list of positions for a brokerage account. Returns currency, blocked, securities, futures, and options positions.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "description": "Brokerage account identifier. Must be a value returned by invest_list_broker_accounts.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountId"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_currency",
+      "description": "Get a currency instrument by its identifier. Returns details about a single currency including its nominal value, trading flags, and market data. Use idType to specify the type of identifier provided: UID is preferred for uniqueness, TICKER requires classCode to disambiguate exchange and trading mode.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "classCode": {
+            "description": "Deprecated. Optional. Trading mode, e.g. TQBR, TQCB, TQOB, SPBFUT.",
+            "type": "string"
+          },
+          "idType": {
+            "description": "Type of the identifier supplied in 'instrumentId'. UID is preferred (globally unique). TICKER requires classCode to specify the trading mode — you can instead pass instrumentId in the ticker_classCode format, e.g. SBER_TQBR. INSTRUMENT_ID_TYPE_ID accepts uid or ticker_classCode.",
+            "enum": [
+              "INSTRUMENT_ID_TYPE_TICKER",
+              "INSTRUMENT_ID_TYPE_UID",
+              "INSTRUMENT_ID_TYPE_POSITION_UID",
+              "INSTRUMENT_ID_TYPE_ID"
+            ],
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier. Value format depends on idType.",
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (name, uid) always included. Add: IDENTIFIERS=exchange codes (ticker/classCode/isin), STATIC_DATA=currency/nominal/lot, TRADING_FLAGS=trading restrictions, MARKET_DATA=exchange/prices/candle dates. Use FULL for all.",
+            "items": {
+              "enum": [
+                "BASE",
+                "IDENTIFIERS",
+                "STATIC_DATA",
+                "TRADING_FLAGS",
+                "MARKET_DATA",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "instrumentId",
+          "idType"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_share",
+      "description": "Get a share (equity) by its identifier. Returns details including nominal value, trading flags, and market data. Use idType to specify the identifier type; UID is preferred for uniqueness.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "classCode": {
+            "description": "Deprecated. Optional. Trading mode, e.g. TQBR, TQCB, TQOB, SPBFUT.",
+            "type": "string"
+          },
+          "idType": {
+            "description": "Type of the identifier supplied in 'instrumentId'. UID is preferred (globally unique). TICKER requires classCode to specify the trading mode — you can instead pass instrumentId in the ticker_classCode format, e.g. SBER_TQBR. INSTRUMENT_ID_TYPE_ID accepts uid or ticker_classCode.",
+            "enum": [
+              "INSTRUMENT_ID_TYPE_TICKER",
+              "INSTRUMENT_ID_TYPE_UID",
+              "INSTRUMENT_ID_TYPE_POSITION_UID",
+              "INSTRUMENT_ID_TYPE_ID"
+            ],
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier. Value format depends on idType.",
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (name, uid) always included. Add: IDENTIFIERS=exchange codes (ticker/classCode/isin), STATIC_DATA=currency/nominal/lot, TRADING_FLAGS=trading restrictions, MARKET_DATA=exchange/prices/candle dates. Use FULL for all.",
+            "items": {
+              "enum": [
+                "BASE",
+                "IDENTIFIERS",
+                "STATIC_DATA",
+                "TRADING_FLAGS",
+                "MARKET_DATA",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "instrumentId",
+          "idType"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_candles",
+      "description": "Get historical candles for an instrument. Use instrumentId to specify the instrument, from/to to define the time range (ISO 8601 UTC), interval for the candle size, limit to cap the number of returned candles (counted back from to), and candleSourceType to filter by data source. Always read priceCurrency in the response to determine the actual currency (it may be \"pt\" for exchange points).",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "candleSourceType": {
+            "description": "Candle source filter. UNSPECIFIED — all candles. EXCHANGE — exchange candles only. INCLUDE_WEEKEND — all candles including weekend trading. Cannot be combined with limit.",
+            "enum": [
+              "CANDLE_SOURCE_UNSPECIFIED",
+              "CANDLE_SOURCE_EXCHANGE",
+              "CANDLE_SOURCE_INCLUDE_WEEKEND"
+            ],
+            "type": "string"
+          },
+          "from": {
+            "description": "Start of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier ticker_classCode e.g. SBER_TQBR.",
+            "type": "string"
+          },
+          "interval": {
+            "description": "Candle interval. 5_SEC — max limit 2500. 10_SEC — max limit 1250. 30_SEC — max limit 2500. 1_MIN — max limit 2400. 2_MIN — max limit 1200. 3_MIN — max limit 750. 5_MIN — max limit 2400. 10_MIN — max limit 1200. 15_MIN — max limit 2400. 30_MIN — max limit 1200. HOUR — max limit 2400. 2_HOUR — max limit 2400. 4_HOUR — max limit 700. DAY — max limit 2400. WEEK — max limit 300. MONTH — max limit 120.",
+            "enum": [
+              "CANDLE_INTERVAL_5_SEC",
+              "CANDLE_INTERVAL_10_SEC",
+              "CANDLE_INTERVAL_30_SEC",
+              "CANDLE_INTERVAL_1_MIN",
+              "CANDLE_INTERVAL_2_MIN",
+              "CANDLE_INTERVAL_3_MIN",
+              "CANDLE_INTERVAL_5_MIN",
+              "CANDLE_INTERVAL_10_MIN",
+              "CANDLE_INTERVAL_15_MIN",
+              "CANDLE_INTERVAL_30_MIN",
+              "CANDLE_INTERVAL_HOUR",
+              "CANDLE_INTERVAL_2_HOUR",
+              "CANDLE_INTERVAL_4_HOUR",
+              "CANDLE_INTERVAL_DAY",
+              "CANDLE_INTERVAL_WEEK",
+              "CANDLE_INTERVAL_MONTH"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum number of candles to return, counted back from to. Cannot be combined with candleSourceType.",
+            "type": "integer"
+          },
+          "to": {
+            "description": "End of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "instrumentId",
+          "interval",
+          "to"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_bond_accrued",
+      "description": "Get accrued coupon interest (ACI) for a bond over a date range. Returns daily NKD values, percentage values, and nominal amounts. Useful for calculating the full price of a bond purchase including accrued interest.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "description": "Start of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier (UID).",
+            "type": "string"
+          },
+          "to": {
+            "description": "End of the requested period (ISO 8601 UTC).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "instrumentId"
+        ]
+      }
+    },
+    {
+      "name": "invest_list_currencies",
+      "description": "Get the full list of currency instruments available on Tinkoff Invest. Use instrumentStatus to filter by availability: INSTRUMENT_STATUS_BASE returns only instruments currently tradeable via API, INSTRUMENT_STATUS_ALL returns the complete catalogue including non-tradeable instruments. The response may be large — use responseView to limit returned fields.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "instrumentStatus": {
+            "description": "Filter by instrument availability. INSTRUMENT_STATUS_BASE — only instruments tradeable via API (default). INSTRUMENT_STATUS_ALL — full catalogue including non-tradeable instruments.",
+            "enum": [
+              "INSTRUMENT_STATUS_BASE",
+              "INSTRUMENT_STATUS_ALL"
+            ],
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (name, uid) always included. Add: IDENTIFIERS=exchange codes (ticker/classCode/isin), STATIC_DATA=currency/nominal/lot, TRADING_FLAGS=trading restrictions, MARKET_DATA=exchange/prices/candle dates. Use FULL for all.",
+            "items": {
+              "enum": [
+                "BASE",
+                "IDENTIFIERS",
+                "STATIC_DATA",
+                "TRADING_FLAGS",
+                "MARKET_DATA",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        }
+      }
+    },
+    {
+      "name": "invest_get_bond",
+      "description": "Get a bond by its identifier. Returns detailed information about a single bond instrument including its maturity date, coupon structure, nominal value, trading flags, and market data. Use idType to specify the type of identifier provided: UID is preferred for uniqueness, TICKER requires classCode to disambiguate exchange and trading mode.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "classCode": {
+            "description": "Deprecated. Optional. Trading mode, e.g. TQBR, TQCB, TQOB, SPBFUT.",
+            "type": "string"
+          },
+          "idType": {
+            "description": "Type of the identifier supplied in 'instrumentId'. UID is preferred (globally unique). TICKER requires classCode to specify the trading mode — you can instead pass instrumentId in the ticker_classCode format, e.g. SBER_TQBR. INSTRUMENT_ID_TYPE_ID accepts uid or ticker_classCode.",
+            "enum": [
+              "INSTRUMENT_ID_TYPE_TICKER",
+              "INSTRUMENT_ID_TYPE_UID",
+              "INSTRUMENT_ID_TYPE_POSITION_UID",
+              "INSTRUMENT_ID_TYPE_ID"
+            ],
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier. Value format depends on idType.",
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (name, uid) always included. Add: IDENTIFIERS=exchange codes (ticker/classCode/isin), STATIC_DATA=maturity/nominal/lot, ADDITIONAL_INFO=coupon structure and amortization flags, TRADING_FLAGS=trading restrictions, MARKET_DATA=exchange/prices/candle dates. Use FULL for all.",
+            "items": {
+              "enum": [
+                "BASE",
+                "IDENTIFIERS",
+                "STATIC_DATA",
+                "ADDITIONAL_INFO",
+                "TRADING_FLAGS",
+                "MARKET_DATA",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "instrumentId",
+          "idType"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_future",
+      "description": "Get a futures contract by its identifier. Returns details including expiration date, trade dates, underlying asset, and trading flags. Use idType to specify the type of identifier: UID is preferred for uniqueness, TICKER requires classCode to disambiguate trading mode.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "classCode": {
+            "description": "Deprecated. Optional. Trading mode, e.g. TQBR, TQCB, TQOB, SPBFUT.",
+            "type": "string"
+          },
+          "idType": {
+            "description": "Type of the identifier supplied in 'instrumentId'. UID is preferred (globally unique). TICKER requires classCode to specify the trading mode — you can instead pass instrumentId in the ticker_classCode format, e.g. SBER_TQBR. INSTRUMENT_ID_TYPE_ID accepts uid or ticker_classCode.",
+            "enum": [
+              "INSTRUMENT_ID_TYPE_TICKER",
+              "INSTRUMENT_ID_TYPE_UID",
+              "INSTRUMENT_ID_TYPE_POSITION_UID",
+              "INSTRUMENT_ID_TYPE_ID"
+            ],
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier. Value format depends on idType.",
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (name, uid) always included. Add: IDENTIFIERS=ticker/classCode/positionUid/basicAssetPositionUid, STATIC_DATA=expiration/trade DATES/currency/lot, ADDITIONAL_INFO=futuresType/basicAsset/assetType, TRADING_FLAGS=trading restrictions, MARKET_DATA=exchange/prices/price-step value/candle dates. Use FULL for all.",
+            "items": {
+              "enum": [
+                "BASE",
+                "IDENTIFIERS",
+                "STATIC_DATA",
+                "ADDITIONAL_INFO",
+                "TRADING_FLAGS",
+                "MARKET_DATA",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "instrumentId",
+          "idType"
+        ]
+      }
+    },
+    {
+      "name": "invest_list_shares",
+      "description": "Get the full list of shares (equities) available on Tinkoff Invest. Use instrumentStatus to filter by availability. The response may be large — use responseView to limit returned fields.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "instrumentStatus": {
+            "description": "Filter by instrument availability. INSTRUMENT_STATUS_BASE — only instruments tradeable via API (default). INSTRUMENT_STATUS_ALL — full catalogue including non-tradeable instruments.",
+            "enum": [
+              "INSTRUMENT_STATUS_BASE",
+              "INSTRUMENT_STATUS_ALL"
+            ],
+            "type": "string"
+          },
+          "responseView": {
+            "description": "BASE (name, uid) always included. Add: IDENTIFIERS=exchange codes (ticker/classCode/isin), STATIC_DATA=currency/nominal/lot, TRADING_FLAGS=trading restrictions, MARKET_DATA=exchange/prices/candle dates. Use FULL for all.",
+            "items": {
+              "enum": [
+                "BASE",
+                "IDENTIFIERS",
+                "STATIC_DATA",
+                "TRADING_FLAGS",
+                "MARKET_DATA",
+                "FULL"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        }
+      }
+    },
+    {
+      "name": "invest_get_asset",
+      "description": "Get an asset by its identifier. An asset is a higher-level entity that groups related instruments (e.g. a company or index). Returns the asset's name, type, brand information, and the list of associated instrument UIDs.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Asset identifier (UID).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_trading_statuses",
+      "description": "Get current trading statuses for a list of instruments. Returns the exchange trading session state (normal trading, auction, break, etc.) and which order types (limit, market, bestprice) are accepted for each instrument. Use before placing an order to confirm that trading is currently available.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "instrumentId": {
+            "description": "Array of instrument identifiers (UID or ticker_classCode).",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "instrumentId"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_max_lots",
+      "description": "Get available buy/sell lot limits for an instrument and account. If price is omitted, limits are calculated using current order book prices.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "description": "Brokerage account identifier. Must be a value returned by invest_list_broker_accounts.",
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier ticker_classCode.",
+            "type": "string"
+          },
+          "price": {
+            "description": "Instrument price as a decimal string. If omitted, current order book prices are used.",
+            "properties": {
+              "value": {
+                "description": "Decimal number string",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "accountId",
+          "instrumentId"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_order_price",
+      "description": "Get the preliminary cost of a limit order. Returns estimated total amount, commissions, and instrument-specific extras (NKD for bonds, initial margin for futures).",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "description": "Brokerage account identifier. Must be a value returned by invest_list_broker_accounts.",
+            "type": "string"
+          },
+          "direction": {
+            "description": "ORDER_DIRECTION_BUY — Buy. ORDER_DIRECTION_SELL — Sell.",
+            "enum": [
+              "ORDER_DIRECTION_BUY",
+              "ORDER_DIRECTION_SELL"
+            ],
+            "type": "string"
+          },
+          "instrumentId": {
+            "description": "Instrument identifier ticker_classCode e.g. SBER_TQBR.",
+            "type": "string"
+          },
+          "price": {
+            "description": "Limit price per instrument unit as a decimal string.",
+            "properties": {
+              "value": {
+                "description": "Decimal number string",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "quantity": {
+            "description": "Number of lots.",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "accountId",
+          "instrumentId",
+          "quantity",
+          "direction",
+          "price"
+        ]
+      }
+    },
+    {
+      "name": "invest_get_user_info",
+      "description": "Get the authenticated user's profile on Tinkoff Invest: tariff plan name, premium client status, qualified investor status, instrument categories approved for trading, and risk level code. Qualified investor status is required to trade certain complex instruments such as foreign stocks and structured products.",
+      "input_schema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "invest_get_brand",
+      "description": "Get a brand by its identifier. Returns the brand's name, sector, company, country, and descriptive information. Brand UIDs are available in the asset response from invest_get_asset.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Brand identifier (UID).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    },
+    {
+      "name": "invest_list_assets",
+      "description": "Get the list of assets filtered by instrument status and type. An asset is a higher-level entity that groups related instruments (e.g. a company or index). Use instrumentType to narrow results to a specific asset class.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "instrumentStatus": {
+            "description": "Filter by instrument availability. INSTRUMENT_STATUS_BASE — only instruments tradeable via API. INSTRUMENT_STATUS_ALL — full catalogue including non-tradeable instruments.",
+            "enum": [
+              "INSTRUMENT_STATUS_BASE",
+              "INSTRUMENT_STATUS_ALL"
+            ],
+            "type": "string"
+          },
+          "instrumentType": {
+            "description": "Filter by instrument type. Omit or use INSTRUMENT_TYPE_UNSPECIFIED to return assets of all types.",
+            "enum": [
+              "INSTRUMENT_TYPE_UNSPECIFIED",
+              "INSTRUMENT_TYPE_BOND",
+              "INSTRUMENT_TYPE_CLEARING_CERTIFICATE",
+              "INSTRUMENT_TYPE_COMMODITY",
+              "INSTRUMENT_TYPE_SHARE",
+              "INSTRUMENT_TYPE_CURRENCY",
+              "INSTRUMENT_TYPE_ETF",
+              "INSTRUMENT_TYPE_FUTURES",
+              "INSTRUMENT_TYPE_SP",
+              "INSTRUMENT_TYPE_OPTION"
+            ],
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "invest_list_brands",
+      "description": "Get a paginated list of all brands available on Tinkoff Invest. Use paging.limit and paging.pageNumber to page through large result sets. The response includes a paging object with totalCount for calculating total pages.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "paging": {
+            "description": "Pagination parameters.",
+            "properties": {
+              "limit": {
+                "description": "Maximum number of brands to return per page.",
+                "type": "integer"
+              },
+              "pageNumber": {
+                "description": "Page number to return (0-based).",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "name": "invest_get_asset_fundamentals",
+      "description": "Get fundamental financial indicators for one or more assets. Returns market cap, valuation ratios (P/E, P/B, P/S, EV/EBITDA), profitability metrics (ROE, ROA, ROIC, net margin), revenue and EPS growth rates, debt ratios, and dividend data. Use for fundamental analysis before taking a position.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "assets": {
+            "description": "Asset UIDs to query (up to 100). Each element is a plain UID string, not an object.",
+            "items": {
+              "description": "Asset identifier (UID) as a plain string.",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "assets"
+        ]
+      }
+    }
+  ],
+  "examples": {
+    "candles": {
+      "request": {
+        "instrumentId": "SBER_TQBR",
+        "interval": "CANDLE_INTERVAL_DAY",
+        "from": "2026-10-01T00:00:00Z",
+        "to": "2026-10-10T00:00:00Z",
+        "limit": 2
+      },
+      "response": {
+        "priceCurrency": "rub",
+        "candles": [
+          {
+            "open": {
+              "value": "280.7"
+            },
+            "high": {
+              "value": "285.43"
+            },
+            "low": {
+              "value": "280.16"
+            },
+            "close": {
+              "value": "285.02"
+            },
+            "volume": "25889129",
+            "time": "2026-10-09",
+            "isComplete": true,
+            "candleSource": "CANDLE_SOURCE_EXCHANGE",
+            "volumeBuy": "15140678",
+            "volumeSell": "10748451"
+          },
+          {
+            "open": {
+              "value": "285.5"
+            },
+            "high": {
+              "value": "287"
+            },
+            "low": {
+              "value": "285.11"
+            },
+            "close": {
+              "value": "286"
+            },
+            "volume": "8994384",
+            "time": "2026-10-10",
+            "isComplete": true,
+            "candleSource": "CANDLE_SOURCE_EXCHANGE",
+            "volumeBuy": "5276523",
+            "volumeSell": "3717861"
+          }
+        ]
+      }
+    },
+    "share": {
+      "request": {
+        "instrumentId": "SBER_TQBR",
+        "idType": "INSTRUMENT_ID_TYPE_ID",
+        "responseView": [
+          "FULL"
+        ]
+      },
+      "response": {
+        "instrument": {
+          "ticker": "SBER",
+          "classCode": "TQBR",
+          "isin": "RU0009029540",
+          "lot": 1,
+          "currency": "rub",
+          "shortEnabledFlag": true,
+          "name": "Сбербанк",
+          "exchange": "moex_mrng_evng_e_wknd_dlr",
+          "nominal": {
+            "currency": "rub",
+            "value": "3"
+          },
+          "minPriceIncrement": {
+            "value": "0.01"
+          },
+          "apiTradeAvailableFlag": true,
+          "positionUid": "41eb2102-5333-4713-bf15-72b204c4bf7b",
+          "assetUid": "40d89385-a03a-4659-bf4e-d3ecba011782",
+          "requiredTests": [],
+          "forIisFlag": true,
+          "forQualInvestorFlag": false,
+          "first1minCandleDate": "2018-03-07T18:33:00Z",
+          "first1dayCandleDate": "2000-01-04T07:00:00Z",
+          "dlongClient": {
+            "value": "0.125"
+          },
+          "dshortClient": {
+            "value": "0.1428"
+          }
+        }
+      }
+    },
+    "operations": {
+      "response": {
+        "nextCursor": "sample-nextCursor",
+        "hasNext": true,
+        "items": [
+          {
+            "cursor": "sample-cursor",
+            "id": "sample-id",
+            "parentOperationId": "sample-parentOperationId",
+            "date": "2026-10-01T10:00:00Z",
+            "type": "OPERATION_TYPE_BROKER_FEE",
+            "state": "OPERATION_STATE_EXECUTED",
+            "ticker": "sample-ticker",
+            "classCode": "TQBR",
+            "payment": {
+              "currency": "rub",
+              "value": "1"
+            },
+            "price": {
+              "currency": "rub",
+              "value": "1"
+            },
+            "yieldRelative": {
+              "value": "1"
+            },
+            "quantity": "1",
+            "quantityDone": "1",
+            "cancelReason": "sample-cancelReason",
+            "childOperations": []
+          }
+        ]
+      },
+      "anonymized": true
+    },
+    "bond_events": {
+      "request": {
+        "instrumentId": "043ffb17-07e9-4c79-941f-4c5712d133cd",
+        "from": "2026-10-01T00:00:00Z",
+        "to": "2026-11-15T00:00:00Z",
+        "responseView": [
+          "FULL"
+        ]
+      },
+      "response": {
+        "events": []
+      }
+    },
+    "buy_operation": {
+      "response": {
+        "nextCursor": "sample-nextCursor",
+        "hasNext": true,
+        "items": [
+          {
+            "cursor": "sample-cursor",
+            "id": "sample-id",
+            "parentOperationId": "sample-parentOperationId",
+            "date": "2026-10-01T10:00:00Z",
+            "type": "OPERATION_TYPE_BUY",
+            "state": "OPERATION_STATE_EXECUTED",
+            "ticker": "sample-ticker",
+            "classCode": "TQBR",
+            "payment": {
+              "currency": "rub",
+              "value": "-1"
+            },
+            "price": {
+              "currency": "rub",
+              "value": "1"
+            },
+            "commission": {
+              "currency": "rub",
+              "value": "-1"
+            },
+            "yieldRelative": {
+              "value": "1"
+            },
+            "quantity": "1",
+            "quantityDone": "1",
+            "cancelReason": "sample-cancelReason",
+            "tradesInfo": {
+              "trades": [
+                {
+                  "num": "sample-num",
+                  "date": "2026-10-01T10:00:00Z",
+                  "quantity": "1",
+                  "price": {
+                    "currency": "rub",
+                    "value": "1"
+                  },
+                  "yield": {
+                    "currency": "rub",
+                    "value": "1"
+                  },
+                  "yieldRelative": {
+                    "value": "1"
+                  }
+                },
+                {
+                  "num": "sample-num",
+                  "date": "2026-10-01T10:00:00Z",
+                  "quantity": "1",
+                  "price": {
+                    "currency": "rub",
+                    "value": "1"
+                  },
+                  "yield": {
+                    "currency": "rub",
+                    "value": "1"
+                  },
+                  "yieldRelative": {
+                    "value": "1"
+                  }
+                }
+              ]
+            },
+            "childOperations": [
+              {
+                "instrumentUid": "sample-instrumentUid",
+                "payment": {
+                  "currency": "rub",
+                  "value": "-1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "anonymized": true
+    },
+    "hourly_candles": {
+      "request": {
+        "instrumentId": "SBER_TQBR",
+        "interval": "CANDLE_INTERVAL_HOUR",
+        "from": "2026-10-09T18:00:00Z",
+        "to": "2026-10-10T00:00:00Z",
+        "limit": 10
+      },
+      "response": {
+        "priceCurrency": "rub",
+        "candles": [
+          {
+            "open": {
+              "value": "282.4"
+            },
+            "high": {
+              "value": "283.24"
+            },
+            "low": {
+              "value": "282.37"
+            },
+            "close": {
+              "value": "283.22"
+            },
+            "volume": "667109",
+            "time": "2026-10-09T18:00:00Z",
+            "isComplete": true,
+            "candleSource": "CANDLE_SOURCE_EXCHANGE",
+            "volumeBuy": "524779",
+            "volumeSell": "142330"
+          },
+          {
+            "open": {
+              "value": "283.23"
+            },
+            "high": {
+              "value": "285.43"
+            },
+            "low": {
+              "value": "283.23"
+            },
+            "close": {
+              "value": "284.54"
+            },
+            "volume": "6694695",
+            "time": "2026-10-09T19:00:00Z",
+            "isComplete": true,
+            "candleSource": "CANDLE_SOURCE_EXCHANGE",
+            "volumeBuy": "4432015",
+            "volumeSell": "2262680"
+          },
+          {
+            "open": {
+              "value": "284.54"
+            },
+            "high": {
+              "value": "285.3"
+            },
+            "low": {
+              "value": "284.29"
+            },
+            "close": {
+              "value": "285.02"
+            },
+            "volume": "2526364",
+            "time": "2026-10-09T20:00:00Z",
+            "isComplete": true,
+            "candleSource": "CANDLE_SOURCE_EXCHANGE",
+            "volumeBuy": "1583588",
+            "volumeSell": "942776"
+          },
+          {
+            "open": {
+              "value": "283.59"
+            },
+            "high": {
+              "value": "287.38"
+            },
+            "low": {
+              "value": "283.59"
+            },
+            "close": {
+              "value": "285.54"
+            },
+            "volume": "22050",
+            "time": "2026-10-09T23:00:00Z",
+            "isComplete": true,
+            "candleSource": "CANDLE_SOURCE_DEALER_WEEKEND",
+            "volumeBuy": "10711",
+            "volumeSell": "11339"
+          }
+        ]
+      }
+    },
+    "bond_accrued": {
+      "request": {
+        "instrumentId": "043ffb17-07e9-4c79-941f-4c5712d133cd",
+        "from": "2026-10-01T00:00:00Z",
+        "to": "2026-10-04T00:00:00Z"
+      },
+      "response": {
+        "accruedInterests": [
+          {
+            "date": "2026-10-01",
+            "value": {
+              "value": "40.61"
+            },
+            "valuePercent": {
+              "value": "4.061"
+            },
+            "nominal": {
+              "value": "1000"
+            }
+          },
+          {
+            "date": "2026-10-02",
+            "value": {
+              "value": "41.61"
+            },
+            "valuePercent": {
+              "value": "4.161"
+            },
+            "nominal": {
+              "value": "1000"
+            }
+          },
+          {
+            "date": "2026-10-03",
+            "value": {
+              "value": "41.95"
+            },
+            "valuePercent": {
+              "value": "4.195"
+            },
+            "nominal": {
+              "value": "1000"
+            }
+          },
+          {
+            "date": "2026-10-04",
+            "value": {
+              "value": "41.95"
+            },
+            "valuePercent": {
+              "value": "4.195"
+            },
+            "nominal": {
+              "value": "1000"
+            }
+          }
+        ]
+      }
+    },
+    "currencies": {
+      "response": {
+        "currencies": [
+          {
+            "ticker": "CNYRUB_TOM",
+            "classCode": "CETS",
+            "isin": "",
+            "lot": 1000,
+            "currency": "rub",
+            "shortEnabledFlag": false,
+            "name": "Китайский юань",
+            "exchange": "FX",
+            "nominal": {
+              "currency": "cny",
+              "value": "1"
+            },
+            "minPriceIncrement": {
+              "value": "0.0005"
+            },
+            "apiTradeAvailableFlag": true,
+            "positionUid": "176c3dbf-b346-48a6-b20c-daa9d028f031",
+            "requiredTests": [],
+            "assetUid": "ef981949-7e4f-4f9f-bac5-548b12f88637",
+            "forIisFlag": true,
+            "forQualInvestorFlag": false,
+            "first1minCandleDate": "2018-03-07T19:28:00Z",
+            "first1dayCandleDate": "1993-07-09"
+          },
+          {
+            "ticker": "USD000UTSTOM",
+            "classCode": "CETS",
+            "isin": "",
+            "lot": 1000,
+            "currency": "rub",
+            "shortEnabledFlag": false,
+            "name": "Доллар США",
+            "exchange": "moex_close",
+            "nominal": {
+              "currency": "usd",
+              "value": "1"
+            },
+            "minPriceIncrement": {
+              "value": "0.0025"
+            },
+            "apiTradeAvailableFlag": true,
+            "positionUid": "6e97aa9b-50b6-4738-bce7-17313f2b2cc2",
+            "requiredTests": [],
+            "assetUid": "57880736-302f-4add-80af-44b90a7b8844",
+            "forIisFlag": true,
+            "forQualInvestorFlag": false,
+            "first1minCandleDate": "2018-03-07T16:16:00Z",
+            "first1dayCandleDate": "2000-05-16"
+          }
+        ]
+      },
+      "selection": "public USD and CNY CETS rows"
+    },
+    "future": {
+      "response": {
+        "instrument": {
+          "ticker": "SiZ6",
+          "classCode": "SPBFUT",
+          "lot": 1,
+          "currency": "rub",
+          "shortEnabledFlag": true,
+          "name": "Si-12.26 Курс Доллар – Рубль",
+          "exchange": "forts_futures_weekend",
+          "firstTradeDate": "2024-12-13T07:00:00Z",
+          "lastTradeDate": "2026-12-17T16:00:00Z",
+          "futuresType": "DELIVERY_TYPE_CASH_SETTLEMENT",
+          "assetType": "TYPE_CURRENCY",
+          "basicAsset": "USD/RUB",
+          "expirationDate": "2026-12-18",
+          "minPriceIncrement": {
+            "value": "1"
+          },
+          "apiTradeAvailableFlag": true,
+          "positionUid": "1fab223a-5a00-4a68-b5df-e1ece28229c7",
+          "basicAssetPositionUid": "6e97aa9b-50b6-4738-bce7-17313f2b2cc2",
+          "requiredTests": [],
+          "forIisFlag": true,
+          "forQualInvestorFlag": false,
+          "first1minCandleDate": "2024-12-17T15:18:00Z",
+          "first1dayCandleDate": "2024-12-17",
+          "minPriceIncrementAmount": {
+            "value": "1"
+          },
+          "dlongClient": {
+            "value": "0.0585"
+          },
+          "dshortClient": {
+            "value": "0.0576"
+          }
+        }
+      }
+    },
+    "share_catalog": {
+      "request": {
+        "instrumentStatus": "INSTRUMENT_STATUS_ALL",
+        "responseView": [
+          "IDENTIFIERS"
+        ]
+      },
+      "response": {
+        "instruments": [
+          {
+            "ticker": "SBER",
+            "classCode": "TQBR",
+            "isin": "RU0009029540",
+            "name": "Сбербанк",
+            "positionUid": "41eb2102-5333-4713-bf15-72b204c4bf7b",
+            "assetUid": "40d89385-a03a-4659-bf4e-d3ecba011782"
+          },
+          {
+            "ticker": "SBERP",
+            "classCode": "TQBR",
+            "isin": "RU0009029557",
+            "name": "Сбербанк - привилегированные акции",
+            "positionUid": "9cf9718d-50df-4326-a205-cf306933607e",
+            "assetUid": "0f016970-78e8-43c8-b21c-ccff349a99cb"
+          }
+        ]
+      },
+      "full_count": 8080
+    },
+    "share_full_screening": {
+      "request": {
+        "instrumentId": "SBER_TQBR",
+        "idType": "INSTRUMENT_ID_TYPE_ID",
+        "responseView": [
+          "FULL"
+        ]
+      },
+      "response": {
+        "instrument": {
+          "ticker": "SBER",
+          "classCode": "TQBR",
+          "isin": "RU0009029540",
+          "lot": 1,
+          "currency": "rub",
+          "shortEnabledFlag": true,
+          "name": "Сбербанк",
+          "exchange": "moex_mrng_evng_e_wknd_dlr",
+          "nominal": {
+            "currency": "rub",
+            "value": "3"
+          },
+          "minPriceIncrement": {
+            "value": "0.01"
+          },
+          "apiTradeAvailableFlag": true,
+          "positionUid": "41eb2102-5333-4713-bf15-72b204c4bf7b",
+          "assetUid": "40d89385-a03a-4659-bf4e-d3ecba011782",
+          "requiredTests": [],
+          "forIisFlag": true,
+          "forQualInvestorFlag": false,
+          "first1minCandleDate": "2018-03-07T18:33:00Z",
+          "first1dayCandleDate": "2000-01-04T07:00:00Z",
+          "dlongClient": {
+            "value": "0.125"
+          },
+          "dshortClient": {
+            "value": "0.1428"
+          }
+        }
+      }
+    },
+    "share_asset": {
+      "request": {
+        "id": "40d89385-a03a-4659-bf4e-d3ecba011782"
+      },
+      "response": {
+        "asset": {
+          "uid": "40d89385-a03a-4659-bf4e-d3ecba011782",
+          "type": "ASSET_TYPE_SECURITY",
+          "name": "Акции обыкновенные ПАО Сбербанк",
+          "brand": {
+            "uid": "3a8585e6-e9eb-431c-8e70-ef5b43a9cf00"
+          },
+          "instruments": [
+            {
+              "ticker": "SBER",
+              "classCode": "TQBR"
+            },
+            {
+              "ticker": "SBER",
+              "classCode": "SMAL"
+            },
+            {
+              "ticker": "SBER",
+              "classCode": "SPEQ"
+            },
+            {
+              "ticker": "SBER",
+              "classCode": "BEB"
+            },
+            {
+              "ticker": "RU0009029540",
+              "classCode": "A53"
+            },
+            {
+              "ticker": "SBER",
+              "classCode": "RDL"
+            },
+            {
+              "ticker": "RU0009029540",
+              "classCode": "A21"
+            },
+            {
+              "ticker": "RU0009029540",
+              "classCode": "RU0009029540_TILT01"
+            },
+            {
+              "ticker": "RU0009029540",
+              "classCode": "RU0009029540_TNDS"
+            },
+            {
+              "ticker": "RU0009029540",
+              "classCode": "RU0009029540_BLABEB"
+            },
+            {
+              "ticker": "SBER",
+              "classCode": "37M"
+            },
+            {
+              "ticker": "RU0009029540",
+              "classCode": "A56"
+            }
+          ]
+        }
+      }
+    },
+    "share_brand": {
+      "request": {
+        "id": "3a8585e6-e9eb-431c-8e70-ef5b43a9cf00"
+      },
+      "response": {
+        "uid": "3a8585e6-e9eb-431c-8e70-ef5b43a9cf00",
+        "name": "Сбербанк ао (ISIN)",
+        "company": "СберБанк",
+        "sector": "financial",
+        "countryOfRisk": "RUS"
+      },
+      "omitted_fields": [
+        "description",
+        "info"
+      ]
+    },
+    "share_trading": {
+      "request": {
+        "instrumentId": [
+          "SBER_TQBR"
+        ]
+      },
+      "response": {
+        "tradingStatuses": [
+          {
+            "tradingStatus": "SECURITY_TRADING_STATUS_NORMAL_TRADING",
+            "limitOrderAvailableFlag": true,
+            "marketOrderAvailableFlag": true,
+            "bestpriceOrderAvailableFlag": true,
+            "ticker": "SBER",
+            "classCode": "TQBR"
+          }
+        ]
+      }
+    },
+    "user_info_shape": {
+      "fields": {
+        "qualifiedForWorkWith": "list",
+        "riskLevelCode": "str",
+        "qualStatus": "bool",
+        "premStatus": "bool",
+        "tariff": "str",
+        "userId": "str"
+      }
+    },
+    "max_lots_shape": {
+      "response_shape": {
+        "sellLimits": {
+          "sellMaxLots": "str"
+        },
+        "buyLimits": {
+          "buyMoneyAmount": {
+            "value": "str"
+          },
+          "buyMaxLots": "str",
+          "buyMaxMarketLots": "str"
+        },
+        "currency": "str"
+      }
+    },
+    "asset_catalog": {
+      "request": {
+        "instrumentStatus": "INSTRUMENT_STATUS_ALL",
+        "instrumentType": "INSTRUMENT_TYPE_SHARE"
+      },
+      "response": {
+        "assets": [
+          {
+            "uid": "40d89385-a03a-4659-bf4e-d3ecba011782",
+            "type": "ASSET_TYPE_SECURITY",
+            "name": "Акции обыкновенные ПАО Сбербанк",
+            "instruments": [
+              {
+                "ticker": "SBER",
+                "classCode": "TQBR"
+              },
+              {
+                "ticker": "SBER",
+                "classCode": "SMAL"
+              },
+              {
+                "ticker": "SBER",
+                "classCode": "SPEQ"
+              },
+              {
+                "ticker": "SBER",
+                "classCode": "BEB"
+              },
+              {
+                "ticker": "RU0009029540",
+                "classCode": "A53"
+              },
+              {
+                "ticker": "SBER",
+                "classCode": "RDL"
+              },
+              {
+                "ticker": "RU0009029540",
+                "classCode": "A21"
+              },
+              {
+                "ticker": "RU0009029540",
+                "classCode": "RU0009029540_TILT01"
+              },
+              {
+                "ticker": "RU0009029540",
+                "classCode": "RU0009029540_TNDS"
+              },
+              {
+                "ticker": "RU0009029540",
+                "classCode": "RU0009029540_BLABEB"
+              },
+              {
+                "ticker": "SBER",
+                "classCode": "37M"
+              },
+              {
+                "ticker": "RU0009029540",
+                "classCode": "A56"
+              }
+            ]
+          }
+        ]
+      },
+      "full_count": 2780
+    },
+    "brand_catalog": {
+      "request": {
+        "paging": {
+          "limit": 1000,
+          "pageNumber": 0
+        }
+      },
+      "response": {
+        "brands": [
+          {
+            "uid": "43518068-7720-49b3-8d3e-fbd7a12be3ae",
+            "name": "Sritex",
+            "company": "Sritex",
+            "sector": "consumer",
+            "countryOfRisk": "IDN"
+          }
+        ],
+        "paging": {
+          "limit": 1000,
+          "pageNumber": 0,
+          "totalCount": 7378
+        }
+      }
+    }
+  },
+  "availability": {
+    "tool_names": [
+      "invest_create_favorite_group",
+      "invest_delete_favorite_group",
+      "invest_edit_favorite_instruments",
+      "invest_find_instrument",
+      "invest_get_asset",
+      "invest_get_asset_fundamentals",
+      "invest_get_bond_accrued",
+      "invest_get_bond_events",
+      "invest_get_brand",
+      "invest_get_dfa",
+      "invest_get_favorite_groups",
+      "invest_get_favorite_instruments",
+      "invest_get_forecast",
+      "invest_get_insider_deals",
+      "invest_get_instrument_reports",
+      "invest_get_risk_rates",
+      "invest_get_share_dividends",
+      "invest_get_trading_schedule",
+      "invest_list_assets",
+      "invest_list_bonds",
+      "invest_list_brands",
+      "invest_list_consensus_forecasts",
+      "invest_list_countries",
+      "invest_list_currencies",
+      "invest_list_dfas",
+      "invest_list_etfs",
+      "invest_list_futures",
+      "invest_list_indicatives",
+      "invest_list_options",
+      "invest_list_shares",
+      "invest_list_structured_notes",
+      "invest_get_last_trades",
+      "invest_get_market_values",
+      "invest_get_orderbook",
+      "invest_get_tech_analysis",
+      "invest_get_trading_statuses",
+      "invest_get_blocked_guarantee",
+      "invest_get_operations",
+      "invest_get_portfolio",
+      "invest_get_positions",
+      "invest_cancel_order",
+      "invest_create_order",
+      "invest_get_max_lots",
+      "invest_get_order_price",
+      "invest_get_order_state",
+      "invest_get_orders",
+      "invest_replace_order",
+      "invest_list_signals",
+      "invest_list_strategies",
+      "invest_cancel_stoporder",
+      "invest_create_stoporder",
+      "invest_get_stoporders",
+      "invest_deposit_broker_account",
+      "invest_get_broker_account_margin",
+      "invest_get_broker_account_values",
+      "invest_get_user_info",
+      "invest_list_broker_accounts",
+      "invest_transfer_broker_accounts",
+      "invest_get_bond",
+      "invest_get_currency",
+      "invest_get_etf",
+      "invest_get_future",
+      "invest_get_news",
+      "invest_get_option",
+      "invest_get_share",
+      "invest_get_structured_note",
+      "invest_get_candles",
+      "invest_list_offers",
+      "invest_list_accounts"
+    ],
+    "notes": [
+      "MCP exposes bond events and share dividends. No dedicated share split history tool is advertised.",
+      "Operation BASE fields include ticker/classCode and quantityDone. Stable instrument UID is not guaranteed.",
+      "Candles limit is counted backwards from to and cannot be combined with candleSourceType."
+    ]
+  }
+}
