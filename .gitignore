@@ -9,3 +9,5 @@ docs/_build/
 *.sqlite3
 .coverage
 certs/
+forecast-models/
+experiments/
